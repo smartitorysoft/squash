@@ -1,0 +1,8 @@
+.sticky {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  background-color: green;
+  border: 2px solid #4caf50;
+  height: 100vh;
+}
