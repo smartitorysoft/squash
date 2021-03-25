@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  nest:
+    image: "smartitory/squash-nestjs:latest"
+    env_file: 
+      - ./nest.prod.env 
+    build:
+      target: production
+    command:  npm run start:prod
