@@ -4,12 +4,10 @@ services:
 
   postgres:
     image: "postgres:13.2-alpine"
-    env_file: 
-      - ./postgres.dev.env 
     volumes:
       - postgres-data:/var/lib/postgresql/data/ 
     networks:
-      - squash_subnet
+      - subnet
     ports:
       - 5432:5432
     restart: unless-stopped
@@ -19,7 +17,7 @@ services:
     build:
       context: ./back-end
     networks:
-      - squash_subnet
+      - subnet
     links:
       - "postgres:postgres"
     ports:
@@ -27,12 +25,25 @@ services:
     depends_on:
       - postgres
     restart: unless-stopped
+  
+  next:
+    image: "smartitory/squash-nextjs:latest"
+    build:
+      context: ./front-end
+    networks:
+      - subnet
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+      - nest
+    restart: unless-stopped
     
 volumes:
   postgres-data:
   
 
 networks:
-  squash_subnet:
+  subnet:
     driver: bridge
     external: false

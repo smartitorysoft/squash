@@ -1,8 +1,12 @@
 version: '3.7'
 
 services:
+
+  postgres:
+    env_file: 
+      - ./postgres.dev.env 
+
   nest:
-    image: "smartitory/squash-nestjs:latest"
     env_file: 
       - ./nest.dev.env 
     build:
@@ -14,3 +18,16 @@ services:
     ports:
       - 3300:3300
       - 9929:9929
+  
+  next:
+    env_file: 
+      - ./next.dev.env 
+    build:
+      target: development
+    volumes:
+      - ./front-end:/app
+      - /app/node_modules
+      - /app/.next
+    command: sleep infinity
+    ports:
+      - 3000:3000
