@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  nest:
+    image: "smartitory/squash-nestjs:latest"
+    env_file: 
+      - ./nest.dev.env 
+    build:
+      target: development
+    volumes:
+      - ./back-end:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:debug
+    ports:
+      - 3300:3300
+      - 9929:9929
