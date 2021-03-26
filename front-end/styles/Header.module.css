@@ -6,3 +6,12 @@
   border: 2px solid #4caf50;
   height: 100vh;
 }
+
+.header {
+  display: flex;
+  flex-direction: row;
+}
+
+.div {
+  width: 45vw;
+}

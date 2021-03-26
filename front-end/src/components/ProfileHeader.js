@@ -12,11 +12,10 @@ export const ProfileHeader = () => {
 
     return (
         <div>
-            <AppBar position='static'>
-                <Tabs  value={value} onChange={handleChange} aria-label="simple tabs example">
+            <AppBar   position='static'>
+                <Tabs  variant="fullWidth" value={value} onChange={handleChange} aria-label="simple tabs example">
                     <Tab label='Foglalásaim'/>
                     <Tab label='Tranzakciók'/>
-                    <Tab label='Személyes adatok'/>
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -25,9 +24,7 @@ export const ProfileHeader = () => {
             <TabPanel value={value} index={1}>
                 Tranzakciók
             </TabPanel>
-            <TabPanel value={value} index={2}>
-                <ProfileDetails/>
-            </TabPanel>
+           
         </div>
     )
 }

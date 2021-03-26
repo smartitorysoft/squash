@@ -14,11 +14,11 @@ export const HomeHeader = () => {
 
     return (
         <div >
-            <AppBar position='absolute'>
+            <AppBar style={{ alignItems:'flex-end'}} position='static'>
                 <Tabs  value={value} onChange={handleChange} aria-label="simple tabs example">
                     <Tab label='Home'/>
                     <Tab label='Foglalás'/>
-                    <Tab label='Profil'/>
+                    <Tab  label='Profil'/>
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -28,6 +28,18 @@ export const HomeHeader = () => {
                 Foglalás
             </TabPanel>
             <TabPanel value={value} index={2}>
+                <div className={styles.header}>
+                    <div className={styles.div}>
+                        <p> Vezetéknév Keresztnév</p>
+                        <p>Telefonszám</p>
+                        <p>Email</p></div>
+                    <div className={styles.div}>
+                        <p>Kreditek száma</p>
+                        <p>Következő foglalás</p>
+                        <p>Kártyaszám</p>
+                    </div>
+
+                </div>
                 <Profile/>
             </TabPanel>
         </div>
