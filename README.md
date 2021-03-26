@@ -54,7 +54,9 @@ API_URL | The address of the back-end. In this application the name of the back-
 
 ##### Back-end development
 For back-end development use the 
-`docker-compose up`
+```
+docker-compose up
+```
 command, that way the console of the containers is attached to the terminal you're running this from.
 
 To stop execution simply terminate the console process.
@@ -63,7 +65,9 @@ Have fun.
 
 ##### Front-end development
 For front-end development start by typing the command
-`docker-compose up -d`
+```
+docker-compose up -d
+```
 This starts the database and the back-end in detached mode.
 Start the front-end with
 ```
@@ -77,16 +81,25 @@ Good luck.
 
 ##### Testing and production
 To start the application simply type
-`docker-compose up -d --build`
+```
+docker-compose up -d --build
+```
 
 To stop the application type
-`docker-compose down`
+```
+docker-compose down
+```
 
 ## Important
 All environments use hot reloading, so you don't have to rebuild the docker container every time you make changes to the code. However, if you make changes to *node_modules* you should stop the containers with 
-`docker-compose down`
+```
+docker-compose down
+```
 and rebuild with
-`docker-compose build`
+```
+docker-compose build
+```
+or start the project with the `--build` flag.
 
 This also applies when pulling changes from the repository.
 
