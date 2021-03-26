@@ -19,4 +19,4 @@ services:
       - ./next.prod.env 
     build:
       target: production
-    command: npm start
+    command: node_modules/.bin/next start

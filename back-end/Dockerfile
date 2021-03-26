@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 ADD package*.json ./
 
-RUN npm install --only=development
+RUN npm install 
 RUN npm install rimraf
 
 ADD . .
@@ -27,4 +27,4 @@ ADD . .
 
 COPY --from=development /usr/src/app/dist ./dist
 
-CMD ["node", "dist/main"]
+# CMD ["node", "dist/main"]
