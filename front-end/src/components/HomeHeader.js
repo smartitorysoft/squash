@@ -14,7 +14,7 @@ export const HomeHeader = () => {
 
     return (
         <div >
-            <AppBar style={{ alignItems:'flex-end'}} position='static'>
+            <AppBar style={{ alignItems:'flex-end'}} position='sticky'>
                 <Tabs  value={value} onChange={handleChange} aria-label="simple tabs example">
                     <Tab label='Home'/>
                     <Tab label='Foglalás'/>
