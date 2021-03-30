@@ -19,3 +19,11 @@ export default {
       onClose: () => alert('close')
     
   };
+
+  export const Reserved = Template.bind({});
+  Reserved.args = {
+      open: true,
+      onClose: () => alert('close'),
+      reserved:['1']
+    
+  };

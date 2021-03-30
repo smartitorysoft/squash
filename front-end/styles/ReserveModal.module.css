@@ -4,4 +4,16 @@
   background-color: white;
   margin-left: calc(100% / 8);
   margin-top: calc(100% / 8);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.boxes {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }

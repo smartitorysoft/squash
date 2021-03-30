@@ -7,6 +7,40 @@ import {IconButton} from '@material-ui/core'
 export const Card = ({reserved}) => {
     const [open, setOpen] = useState(false)
 
+
+    const modalBody = (
+        <div className='modal'>
+                    <div className='boxes'>
+                        <FormGroup row>
+                            <FormControlLabel 
+                            disabled={ reserved && reserved.includes("1")} 
+                            control={<Checkbox checked={checked.checkedA} 
+                            onChange={handleChange} name="checkedA" />}
+                            label="1-es pálya"
+                            />
+                            <FormControlLabel 
+                            disabled={ reserved && reserved.includes("2")}   
+                            control={<Checkbox checked={checked.checkedB} 
+                            onChange={handleChange} name="checkedB" />}
+                            label="2-es pálya"
+                            />
+                        </FormGroup>
+                    </div>
+                    <Button variant="contained" color="primary">Foglalás</Button>
+                </div>
+    )
+
+
+    const [checked, setChecked] = useState({
+        checkedA:false,
+        checkedB:false,
+    })
+    
+const handleChange = (event) => {
+    setChecked({...checked, [event.target.name]:event.target.checked})
+}
+
+
     if ( reserved && reserved.length > 0) {
         if (reserved.length === 2) {
             return (
@@ -21,7 +55,7 @@ export const Card = ({reserved}) => {
                         <IconButton onClick={() => setOpen(true)}>
                             <AddIcon/> 
                         </IconButton>
-                        <ReserveModal open={open} onClose={() => setOpen(false)} /></div>
+                        <ReserveModal body={modalBody} reserved={reserved} open={open} onClose={() => setOpen(false)} /></div>
                     :
                     <p>Reserved</p>}
                 </div>
@@ -32,7 +66,7 @@ export const Card = ({reserved}) => {
                     <IconButton onClick={() => setOpen(true)}>
                         <AddIcon/> 
                     </IconButton>
-                    <ReserveModal open={open} onClose={() => setOpen(false)} /></div> : 
+                    <ReserveModal body={modalBody} reserved={reserved} open={open} onClose={() => setOpen(false)} /></div> : 
                     <p>Reserved</p>}
                 </div>  
                 
@@ -44,7 +78,7 @@ export const Card = ({reserved}) => {
                 <IconButton onClick={() => setOpen(true)}>
                     <AddIcon/> 
                 </IconButton>
-                <ReserveModal open={open} onClose={() => setOpen(false)} />
+                <ReserveModal body={modalBody} reserved={reserved} open={open} onClose={() => setOpen(false)} />
             </div>
         )
     }
