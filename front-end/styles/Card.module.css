@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  border: solid rgb(125, 120, 120);
+  border-width: 1px 1px;
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.segment {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.verticalLine {
+  height: 100%;
+  width: 1px;
+  background-color: grey;
+}
+
+.full {
+  display: flex;
+  flex-direction: row;
+  border: solid rgb(125, 120, 120);
+  border-width: 1px 1px;
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(253, 61, 61);
+}
+
+.half {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(253, 61, 61);
+}

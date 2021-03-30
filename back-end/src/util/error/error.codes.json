@@ -1,0 +1,22 @@
+{
+  "23503": {
+    "name": "foreign_key_violation",
+    "type": "postgres",
+    "code": "235pg03"
+  },
+  "23505": {
+    "name": "unique_violation",
+    "type": "postgres",
+    "code": "235pg05"
+  },
+  "200au00": {
+    "name": "Wrong credentials",
+    "type": "auth",
+    "code": "200au00"
+  },
+  "EntityNotFound": {
+    "name": "EntityNotFound",
+    "type": "typeorm",
+    "code": "404em00"
+  }
+}
