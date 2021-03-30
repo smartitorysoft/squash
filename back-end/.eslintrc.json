@@ -1,0 +1,41 @@
+{
+	"root": true,
+	"env": {
+    "node": true,
+		"es6": true,
+    "jest": true
+  },
+	"extends": [
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "prettier/@typescript-eslint"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint/eslint-plugin", "prettier"],
+  "rules": {
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+		"prettier/prettier": [
+			2,
+			{
+				"useTabs": true,
+				"printWidth": 80,
+				"tabWidth": 2,
+				"singleQuote": true,
+				"trailingComma": "none",
+				"jsxSingleQuote": true,
+				"jsxBracketSameLine": true,
+				"semi": true,
+				"bracketSpacing": true,
+				"endOfLine": "lf"
+			}
+		]
+  }	
+}
