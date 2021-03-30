@@ -61,6 +61,7 @@ export class PermissionService {
 
 	public async update(id: string, data: UpdatePermissionDto): Promise<boolean> {
 		//kellenek ezek az id alapu lekerdezesek, mert az update nem ellenorzi, hogy letezik-e a rekord
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const perm = await this.getById(id);
 
 		const result = await this.repository.update({ id: id }, data);
