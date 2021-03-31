@@ -1,11 +1,13 @@
-import React from "react";
-import { AppBar, Tabs, Tab } from "@material-ui/core";
+import React, { useState } from "react";
+import { AppBar, Tabs, Tab, IconButton } from "@material-ui/core";
 import { Profile } from "../../views/Profile/Profile";
 import TabPanel from "../TabPanel/TabPanel";
 import styles from "../../../styles/Header.module.css";
+import ProfileModal from "../ProfileModal/ProfileModal";
 
 export const HomeHeader = () => {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -41,6 +43,14 @@ export const HomeHeader = () => {
             <p>Kreditek száma</p>
             <p>Következő foglalás</p>
             <p>Kártyaszám</p>
+          </div>
+
+          <div className={styles.div}>
+            <IconButton onClick={() => setOpen(true)}>
+              <p>Szerkeszt</p>
+            </IconButton>
+
+            <ProfileModal open={open} onClose={() => setOpen(false)} />
           </div>
         </div>
         <Profile />
