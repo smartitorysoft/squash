@@ -16,12 +16,11 @@ export default function credit() {
         createData('Lorem Ipsum', 262)
       ];
 
-    
+    console.log(value);
     return (
         <div>
             <TextInput  onChange={(text) => {
-                setValue(text);
-                console.log('value', value);
+                setValue(text.target.value);
             }}/>
             <TableContainer  component={Paper}>
                 <Table>
