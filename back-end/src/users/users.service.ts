@@ -46,7 +46,7 @@ export class UsersService {
 						password: baseUser.password,
 						role: rootRole.name
 					}),
-					null
+					true
 				);
 				console.log('Generated base user!');
 			}, 5 * 1000);
@@ -77,7 +77,7 @@ export class UsersService {
 
 	public async create(
 		registrationData: CreateUserDto,
-		currentUser: User | null
+		createdBySystem = false
 	): Promise<string> {
 		const isRegistered = await this.usersRepository.findOne({
 			email: registrationData.email
@@ -100,8 +100,8 @@ export class UsersService {
 			password: hashedPassword,
 			role: role,
 			profile: newProfile,
-			createdBy: currentUser?.email ? currentUser.email : 'system',
-			lastChangedBy: currentUser?.email ? currentUser.email : 'system'
+			createdBy: createdBySystem ? 'system' : 'self',
+			lastChangedBy: createdBySystem ? 'system' : 'self'
 		});
 
 		await this.usersRepository.save(newUser);
