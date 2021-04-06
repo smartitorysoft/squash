@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsPhoneNumber, IsOptional } from 'class-validator';
+import { IsString, IsPhoneNumber } from 'class-validator';
 
 export class ProfileDto {
 	@ApiProperty({ required: false })
