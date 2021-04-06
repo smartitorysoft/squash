@@ -1,47 +1,60 @@
 import React,{useState} from 'react'
-import {Table, TableCell, TableContainer, TableHead, TableRow, TableBody, Paper} from '@material-ui/core'
+import {Table, TableCell, TableContainer, 
+    TableHead, TableRow, TableBody, 
+    Paper} from '@material-ui/core'
 import TextInput from '../src/components/TextInput';
+import styles from '../styles/Table.module.css'
+import Row from '../src/components/Row/Row'
 
 export default function credit() {
 
     const [value, setValue] = useState('')
+    const [open, setOpen] = React.useState(false);
 
-    function createData(name, credit) {
-        return { name, credit };
+    function createData(name, email, credit) {
+        return { name, email, credit };
       }
 
       const rows = [
-        createData('Ungnád', 159),
-        createData('Tas', 237),
-        createData('Lorem Ipsum', 262)
+        createData('Ungnád', 'csillagharcos@example.com', 2005159),
+        createData('Tas', 'itTas@example.com', 237),
+        createData('Lorem Ipsum','loremipsum@example.com', 262)
       ];
 
-    console.log(value);
+      const filterRows = (row) => {
+          if (row.name.includes(value) || row.email.includes(value)) {
+              return true
+          }
+            return false
+          
+      }
+
+      
+
     return (
         <div>
-            <TextInput  onChange={(text) => {
+            <TextInput  label='Keresés' onChange={(text) => {
                 setValue(text.target.value);
             }}/>
-            <TableContainer  component={Paper}>
+            <TableContainer classes={styles.table} component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell >Név</TableCell>
+                            <TableCell/>
+                            <TableCell align='left' >Név</TableCell>
+                            <TableCell align='right'>Email</TableCell>
                             <TableCell align='right'>Kredit</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.filter((row) => row.name.includes(value)).map(filteredRow => ( 
-                            <TableRow key={filteredRow.name}>
-                                <TableCell component="th" scope="row">
-                                    {filteredRow.name}
-                                </TableCell>
-                                <TableCell align="right">{filteredRow.credit}</TableCell>
-                            </TableRow>
+                        {rows.filter((row) =>filterRows(row)).map(filteredRow => ( 
+                            <Row row = {filteredRow}/>
                         ))}
                     </TableBody>
+                    
                 </Table>
             </TableContainer>
+            
         </div>
     )
 }
