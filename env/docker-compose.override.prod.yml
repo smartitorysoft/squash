@@ -4,19 +4,19 @@ services:
 
   postgres:
     env_file: 
-      - ./postgres.prod.env 
+      - ./env/postgres.prod.env 
 
   nest:
     image: "smartitory/squash-nestjs:latest"
     env_file: 
-      - ./nest.prod.env 
+      - ./env/nest.prod.env 
     build:
       target: production
     command:  npm run start:prod
 
   next:
     env_file: 
-      - ./next.prod.env 
+      - ./env/next.prod.env 
     build:
       target: production
     command: node_modules/.bin/next start

@@ -4,11 +4,11 @@ services:
 
   postgres:
     env_file: 
-      - ./postgres.dev.env 
+      - ./env/postgres.dev.env 
 
   nest:
     env_file: 
-      - ./nest.dev.env 
+      - ./env/nest.dev.env 
     build:
       target: development
     volumes:
@@ -21,7 +21,7 @@ services:
   
   next:
     env_file: 
-      - ./next.dev.env 
+      - ./env/next.dev.env 
     build:
       target: development
     volumes:
