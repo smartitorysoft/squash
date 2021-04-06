@@ -8,9 +8,9 @@
 
 2. Clone the repository.
 
-3. Make a copy of either `docker-compose.override.dev.yml` or `docker-compose.override.prod.yml`  based on your execution environment and rename it to `docker-compose.override.yml`. (testing is considered a prod environment)
+3. Make a copy of either `env/docker-compose.override.dev.yml` or `env/docker-compose.override.prod.yml`  based on your execution environment **to the project root** and rename it to `docker-compose.override.yml`. (testing is considered a prod environment)
 
-4. Make a copy of each `*.example.env` and rename them to `*.dev.env` or `*.prod.env` based on your execution environment.
+4. Make a copy of each `*.example.env` in the `env` folder and rename them to `*.dev.env` or `*.prod.env` based on your execution environment.
 
 ## Environment configuration 
 Environmental variables can be configured for eact container (postgres, nestjs and nextjs) via their respective `.env` files in the project root.
