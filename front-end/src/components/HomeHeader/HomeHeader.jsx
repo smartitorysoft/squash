@@ -4,6 +4,7 @@ import { Profile } from "../../views/Profile/Profile";
 import TabPanel from "../TabPanel/TabPanel";
 import styles from "../../../styles/Header.module.css";
 import ProfileModal from "../ProfileModal/ProfileModal";
+import EditIcon from "@material-ui/icons/Edit";
 
 export const HomeHeader = () => {
   const [value, setValue] = useState(0);
@@ -47,7 +48,7 @@ export const HomeHeader = () => {
 
           <div className={styles.div}>
             <IconButton onClick={() => setOpen(true)}>
-              <p>Szerkeszt</p>
+              <EditIcon />
             </IconButton>
 
             <ProfileModal open={open} onClose={() => setOpen(false)} />
