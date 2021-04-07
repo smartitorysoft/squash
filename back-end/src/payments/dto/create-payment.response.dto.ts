@@ -1,5 +1,5 @@
 class CreatePaymentResponseDto {
-	success: boolean;
+	id: string;
 }
 
 export default CreatePaymentResponseDto;

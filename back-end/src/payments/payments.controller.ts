@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Param,
+	ParseUUIDPipe,
+	Post,
+	UseGuards
+} from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import JwtAuthenticationGuard from '../auth/guards/jwt-authentication.guard';
 import { PermissionGuard } from '../admin/permission/guard/permission.guard';
@@ -13,15 +20,14 @@ export class PaymentsController {
 
 	@Post(':id')
 	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
-	@Target('users')
+	@Target('admin')
 	@Operation('create')
 	async create(
 		@Body() dto: CreatePaymentDto,
-		@Param('id') id: string
+		@Param('id', new ParseUUIDPipe()) id: string
 	): Promise<CreatePaymentResponseDto> {
 		const response = new CreatePaymentResponseDto();
-		console.log(`ID time: ${id}`);
-		response.success = true;
+		response.id = await this.paymentsService.addCredit(id, dto.value);
 		return response;
 	}
 }

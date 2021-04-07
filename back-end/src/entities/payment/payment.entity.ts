@@ -9,10 +9,10 @@ export class Payment extends BaseEntity {
 	@Column({ type: 'int', nullable: false })
 	value: number;
 
-	@ManyToOne((type) => User, { nullable: false, eager: true })
 	@JoinColumn()
+	@ManyToOne(() => User, { nullable: false, eager: false })
 	user: User;
 
-	@Column('enum', { name: 'category', enum: PaymentType })
+	@Column('enum', { nullable: false, name: 'type', enum: PaymentType })
 	type: PaymentType;
 }

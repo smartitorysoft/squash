@@ -1,11 +1,11 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class paymentEntity1617717869508 implements MigrationInterface {
-    name = 'paymentEntity1617717869508'
+export class paymentEntity1617796311653 implements MigrationInterface {
+    name = 'paymentEntity1617796311653'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TYPE "payments_category_enum" AS ENUM('TOP_UP', 'CHARGE', 'STORNO')`);
-        await queryRunner.query(`CREATE TABLE "payments" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "isDeleted" boolean NOT NULL DEFAULT false, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP, "createdBy" character varying(300) NOT NULL DEFAULT 'system', "lastChangedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP, "lastChangedBy" character varying(300) NOT NULL DEFAULT 'system', "value" integer NOT NULL, "category" "payments_category_enum" NOT NULL, "userId" uuid NOT NULL, CONSTRAINT "PK_197ab7af18c93fbb0c9b28b4a59" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TYPE "payments_type_enum" AS ENUM('TOP_UP', 'CHARGE', 'STORNO')`);
+        await queryRunner.query(`CREATE TABLE "payments" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "isDeleted" boolean NOT NULL DEFAULT false, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP, "createdBy" character varying(300) NOT NULL DEFAULT 'system', "lastChangedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP, "lastChangedBy" character varying(300) NOT NULL DEFAULT 'system', "value" integer NOT NULL, "type" "payments_type_enum" NOT NULL, "userId" uuid NOT NULL, CONSTRAINT "PK_197ab7af18c93fbb0c9b28b4a59" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_18688d0ca619b949334a3709ec" ON "payments" ("id", "createdAt") `);
         await queryRunner.query(`DROP INDEX "IDX_603379383366b71239acc25e26"`);
         await queryRunner.query(`COMMENT ON COLUMN "users"."createdAt" IS NULL`);
@@ -26,7 +26,7 @@ export class paymentEntity1617717869508 implements MigrationInterface {
         await queryRunner.query(`CREATE INDEX "IDX_603379383366b71239acc25e26" ON "users" ("id", "createdAt") `);
         await queryRunner.query(`DROP INDEX "IDX_18688d0ca619b949334a3709ec"`);
         await queryRunner.query(`DROP TABLE "payments"`);
-        await queryRunner.query(`DROP TYPE "payments_category_enum"`);
+        await queryRunner.query(`DROP TYPE "payments_type_enum"`);
     }
 
 }
