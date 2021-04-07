@@ -7,4 +7,9 @@ module.exports = {
 
     return config
   },
+  publicRuntimeConfig: {
+    // Will be available on both server and client
+    staticFolder: '/static',
+    backendApi: process.env.API_URL
+  },
 }
