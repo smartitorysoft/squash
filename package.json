@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "@material-ui/icons": "^4.11.2",
-    "react-redux": "^7.2.3",
-    "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
-  }
-}
