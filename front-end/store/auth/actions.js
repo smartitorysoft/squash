@@ -3,7 +3,7 @@ export const login = (data) => (dispatch, getState, {api}) => {
     //TODO
     dispatch({
         type: LOG_IN,
-        payload: {}
+        payload: data
     })
 }
 

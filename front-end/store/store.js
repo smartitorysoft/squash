@@ -1,11 +1,12 @@
+
 import getConfig from "next/config";
+import { createStore, applyMiddleware, compose } from "redux";
 import axios from "axios";
 import thunk from "redux-thunk";
-import { createStore, applyMiddleware, compose } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
-import reducers from "store/reducers";
-import interceptors from "./interceptors";
-const { BACKEND_API } = getConfig().publicRuntimeConfig;
+import reducers from "../store/reducers";
+
+const { backendApi } = getConfig().publicRuntimeConfig;
 
 const __NEXT_REDUX_STORE__ = "__NEXT_REDUX_STORE__";
 
@@ -21,39 +22,39 @@ const headers = {
 };
 
 const makeStore = (initialState, ctx) => {
- 
-    // Create store if unavailable on the client and set it on the window object
-    if (!window[__NEXT_REDUX_STORE__]) {
-      const jsonApi = () => {
-        const instance = axios.create({
-          baseURL: `/api/${BACKEND_API.VERSION}`,
-          headers: {
-            ...headers,
-            "Content-Type": "application/json"
-          }
-        });
-        interceptors(instance);
-        return instance;
-      };
-      const formDataApi = () => {
-        const instance = axios.create({
-          baseURL: `/api/${BACKEND_API.VERSION}`,
-          headers: {
-            ...headers,
-            "Content-Type": "multipart/form-data"
-          }
-        });
-        interceptors(instance);
-        return instance;
-      };
-      const store = createStore(
-        reducers,
-        initialState,
-        composeEnhancers(applyMiddleware(thunk.withExtraArgument({ jsonApi, formDataApi })))
-      );
-      window[__NEXT_REDUX_STORE__] = store;
-    }
-    return window[__NEXT_REDUX_STORE__];
-  }; 
+  
+  // Create store if unavailable on the client and set it on the window object
+  
+    const jsonApi = () => {
+      const instance = axios.create({
+        baseURL: `${backendApi}`,
+        headers: {
+          ...headers,
+          "Content-Type": "application/json"
+        }
+      });
+      return instance;
+    };
+    
+    const formDataApi = () => {
+      const instance = axios.create({
+        baseURL: `${backendApi}`,
+        headers: {
+          ...headers,
+          "Content-Type": "multipart/form-data"
+        }
+      });
+      return instance;
+    };
 
-  export default makeStore;
+    const store = createStore(
+      reducers,
+      initialState,
+      composeEnhancers(applyMiddleware(thunk.withExtraArgument({ jsonApi, formDataApi })))
+    );
+  
+  return store;
+};
+
+export default makeStore;
+
