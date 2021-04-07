@@ -4,10 +4,11 @@ import { AdminModule } from './admin/admin.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { configService } from './config/config.service';
 import { ProfileModule } from './users/profile/profile.module';
 import { UsersModule } from './users/users.module';
 import { MailModule } from './util/mail/mail.module';
+import { PaymentsModule } from './payments/payments.module';
+import { configService } from './config/config.service';
 
 @Module({
 	imports: [
@@ -16,7 +17,8 @@ import { MailModule } from './util/mail/mail.module';
 		AuthModule,
 		AdminModule,
 		ProfileModule,
-		MailModule
+		MailModule,
+		PaymentsModule
 	],
 	controllers: [AppController],
 	providers: [AppService]
