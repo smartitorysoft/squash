@@ -1,7 +1,7 @@
 
 import React, {useState} from 'react'
 import {Button, Checkbox, FormControlLabel, FormGroup, Modal} from '@material-ui/core'
-import '../../../styles/ReserveModal.module.css'
+import styles from '../../../styles/ReserveModal.module.css'
 
 export const ReserveModal = ({ open, onClose, reserved}) => {
     
@@ -20,8 +20,8 @@ export const ReserveModal = ({ open, onClose, reserved}) => {
                 open = {open}
                 onClose = {onClose}
             >
-               <div className='modal'>
-                    <div className='boxes'>
+               <div className={styles.modal}>
+                    <div className={styles.boxes}>
                         <FormGroup row>
                             <FormControlLabel 
                             disabled={ reserved && reserved.includes("1")} 

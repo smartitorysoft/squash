@@ -14,7 +14,7 @@ export const Card = ({reserved}) => {
             )
         } else {
         return (
-            <div className={ 'container'}>
+            <div className={'container'}>
                 <div className={reserved[0] === '2' ? 'segment' : 'half'}>
                     {reserved[0] === '2' ? 
                     <div>
