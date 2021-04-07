@@ -115,14 +115,10 @@ export class UsersService {
 		currentUser: User
 	): Promise<boolean> {
 		const user = await this.getById(id);
-
 		const result = await this.usersRepository.update(
 			{ id: id },
 			{
 				email: data.email,
-				role: data.role
-					? await this.rolesService.getRole(data.role)
-					: user.role,
 				lastChangedAt: new Date(),
 				lastChangedBy: currentUser.email
 			}
