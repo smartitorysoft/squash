@@ -26,11 +26,13 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 import { configService } from 'src/config/config.service';
 
 @Controller('users')
-@UseGuards(JwtAuthenticationGuard, PermissionGuard)
 export class UsersController {
 	constructor(private usersService: UsersService) {}
 
 	@Get()
+	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
+	@Target('users')
+	@Operation('read')
 	async index(
 		@Query('page') page = 1,
 		@Query('limit') limit = 10
@@ -44,8 +46,7 @@ export class UsersController {
 	}
 
 	@Get('me')
-	@Target('users')
-	@Operation('read')
+	@UseGuards(JwtAuthenticationGuard)
 	@ApiResponse({ status: 200, type: UserDataDto })
 	public async getMe(@Req() req: RequestWithUser): Promise<UserDataDto> {
 		return new UserDataDto(req.user);
@@ -62,19 +63,18 @@ export class UsersController {
 	}
 
 	@Post()
-	@Target('users')
-	@Operation('create')
 	@ApiResponse({ status: 200, type: CreateUserResponseDto })
 	public async create(
 		@Req() request: RequestWithUser,
 		@Body() msg: CreateUserDto
 	): Promise<CreateUserResponseDto> {
 		const response = new CreateUserResponseDto();
-		response.id = await this.usersService.create(msg, request.user);
+		response.id = await this.usersService.create(msg);
 		return response;
 	}
 
 	@Put(':id')
+	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
 	@Target('users')
 	@Operation('update')
 	@ApiResponse({ status: 200, type: CreateUserResponseDto })

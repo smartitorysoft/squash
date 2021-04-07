@@ -12,6 +12,6 @@ export class Profile {
 	@Column({ type: 'varchar', length: 128, nullable: true })
 	lastName: string;
 
-	@Column({ type: 'date', nullable: true })
-	dateOfBirth: Date;
+	@Column({ type: 'varchar', length: 15, nullable: true })
+	phone: string;
 }

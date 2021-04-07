@@ -13,7 +13,7 @@ import { Profile } from './profile.entity';
 @Entity({ name: 'users' })
 @Index(['id', 'createdAt'])
 export class User extends BaseEntity {
-	@Column({ type: 'varchar', length: 128, unique: true })
+	@Column({ type: 'varchar', length: 320, unique: true })
 	email: string;
 
 	@Column({ type: 'varchar', length: 256 })
