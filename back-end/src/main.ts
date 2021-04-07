@@ -5,33 +5,16 @@ import { AppModule } from './app.module';
 import { configService } from './config/config.service';
 import corsWrapper from './util/wrappers/cors/cors.wrapper';
 import cookieParser from 'cookie-parser';
-import { AllExceptionsFilter } from './util/filters/all-exceptions.filter';
+import { GlobalExceptionFilter } from './util/filters/global-exception.filter';
 import { ValidationFilter } from './util/filters/validation.filter';
-import { ValidationError, ValidationPipe } from '@nestjs/common';
-import { ValidationException } from './util/exceptions/validation.exception';
+import { ValidationPipe } from './util/pipes/validation.pipe';
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 
-	app.useGlobalFilters(new AllExceptionsFilter(), new ValidationFilter());
+	app.useGlobalFilters(new GlobalExceptionFilter(), new ValidationFilter());
 
-	app.useGlobalPipes(
-		new ValidationPipe({
-			transform: true,
-			whitelist: true,
-			exceptionFactory: (errors: ValidationError[]) => {
-				const messages = errors.map((error) => {
-					return {
-						property: error.property,
-						value: error.value,
-						constraints: error.constraints,
-						message: 'Property value does not satisfy constraints!'
-					};
-				});
-				return new ValidationException(messages);
-			}
-		})
-	);
+	app.useGlobalPipes(ValidationPipe);
 
 	app.use(cookieParser());
 	app.use(corsWrapper());

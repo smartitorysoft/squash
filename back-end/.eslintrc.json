@@ -13,7 +13,7 @@
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "tsconfig.json",
+    "project": "./tsconfig.json",
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint/eslint-plugin", "prettier"],
@@ -34,7 +34,7 @@
 				"jsxBracketSameLine": true,
 				"semi": true,
 				"bracketSpacing": true,
-				"endOfLine": "lf"
+				"endOfLine": "crlf"
 			}
 		]
   }	
