@@ -14,9 +14,14 @@
     "type": "auth",
     "code": "200au00"
   },
-  "EntityNotFound": {
+  "404em00": {
     "name": "EntityNotFound",
     "type": "typeorm",
     "code": "404em00"
-  }
+  },
+	"406vd00": {
+		"name": "Validation Error",
+		"type": "error",
+		"code": "406vd00"
+	}
 }
