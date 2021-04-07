@@ -6,7 +6,7 @@ import { PaymentType } from '../../payments/enum/payment-type.enum';
 @Entity({ name: 'payments' })
 @Index(['id', 'createdAt'])
 export class Payment extends BaseEntity {
-	@Column({ type: 'int', nullable: false })
+	@Column({ type: 'float4', nullable: false })
 	value: number;
 
 	@JoinColumn()
