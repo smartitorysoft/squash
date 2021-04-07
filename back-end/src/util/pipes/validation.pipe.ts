@@ -7,10 +7,6 @@ export const ValidationPipe = new NestValidationPipe({
 	whitelist: true,
 	forbidNonWhitelisted: true,
 	forbidUnknownValues: true,
-	validationError: {
-		target: true,
-		value: true
-	},
 	exceptionFactory: (errors: ValidationError[]) => {
 		return new ValidationException(errors);
 	}

@@ -1,6 +1,8 @@
 *.prod.env
 *.dev.env
+
 .idea
+.vscode
 
 docker-compose.override.yml
 node_modules

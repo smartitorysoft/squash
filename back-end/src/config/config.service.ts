@@ -23,6 +23,10 @@ class ConfigService {
 		return this.getValue('PORT', true);
 	}
 
+	public getGlobalPrefix() {
+		return this.getValue('API_GLOBAL_PREFIX', true);
+	}
+
 	public isProduction() {
 		const mode = this.getValue('MODE', false);
 		return mode != 'DEV';
@@ -101,7 +105,8 @@ const configService = new ConfigService(process.env).ensureValues([
 	'SMTP_DOMAIN',
 	'SMTP_USER',
 	'SMTP_PASSWORD',
-	'API_URL'
+	'API_URL',
+	'API_GLOBAL_PREFIX'
 ]);
 
 export { configService, ConfigService };

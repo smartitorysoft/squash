@@ -19,6 +19,8 @@ async function bootstrap() {
 	app.use(cookieParser());
 	app.use(corsWrapper());
 
+	app.setGlobalPrefix(configService.getGlobalPrefix());
+
 	const options = new DocumentBuilder()
 		.setTitle('Madefalva Web App')
 		.setVersion('1.0.0')
