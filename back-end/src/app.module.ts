@@ -8,6 +8,7 @@ import { configService } from './config/config.service';
 import { ProfileModule } from './users/profile/profile.module';
 import { UsersModule } from './users/users.module';
 import { MailModule } from './util/mail/mail.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
 	imports: [
@@ -16,7 +17,8 @@ import { MailModule } from './util/mail/mail.module';
 		AuthModule,
 		AdminModule,
 		ProfileModule,
-		MailModule
+		MailModule,
+		PaymentsModule
 	],
 	controllers: [AppController],
 	providers: [AppService]
