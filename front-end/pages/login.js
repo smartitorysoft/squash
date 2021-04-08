@@ -3,7 +3,7 @@ import TextInput from "../src/components/TextInput";
 import styles from '../styles/Login.module.css'
 import {useRouter} from 'next/router'
 import {useDispatch, useSelector} from 'react-redux'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {login} from '../store/auth/actions'
 
 export default function Login() {
@@ -13,6 +13,16 @@ export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
   
+    const isSignedIn = useSelector(state => state.auth.isSignedIn)
+
+    console.log('isSignedIn', isSignedIn);
+
+    useEffect(() => {
+      if (isSignedIn) {
+        router.push('/')
+      }
+      
+    }, [isSignedIn])
 
     return (
       <div className={styles.container}>
@@ -29,7 +39,6 @@ export default function Login() {
                 password: password}))
             }/>
             <BasicButton onClick={() => {
-                console.log('clicked');
                 router.push('/register')}
                 } 
                 label='Regisztráció'/>

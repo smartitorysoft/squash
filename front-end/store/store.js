@@ -51,7 +51,9 @@ const makeStore = (initialState, ctx) => {
       reducers,
       initialState,
       composeEnhancers(applyMiddleware(thunk.withExtraArgument({ jsonApi, formDataApi })))
-    );
+      );
+
+    
   
   return store;
 };

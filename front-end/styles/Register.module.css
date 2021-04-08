@@ -5,3 +5,11 @@
   justify-content: center;
   align-items: center;
 }
+
+.buttons {
+  width: 300px;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
