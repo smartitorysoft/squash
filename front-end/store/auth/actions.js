@@ -8,7 +8,7 @@ export const login = (data) => (dispatch, getState, {jsonApi}) => {
             payload: res.data.success
         })
     })
-    .catch(e => console.log('error', e))
+    .catch(e => console.log('Login error', e))
     
 }
 
