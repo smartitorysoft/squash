@@ -3,3 +3,4 @@ export { Role } from './auth/role.entity';
 export { Permission } from './auth/permission.entity';
 export { User } from './user/user.entity';
 export { Profile } from './user/profile.entity';
+export { Payment } from './payment/payment.entity';

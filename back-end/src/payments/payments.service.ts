@@ -1,9 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Payment } from '../entities/payment/payment.entity';
+import { Payment, User } from '../entities';
 import { Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
 import { PaymentType } from './enum/payment-type.enum';
+import {
+	IPaginationOptions,
+	Pagination,
+	paginate
+} from 'nestjs-typeorm-paginate';
+import { PaymentDataDto } from './dto/payment-data.dto';
 
 @Injectable()
 export class PaymentsService {
@@ -12,6 +18,35 @@ export class PaymentsService {
 		private readonly repository: Repository<Payment>,
 		private readonly usersService: UsersService
 	) {}
+
+	private async paginate(
+		options: IPaginationOptions,
+		searchOptions = {}
+	): Promise<Pagination<PaymentDataDto>> {
+		const page = await paginate<Payment>(this.repository, options, {
+			order: { createdAt: 'DESC' },
+			...searchOptions
+		});
+		const items = page.items.map((item) => new PaymentDataDto(item));
+		return new Pagination<PaymentDataDto>(items, page.meta, page.links);
+	}
+
+	async findAll(
+		options: IPaginationOptions
+	): Promise<Pagination<PaymentDataDto>> {
+		return this.paginate(options);
+	}
+
+	async findById(
+		options: IPaginationOptions,
+		user: User
+	): Promise<Pagination<PaymentDataDto>> {
+		return this.paginate(options, {
+			where: {
+				user: user
+			}
+		});
+	}
 
 	async addCredit(userId: string, value: number): Promise<string> {
 		const user = await this.usersService.getById(userId);

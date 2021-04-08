@@ -15,4 +15,7 @@ export class Payment extends BaseEntity {
 
 	@Column('enum', { nullable: false, name: 'type', enum: PaymentType })
 	type: PaymentType;
+
+	@Column('boolean', { nullable: false, default: true })
+	isRevertible: boolean;
 }
