@@ -23,14 +23,16 @@ export class ValidationFilter implements ExceptionFilter {
 	}
 
 	parseErrors = (errors) => {
-		if (errors.length === 0) return undefined;
+		if (!Array.isArray(errors) || !errors.length) return undefined;
 
 		const response = errors.map((error) => {
 			return {
 				property: error.property,
-				value: error.children.length > 0 ? undefined : error.value,
+				value: !Array.isArray(error.children) ? error.value : undefined,
 				violated: error.constraints,
-				children: this.parseErrors(error.children)
+				children: Array.isArray(error.children)
+					? this.parseErrors(error.children)
+					: undefined
 			};
 		});
 
