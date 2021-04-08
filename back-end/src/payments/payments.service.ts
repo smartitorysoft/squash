@@ -37,7 +37,7 @@ export class PaymentsService {
 		return this.paginate(options);
 	}
 
-	async findById(
+	async findByUser(
 		options: IPaginationOptions,
 		user: User
 	): Promise<Pagination<PaymentDataDto>> {

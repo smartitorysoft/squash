@@ -49,7 +49,7 @@ export class PaymentsController {
 		@Req() req: RequestWithUser
 	): Promise<Pagination<PaymentDataDto>> {
 		limit = Math.min(limit, 20);
-		return this.paymentsService.findById(
+		return this.paymentsService.findByUser(
 			{
 				page,
 				limit,
