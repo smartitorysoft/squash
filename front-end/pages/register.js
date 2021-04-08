@@ -21,10 +21,11 @@ export default function Register() {
         dispatch(register({
             email:email,
             password: password,
+            role: 'root',
             profile: {
                 firstName:firstName,
                 lastName:lastName,
-                number:number
+                phone:number
             }
         }))
     }
@@ -34,7 +35,7 @@ export default function Register() {
             <TextInput label='Vezetéknév' onChange={(text) => setLastName(text.target.value)}/>
             <TextInput label='Keresztnév' onChange={(text) => setFirstName(text.target.value)}/>
             <TextInput label='Email cím' onChange={(text) => setEmail(text.target.value)}/>
-            <TextInput label='Telefonszám' type="number" onChange={(text) => setNumber(text.target.value)}/>
+            <TextInput label='Telefonszám' onChange={(text) => setNumber(text.target.value)}/>
             <TextInput label='Jelszó' type="password" onChange={(text) => setPassword(text.target.value)}/>
             <TextInput label='Jelszó megerősítése' type="password" onChange={(text) => setPasswordCheck(text.target.value)}/>
             <div className={styles.buttons}>
