@@ -11,7 +11,7 @@ export class ProfileDto {
 	lastName: string;
 
 	@ApiProperty({ required: true })
-	@IsPhoneNumber()
+	@IsPhoneNumber('RO')
 	phone: string;
 }
 
