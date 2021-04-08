@@ -3,9 +3,10 @@ import { AppointmentsController } from './appointments.controller';
 import { AppointmentsService } from './appointments.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Appointment } from '../entities';
+import { PaymentsModule } from '../payments/payments.module';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Appointment])],
+	imports: [TypeOrmModule.forFeature([Appointment]), PaymentsModule],
 	controllers: [AppointmentsController],
 	providers: [AppointmentsService],
 	exports: [AppointmentsService]

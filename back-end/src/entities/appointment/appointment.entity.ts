@@ -1,5 +1,4 @@
 import {
-	BaseEntity,
 	Column,
 	Entity,
 	Index,
@@ -8,8 +7,9 @@ import {
 	OneToOne
 } from 'typeorm';
 import { User } from '../user/user.entity';
-import { Payment } from '../../../dist/entities';
 import { Court } from '../../appointments/enum/court.enum';
+import { Payment } from '../payment/payment.entity';
+import { BaseEntity } from '../base/base.entity';
 
 @Entity({ name: 'appointments' })
 @Index(['id', 'createdAt'])

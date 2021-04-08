@@ -58,4 +58,14 @@ export class PaymentsService {
 		await this.repository.save(newPayment);
 		return newPayment.id;
 	}
+
+	async chargeCredit(user: User, value: number): Promise<Payment> {
+		const newPayment = await this.repository.create({
+			value,
+			user,
+			type: PaymentType.CHARGE
+		});
+		await this.repository.save(newPayment);
+		return newPayment;
+	}
 }
