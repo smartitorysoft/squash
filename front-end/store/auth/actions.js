@@ -1,10 +1,15 @@
 export const LOG_IN = 'LOG_IN'
-export const login = (data) => (dispatch, getState, {api}) => {
-    //TODO
-    dispatch({
-        type: LOG_IN,
-        payload: data
+export const login = (data) => (dispatch, getState, {jsonApi}) => {
+    jsonApi()
+    .post(`auth`, data)
+    .then(res => {
+        dispatch({
+            type: LOG_IN,
+            payload: res.data.success
+        })
     })
+    .catch(e => console.log('error', e))
+    
 }
 
 export const LOG_OUT = 'LOG_OUT'
