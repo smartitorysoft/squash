@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Appointment, User } from '../entities';
-import { Repository } from 'typeorm';
+import { QueryRunner, Repository } from 'typeorm';
 import CreateAppointmentDto from './dto/create-appointment.dto';
 import { PaymentsService } from '../payments/payments.service';
+
+const COST = 10;
 
 @Injectable()
 export class AppointmentsService {
@@ -14,16 +16,24 @@ export class AppointmentsService {
 	) {}
 
 	async create(dto: CreateAppointmentDto, user: User): Promise<string> {
-		// TODO ide kredit ellenorzes
-		// TODO tranzakcioval kene megoldani
-		const payment = await this.paymentsService.chargeCredit(user, -10);
-		const newAppointment = await this.repository.create({
-			begins: dto.begins,
-			user,
-			payment,
-			court: dto.court
-		});
-		await this.repository.save(newAppointment);
-		return newAppointment.id;
+		if (user.credit >= COST) {
+			const afterward = async (queryRunner: QueryRunner, payment) => {
+				const newAppointment = await this.repository.create({
+					begins: dto.begins,
+					user,
+					payment,
+					court: dto.court
+				});
+				return await queryRunner.manager.save(newAppointment);
+			};
+			const payment = await this.paymentsService.chargeCredit(
+				user,
+				-COST,
+				afterward
+			);
+			return payment.id;
+		} else {
+			throw new HttpException('Not enough credit.', 400);
+		}
 	}
 }
