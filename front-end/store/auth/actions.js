@@ -1,3 +1,5 @@
+import { loadMe } from "../me/actions"
+
 export const LOG_IN = 'LOG_IN'
 export const login = (data) => (dispatch, getState, {jsonApi}) => {
     jsonApi()

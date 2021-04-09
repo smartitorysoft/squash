@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AppBar, Tabs, Tab, IconButton } from "@material-ui/core";
 import { Profile } from "../../views/Profile/Profile";
 import TabPanel from "../TabPanel/TabPanel";
 import styles from "../../../styles/Header.module.css";
 import ProfileModal from "../ProfileModal/ProfileModal";
 import EditIcon from "@material-ui/icons/Edit";
+import { useSelector } from "react-redux";
 
 export const HomeHeader = () => {
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
+
+  const user = useSelector((state) => state.me);
+
+  console.log("user", user);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

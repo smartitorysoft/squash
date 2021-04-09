@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 
 export default function Login() {
   const router = useRouter();
-  console.log(router);
 
   return (
     <div className={styles.container}>
@@ -17,7 +16,6 @@ export default function Login() {
         <BasicButton label="Belépés" />
         <BasicButton
           onClick={() => {
-            console.log("clicked");
             router.push("/register");
           }}
           label="Regisztráció"

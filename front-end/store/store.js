@@ -31,7 +31,8 @@ const makeStore = (initialState, ctx) => {
         headers: {
           ...headers,
           "Content-Type": "application/json"
-        }
+        },
+        withCredentials:true
       });
       return instance;
     };
@@ -42,7 +43,8 @@ const makeStore = (initialState, ctx) => {
         headers: {
           ...headers,
           "Content-Type": "multipart/form-data"
-        }
+        },
+        withCredentials:true
       });
       return instance;
     };
