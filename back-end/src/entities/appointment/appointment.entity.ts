@@ -18,7 +18,7 @@ export class Appointment extends BaseEntity {
 	begins: Date;
 
 	@JoinColumn()
-	@ManyToOne(() => User, { nullable: false, eager: false })
+	@ManyToOne(() => User, { nullable: false, eager: true })
 	user: User;
 
 	@JoinColumn()

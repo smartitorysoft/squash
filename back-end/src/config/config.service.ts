@@ -86,8 +86,8 @@ class ConfigService {
 		};
 	}
 
-	public getApiUrl() {
-		return this.getValue('API_URL');
+	public getApiUrl(path = '') {
+		return this.getValue('API_URL').concat(path);
 	}
 }
 

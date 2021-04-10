@@ -41,11 +41,7 @@ export class PaymentsService {
 		options: IPaginationOptions,
 		user: User
 	): Promise<Pagination<PaymentDataDto>> {
-		return this.paginate(options, {
-			where: {
-				user: user
-			}
-		});
+		return this.paginate(options, { where: { user } });
 	}
 
 	async updateCredits(user: User, queryRunner: QueryRunner): Promise<number> {

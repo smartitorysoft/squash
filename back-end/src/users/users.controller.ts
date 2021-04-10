@@ -41,7 +41,7 @@ export class UsersController {
 		return this.usersService.paginate({
 			page,
 			limit,
-			route: configService.getApiUrl() + 'users'
+			route: configService.getApiUrl('users')
 		});
 	}
 
