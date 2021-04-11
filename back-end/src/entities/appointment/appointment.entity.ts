@@ -22,7 +22,7 @@ export class Appointment extends BaseEntity {
 	user: User;
 
 	@JoinColumn()
-	@OneToOne(() => Payment, { nullable: false, eager: false })
+	@OneToOne(() => Payment, { nullable: false, eager: true })
 	payment: Payment;
 
 	@Column('enum', { nullable: false, name: 'court', enum: Court })

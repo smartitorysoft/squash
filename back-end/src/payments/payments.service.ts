@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Payment, User } from '../entities';
 import { getConnection, QueryRunner, Repository } from 'typeorm';
@@ -10,6 +10,10 @@ import {
 	Pagination
 } from 'nestjs-typeorm-paginate';
 import { PaymentDataDto } from './dto/payment-data.dto';
+
+interface transactionItem {
+	(queryRunner: QueryRunner, payment: Payment): Promise<any>;
+}
 
 @Injectable()
 export class PaymentsService {
@@ -49,16 +53,8 @@ export class PaymentsService {
 			.createQueryBuilder()
 			.select('SUM(payment.value)', 'sum')
 			.from(Payment, 'payment')
-			.where(
-				'payment.userId = :userId and payment.isRevertible = :isRevertible',
-				{
-					userId: user.id,
-					isRevertible: true
-				}
-			)
+			.where('payment.userId = :userId', { userId: user.id })
 			.getRawOne();
-		console.log('SUM');
-		console.log(sum);
 		sum = !sum ? 0 : sum;
 		await queryRunner.manager.update(User, { id: user.id }, { credit: sum });
 		return sum;
@@ -68,21 +64,37 @@ export class PaymentsService {
 		user: User,
 		value: number,
 		type: PaymentType,
-		afterward
+		afterward: transactionItem | transactionItem[] = null
 	): Promise<Payment> {
 		const queryRunner = getConnection().createQueryRunner();
 		await queryRunner.connect();
 		await queryRunner.startTransaction('SERIALIZABLE');
 		try {
+			const finalize = async () => {
+				await this.updateCredits(user, queryRunner);
+				await queryRunner.commitTransaction();
+			};
 			const newPayment = await this.repository.create({ value, user, type });
 			await queryRunner.manager.save(newPayment);
-			await this.updateCredits(user, queryRunner);
 			if (afterward) {
+				if (Array.isArray(afterward)) {
+					let ret = newPayment;
+					for (let i = 0; i < afterward.length; i += 1) {
+						if (afterward[i]) {
+							const tmp = await afterward[i](queryRunner, newPayment);
+							if (tmp) {
+								ret = tmp;
+							}
+						}
+					}
+					await finalize();
+					return ret;
+				}
 				const aft = await afterward(queryRunner, newPayment);
-				await queryRunner.commitTransaction();
+				await finalize();
 				return aft ? aft : newPayment;
 			}
-			await queryRunner.commitTransaction();
+			await finalize();
 			return newPayment;
 		} catch (err) {
 			await queryRunner.rollbackTransaction();
@@ -94,7 +106,7 @@ export class PaymentsService {
 
 	async addCredit(userId: string, value: number): Promise<string> {
 		const user = await this.usersService.getById(userId);
-		const newPayment = await this.create(user, value, PaymentType.TOP_UP, null);
+		const newPayment = await this.create(user, value, PaymentType.TOP_UP);
 		return newPayment.id;
 	}
 
@@ -104,5 +116,29 @@ export class PaymentsService {
 		afterward = null
 	): Promise<Payment> {
 		return await this.create(user, value, PaymentType.CHARGE, afterward);
+	}
+
+	async storno(
+		payment: Payment,
+		afterward: transactionItem = null
+	): Promise<string> {
+		if (payment.isRevertible) {
+			const revoke = async (queryRunner: QueryRunner) => {
+				await queryRunner.manager.update(
+					Payment,
+					{ id: payment.id },
+					{ isRevertible: false }
+				);
+			};
+			const newPayment = await this.create(
+				payment.user,
+				-payment.value,
+				PaymentType.STORNO,
+				[revoke, afterward]
+			);
+			return newPayment.id;
+		} else {
+			throw new HttpException('The payment is already reverted.', 400);
+		}
 	}
 }

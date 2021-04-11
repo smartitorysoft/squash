@@ -1,7 +1,10 @@
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
+	Param,
+	ParseUUIDPipe,
 	Post,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	Query,
@@ -20,6 +23,7 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 import { AppointmentDataAdminDto } from './dto/appointment-data-admin.dto';
 import { AppointmentDataDto } from './dto/appointment-data.dto';
 import { configService } from '../config/config.service';
+import DeleteAppointmentResponseDto from './dto/delete-appointment.response.dto';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -81,5 +85,15 @@ export class AppointmentsController {
 		const response = new CreateAppointmentResponseDto();
 		response.id = await this.appointmentsService.create(dto, req.user);
 		return response;
+	}
+
+	@Delete(':id')
+	@UseGuards(JwtAuthenticationGuard)
+	async delete(
+		@Param('id', new ParseUUIDPipe()) id: string,
+		@Req() req: RequestWithUser
+	): Promise<DeleteAppointmentResponseDto> {
+		await this.appointmentsService.deleteById(id, req.user);
+		return new DeleteAppointmentResponseDto();
 	}
 }
