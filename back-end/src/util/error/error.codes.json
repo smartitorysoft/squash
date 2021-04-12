@@ -19,9 +19,39 @@
     "type": "typeorm",
     "code": "404em00"
   },
-	"406vd00": {
-		"name": "Validation Error",
-		"type": "error",
-		"code": "406vd00"
-	}
+  "406vd00": {
+      "name": "Validation Error",
+      "type": "error",
+      "code": "406vd00"
+  },
+  "400pay00": {
+    "name": "NotEnoughCredit",
+    "type": "payment",
+    "code": "400pay00"
+  },
+  "400pay01": {
+    "name": "PaymentAlreadyReverted",
+    "type": "payment",
+    "code": "400pay01"
+  },
+  "400pay02": {
+    "name": "CannotRevertStorno",
+    "type": "payment",
+    "code": "400pay02"
+  },
+  "404apo00": {
+    "name": "AppointmentNotFound",
+    "type": "appointment",
+    "code": "404apo00"
+  },
+  "500gen00": {
+    "name": "InternalServerError",
+    "type": "error",
+    "code": "500gen00"
+  },
+  "409reg00": {
+    "name": "EmailTaken",
+    "type": "registration",
+    "code": "409reg00"
+  }
 }

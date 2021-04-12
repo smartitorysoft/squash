@@ -1,4 +1,4 @@
-import { Injectable, HttpException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities';
 import { Repository } from 'typeorm';
@@ -16,6 +16,7 @@ import {
 	paginate
 } from 'nestjs-typeorm-paginate';
 import UserDataDto from './dto/user-data.dto';
+import BaseException from '../util/exceptions/base.exception';
 
 @Injectable()
 export class UsersService {
@@ -84,7 +85,7 @@ export class UsersService {
 		});
 
 		if (isRegistered) {
-			throw new HttpException('Email already in use', 400);
+			throw new BaseException('409reg00', 409);
 		}
 
 		const hashedPassword = await bcrypt.hash(registrationData.password, 10);

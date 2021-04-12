@@ -11,6 +11,7 @@ import {
 } from 'nestjs-typeorm-paginate';
 import { AppointmentDataDto } from './dto/appointment-data.dto';
 import { AppointmentDataAdminDto } from './dto/appointment-data-admin.dto';
+import BaseException from '../util/exceptions/base.exception';
 
 const COST = 10;
 const WEEK = 7 * 24 * 60 * 60 * 1000;
@@ -83,29 +84,39 @@ export class AppointmentsService {
 			);
 			return newAppointment.id;
 		} else {
-			throw new HttpException('Not enough credit.', 400);
+			throw new BaseException('400pay00');
 		}
 	}
 
 	async deleteById(id: string, user: User): Promise<boolean> {
-		const appointment = await this.repository.findOneOrFail({
+		const appointment = await this.repository.findOne({
 			id,
 			user,
 			isDeleted: false
 		});
-		const timeDiff = appointment.begins.getTime() - new Date().getTime();
-		if (timeDiff <= WEEK) {
-			await this.repository.update({ id }, { isDeleted: true });
-		} else {
-			const afterward = async (queryRunner: QueryRunner) => {
-				await queryRunner.manager.update(
-					Appointment,
-					{ id },
-					{ isDeleted: true }
-				);
-			};
-			await this.paymentsService.storno(appointment.payment, afterward);
+		if (!appointment) {
+			throw new BaseException('404apo00', 404);
 		}
-		return true;
+		try {
+			const timeDiff = appointment.begins.getTime() - new Date().getTime();
+			if (timeDiff <= WEEK) {
+				await this.repository.update({ id }, { isDeleted: true });
+			} else {
+				const afterward = async (queryRunner: QueryRunner) => {
+					await queryRunner.manager.update(
+						Appointment,
+						{ id },
+						{ isDeleted: true }
+					);
+				};
+				await this.paymentsService.storno(appointment.payment, afterward);
+			}
+			return true;
+		} catch (error) {
+			if (error instanceof HttpException) {
+				throw error;
+			}
+			throw new BaseException('500gen00', 500);
+		}
 	}
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 
 import bcrypt from 'bcrypt';
@@ -7,7 +7,8 @@ import { JwtService } from '@nestjs/jwt';
 import { configService } from 'src/config/config.service';
 import { TokenPayload } from './interfaces/tokenPayload.interface';
 import { User } from 'src/entities';
-import { AuthenticationFailedException } from 'src/util/exceptions/authentication.exception';
+// import { AuthenticationFailedException } from 'src/util/exceptions/authentication.exception';
+import BaseException from '../util/exceptions/base.exception';
 
 @Injectable()
 export class AuthService {
@@ -27,12 +28,14 @@ export class AuthService {
 				user.password
 			);
 			if (!isPasswordMatching) {
-				throw new AuthenticationFailedException('200au00');
+				// throw new AuthenticationFailedException('200au00');
+				throw new BaseException('200au00', HttpStatus.UNAUTHORIZED);
 			}
 
 			return user;
 		} catch (error) {
-			throw new AuthenticationFailedException('200au00');
+			// throw new AuthenticationFailedException('200au00');
+			throw new BaseException('200au00', HttpStatus.UNAUTHORIZED);
 		}
 	}
 
