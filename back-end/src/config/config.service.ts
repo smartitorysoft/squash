@@ -68,7 +68,7 @@ class ConfigService {
 	}
 
 	public getTargetList(): string[] {
-		return ['admin', 'users', 'profile'];
+		return ['admin', 'users', 'payments', 'appointments'];
 	}
 
 	public getBaseUserCredentials() {

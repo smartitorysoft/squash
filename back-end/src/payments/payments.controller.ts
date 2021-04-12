@@ -30,7 +30,7 @@ export class PaymentsController {
 
 	@Get()
 	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
-	@Target('admin')
+	@Target('payments')
 	@Operation('read')
 	async index(
 		@Query('page') page = 1,
@@ -64,7 +64,7 @@ export class PaymentsController {
 
 	@Post(':id')
 	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
-	@Target('admin')
+	@Target('payments')
 	@Operation('create')
 	async create(
 		@Body() dto: CreatePaymentDto,
@@ -77,7 +77,7 @@ export class PaymentsController {
 
 	@Delete(':id')
 	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
-	@Target('admin')
+	@Target('payments')
 	@Operation('delete')
 	async delete(
 		@Param('id', new ParseUUIDPipe()) id: string
