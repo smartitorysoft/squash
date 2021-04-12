@@ -6,6 +6,7 @@ import styles from "../../../styles/Header.module.css";
 import ProfileModal from "../ProfileModal/ProfileModal";
 import EditIcon from "@material-ui/icons/Edit";
 import { useSelector } from "react-redux";
+import { GridComponent } from "../Grid/GridComponent";
 
 export const HomeHeader = () => {
   const [value, setValue] = useState(0);
@@ -33,7 +34,7 @@ export const HomeHeader = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        Home
+        <GridComponent />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Foglalás
