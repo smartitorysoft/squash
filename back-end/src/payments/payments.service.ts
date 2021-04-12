@@ -141,4 +141,9 @@ export class PaymentsService {
 			throw new HttpException('The payment is already reverted.', 400);
 		}
 	}
+
+	async delete(id: string): Promise<string> {
+		const payment = await this.repository.findOneOrFail({ id });
+		return await this.storno(payment);
+	}
 }
