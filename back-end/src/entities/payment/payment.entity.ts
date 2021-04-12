@@ -10,7 +10,7 @@ export class Payment extends BaseEntity {
 	value: number;
 
 	@JoinColumn()
-	@ManyToOne(() => User, { nullable: false, eager: false })
+	@ManyToOne(() => User, { nullable: false, eager: true })
 	user: User;
 
 	@Column('enum', { nullable: false, name: 'type', enum: PaymentType })

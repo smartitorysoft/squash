@@ -5,6 +5,7 @@ import {
 	Param,
 	ParseUUIDPipe,
 	Post,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	Query,
 	Req,
 	UseGuards
@@ -37,7 +38,7 @@ export class PaymentsController {
 		return this.paymentsService.findAll({
 			page,
 			limit,
-			route: `${configService.getApiUrl()}payments`
+			route: configService.getApiUrl('payments')
 		});
 	}
 
@@ -53,7 +54,7 @@ export class PaymentsController {
 			{
 				page,
 				limit,
-				route: `${configService.getApiUrl()}payments`
+				route: configService.getApiUrl('payments/me')
 			},
 			req.user
 		);
