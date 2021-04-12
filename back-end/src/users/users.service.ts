@@ -118,7 +118,6 @@ export class UsersService {
 		const result = await this.usersRepository.update(
 			{ id: id },
 			{
-				email: data.email,
 				lastChangedAt: new Date(),
 				lastChangedBy: currentUser.email
 			}
