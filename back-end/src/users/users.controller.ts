@@ -83,6 +83,6 @@ export class UsersController {
 		@Param('id') id: string
 	): Promise<UpdateUserResponseDto> {
 		await this.usersService.update(id, dto, request.user);
-		return new UpdateUserResponseDto(true);
+		return new UpdateUserResponseDto();
 	}
 }

@@ -4,7 +4,7 @@ export default class UpdateUserResponseDto {
 	@ApiProperty({ required: true })
 	success: boolean;
 
-	constructor(success) {
+	constructor(success = true) {
 		this.success = success;
 	}
 }
