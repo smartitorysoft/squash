@@ -1,35 +1,26 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import {Table, TableCell, TableContainer, 
     TableHead, TableRow, TableBody, 
     Paper} from '@material-ui/core'
 import TextInput from '../src/components/TextInput';
 import styles from '../styles/Table.module.css'
 import Row from '../src/components/Row/Row'
+import {useDispatch, useSelector} from 'react-redux'
+
+import {getUsers} from '../store/user/actions'
 
 export default function credit() {
 
     const [value, setValue] = useState('')
     const [open, setOpen] = React.useState(false);
 
-    function createData(name, email, credit) {
-        return { name, email, credit };
-      }
+    const dispatch = useDispatch()
 
-      const rows = [
-        createData('Ungnád', 'csillagharcos@example.com', 2005159),
-        createData('Tas', 'itTas@example.com', 237),
-        createData('Lorem Ipsum','loremipsum@example.com', 262)
-      ];
+    useEffect(() => {
+        dispatch(getUsers())
+    }, [])
 
-      const filterRows = (row) => {
-          if (row.name.includes(value) || row.email.includes(value)) {
-              return true
-          }
-            return false
-          
-      }
-
-      
+    const users = useSelector(state => state.user.users)
 
     return (
         <div>
@@ -42,13 +33,14 @@ export default function credit() {
                         <TableRow>
                             <TableCell/>
                             <TableCell align='left' >Név</TableCell>
-                            <TableCell align='right'>Email</TableCell>
+                            <TableCell align='left'>Email</TableCell>
                             <TableCell align='right'>Kredit</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.filter((row) =>filterRows(row)).map(filteredRow => ( 
-                            <Row row = {filteredRow}/>
+                        {users.items &&
+                            users.items.map(user => ( 
+                            <Row row = {user}/>
                         ))}
                     </TableBody>
                     

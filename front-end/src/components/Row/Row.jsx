@@ -12,8 +12,8 @@ export default function Row({ row }) {
   const [open, setOpen] = useState(false);
   const [numberOfCredits, setNumberOfCredits] = useState("0");
 
-  const onSubmit = (value) => {
-    dispatch(giveCredit(numberOfCredits));
+  const onSubmit = () => {
+    dispatch(giveCredit({ value: Number(numberOfCredits), id: row.id }));
   };
 
   return (
@@ -25,10 +25,10 @@ export default function Row({ row }) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.name}
+          {row.profile.firstName}
         </TableCell>
-        <TableCell align="right">{row.email}</TableCell>
-        <TableCell align="right">{row.credit}</TableCell>
+        <TableCell align="left">{row.email}</TableCell>
+        {/* <TableCell align="right">{row.credit}</TableCell> */}
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -36,7 +36,7 @@ export default function Row({ row }) {
             <TextInput
               type="number"
               label="Kreditek száma"
-              onChange={(text) => setNumberOfCredits(text.target.values)}
+              onChange={(text) => setNumberOfCredits(text.target.value)}
             />
             <BasicButton label="Jóváhagy" onClick={onSubmit} />
           </Collapse>
