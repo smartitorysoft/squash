@@ -56,7 +56,7 @@ export class PaymentsService {
 			.from(Payment, 'payment')
 			.where('payment.userId = :userId', { userId: user.id })
 			.getRawOne();
-		sum = !sum ? 0 : sum;
+		sum = !sum ? 0 : Number.parseInt(sum, 10);
 		await queryRunner.manager.update(User, { id: user.id }, { credit: sum });
 		return sum;
 	}
@@ -146,7 +146,10 @@ export class PaymentsService {
 	}
 
 	async delete(id: string): Promise<string> {
-		const payment = await this.repository.findOneOrFail({ id });
+		const payment = await this.repository.findOne({ id });
+		if (!payment) {
+			throw new BaseException('404pay00', 404);
+		}
 		return await this.storno(payment);
 	}
 }

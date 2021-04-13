@@ -39,6 +39,11 @@
     "type": "payment",
     "code": "400pay02"
   },
+  "404pay00": {
+    "name": "PaymentNotFound",
+    "type": "payment",
+    "code": "404pay00"
+  },
   "404apo00": {
     "name": "AppointmentNotFound",
     "type": "appointment",

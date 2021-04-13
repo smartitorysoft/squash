@@ -36,14 +36,18 @@ export class UsersController {
 	@Operation('read')
 	async index(
 		@Query('page') page = 1,
-		@Query('limit') limit = 10
+		@Query('limit') limit = 10,
+		@Query('search') search = ''
 	): Promise<Pagination<UserDataDto>> {
-		limit = limit > 20 ? 20 : limit;
-		return this.usersService.paginate({
-			page,
-			limit,
-			route: configService.getApiUrl('users')
-		});
+		limit = Math.max(Math.min(limit, 20), 1);
+		return this.usersService.paginate(
+			{
+				page,
+				limit,
+				route: configService.getApiUrl('users')
+			},
+			search
+		);
 	}
 
 	@Get('me')
