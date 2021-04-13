@@ -6,7 +6,7 @@ export const getAppointments = () => (dispatch, getState, {jsonApi}) => {
         console.log("res");
         dispatch({
             type: GET_APPOINTMENTS,
-            payload: res,data
+            payload: res.data
         })
     })
     .catch(e => console.log("get appointments error", e))

@@ -1,10 +1,24 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "../Card/Card";
+import Card from "../Card";
+import { useDispatch, useSelector } from "react-redux";
+import { getAppointments } from "../../../store/appointments/actions";
+import { useEffect } from "react";
+import moment from "moment";
 
 export const GridComponent = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAppointments());
+  }, []);
+
+  const appointments = useSelector((state) => state.appointments.appointments);
+
+  useEffect(() => {
+    console.log("Appointments", appointments, moment().start("week"));
+  }, [appointments]);
+
   return (
     <div>
       <Grid container>
@@ -20,8 +34,8 @@ export const GridComponent = () => {
                       justify="space-between"
                       spacing="4"
                     >
-                      {[...Array(8).keys()].map((value) => (
-                        <Grid key={value} item>
+                      {[...Array(8).keys()].map((itemvalue) => (
+                        <Grid key={itemvalue} item>
                           <Card reserved={[]} />
                         </Grid>
                       ))}

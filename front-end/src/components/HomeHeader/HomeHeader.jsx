@@ -9,13 +9,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { GridComponent } from "../Grid/GridComponent";
 import { makeStyles } from "@material-ui/core";
 import { makeAppointment } from "../../../store/appointments/actions";
+import { giveCredit } from "../../../store/credit/actions";
 
 export const HomeHeader = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
 
-  const user = useSelector((state) => state.me);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const useStyles = makeStyles((theme) => ({
     container: {
@@ -23,18 +26,9 @@ export const HomeHeader = () => {
     },
   }));
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
   const classes = useStyles();
 
-  dispatch(
-    makeAppointment({
-      begins: "2021-04-13T14:15:22Z",
-      court: "ONE",
-    })
-  );
+  const user = useSelector((state) => state.me.info);
 
   return (
     <div className={styles.home}>

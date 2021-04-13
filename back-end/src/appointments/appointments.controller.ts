@@ -44,7 +44,7 @@ export class AppointmentsController {
 
 	@Get('/admin')
 	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
-	@Target('admin')
+	@Target('appointments')
 	@Operation('read')
 	async indexAdmin(
 		@Query('page') page = 1,
