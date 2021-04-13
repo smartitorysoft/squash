@@ -93,7 +93,18 @@ export class AppointmentsController {
 		@Param('id', new ParseUUIDPipe()) id: string,
 		@Req() req: RequestWithUser
 	): Promise<DeleteAppointmentResponseDto> {
-		await this.appointmentsService.deleteById(id, req.user);
+		await this.appointmentsService.delete(id, req.user);
+		return new DeleteAppointmentResponseDto();
+	}
+
+	@Delete(':/id/admin')
+	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
+	@Target('appointments')
+	@Operation('delete')
+	async deleteAdmin(
+		@Param('id', new ParseUUIDPipe()) id: string
+	): Promise<DeleteAppointmentResponseDto> {
+		await this.appointmentsService.deleteAdmin(id);
 		return new DeleteAppointmentResponseDto();
 	}
 }

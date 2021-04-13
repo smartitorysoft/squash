@@ -12,6 +12,7 @@ import {
 import { AppointmentDataDto } from './dto/appointment-data.dto';
 import { AppointmentDataAdminDto } from './dto/appointment-data-admin.dto';
 import BaseException from '../util/exceptions/base.exception';
+import { Status } from './enum/status.enum';
 
 const COST = 10;
 const WEEK = 7 * 24 * 60 * 60 * 1000;
@@ -73,7 +74,8 @@ export class AppointmentsService {
 					begins: dto.begins,
 					user,
 					payment,
-					court: dto.court
+					court: dto.court,
+					status: Status.PENDING
 				});
 				return await queryRunner.manager.save(newAppointment);
 			};
@@ -88,25 +90,33 @@ export class AppointmentsService {
 		}
 	}
 
-	async deleteById(id: string, user: User): Promise<boolean> {
-		const appointment = await this.repository.findOne({
-			id,
-			user,
-			isDeleted: false
-		});
+	private async deleteById(
+		isAdmin: boolean,
+		id: string,
+		user: User = null
+	): Promise<boolean> {
+		const appointment = await this.repository.findOne(
+			isAdmin ? { id } : { id, user }
+		);
 		if (!appointment) {
 			throw new BaseException('404apo00', 404);
+		}
+		if (appointment.status !== Status.PENDING) {
+			throw new BaseException('400apo00', 400);
 		}
 		try {
 			const timeDiff = appointment.begins.getTime() - new Date().getTime();
 			if (timeDiff <= WEEK) {
-				await this.repository.update({ id }, { isDeleted: true });
+				await this.repository.update(
+					{ id },
+					{ status: isAdmin ? Status.DELETED : Status.CANCELED }
+				);
 			} else {
 				const afterward = async (queryRunner: QueryRunner) => {
 					await queryRunner.manager.update(
 						Appointment,
 						{ id },
-						{ isDeleted: true }
+						{ status: isAdmin ? Status.DELETED : Status.CANCELED }
 					);
 				};
 				await this.paymentsService.storno(appointment.payment, afterward);
@@ -118,5 +128,13 @@ export class AppointmentsService {
 			}
 			throw new BaseException('500gen00', 500);
 		}
+	}
+
+	async delete(id, user: User): Promise<boolean> {
+		return await this.deleteById(false, id, user);
+	}
+
+	async deleteAdmin(id): Promise<boolean> {
+		return await this.deleteById(true, id);
 	}
 }
