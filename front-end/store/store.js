@@ -5,6 +5,7 @@ import axios from "axios";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import reducers from "../store/reducers";
+import { createWrapper } from "next-redux-wrapper"
 
 const { backendApi } = getConfig().publicRuntimeConfig;
 
@@ -25,37 +26,26 @@ const makeStore = (initialState, ctx) => {
   
   // Create store if unavailable on the client and set it on the window object
   
-    const jsonApi = () => {
-      const instance = axios.create({
-        baseURL: `${backendApi}`,
-        headers: {
-          ...headers,
-          "Content-Type": "application/json"
-        }
-      });
-      return instance;
+  const jsonApi = () => {
+  	const instance = axios.create({
+    	baseURL: `${backendApi}`,
+    	headers: {
+      	...headers,
+      	"Content-Type": "application/json"
+    	},
+    	withCredentials:true
+  	});
+    return instance;
     };
     
-    const formDataApi = () => {
-      const instance = axios.create({
-        baseURL: `${backendApi}`,
-        headers: {
-          ...headers,
-          "Content-Type": "multipart/form-data"
-        }
-      });
-      return instance;
-    };
-
     const store = createStore(
       reducers,
       initialState,
-      composeEnhancers(applyMiddleware(thunk.withExtraArgument({ jsonApi, formDataApi })))
+      composeEnhancers(applyMiddleware(thunk.withExtraArgument({ jsonApi })))
       );
 
     
-  
-  return store;
+  return createWrapper(store);
 };
 
 export default makeStore;
