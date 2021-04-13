@@ -5,20 +5,36 @@ import TabPanel from "../TabPanel/TabPanel";
 import styles from "../../../styles/Header.module.css";
 import ProfileModal from "../ProfileModal/ProfileModal";
 import EditIcon from "@material-ui/icons/Edit";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { GridComponent } from "../Grid/GridComponent";
+import { makeStyles } from "@material-ui/core";
+import { makeAppointment } from "../../../store/appointments/actions";
 
 export const HomeHeader = () => {
+  const dispatch = useDispatch();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
 
   const user = useSelector((state) => state.me);
 
-  console.log("user", user);
+  const useStyles = makeStyles((theme) => ({
+    container: {
+      marginLeft: `calc(100% / 8)`,
+    },
+  }));
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const classes = useStyles();
+
+  dispatch(
+    makeAppointment({
+      begins: "2021-04-13T14:15:22Z",
+      court: "ONE",
+    })
+  );
 
   return (
     <div className={styles.home}>
@@ -34,7 +50,9 @@ export const HomeHeader = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <GridComponent />
+        <div className={classes.container}>
+          <GridComponent />
+        </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
         Foglalás

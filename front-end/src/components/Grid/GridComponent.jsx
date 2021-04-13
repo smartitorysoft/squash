@@ -5,37 +5,22 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "../Card/Card";
 
 export const GridComponent = () => {
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    paper: {
-      height: 140,
-      width: 100,
-    },
-    control: {
-      padding: theme.spacing(2),
-    },
-  }));
-
-  const classes = useStyles();
-
   return (
     <div>
       <Grid container>
-        <Grid item xs={12}>
-          <Grid container direction="row" justify="spacebetween" spacing="1">
-            {[0, 1, 2, 3, 4, 5, 6].map((value) => (
+        <Grid item xs>
+          <Grid container direction="row" justify="spacebetween" spacing="10">
+            {[...Array(7).keys()].map((value) => (
               <Grid key={value} item xs={1}>
-                <Grid container spacing={16}>
+                <Grid container spacing={10}>
                   <Grid item>
                     <Grid
                       container
                       direction="column"
                       justify="space-between"
-                      spacing="12"
+                      spacing="4"
                     >
-                      {[0, 1, 2, 3].map((value) => (
+                      {[...Array(8).keys()].map((value) => (
                         <Grid key={value} item>
                           <Card reserved={[]} />
                         </Grid>

@@ -8,8 +8,12 @@ import {
 } from "@material-ui/core";
 import styles from "../../../styles/ReserveModal.module.css";
 import { makeStyles } from "@material-ui/core/styles";
+import { makeAppointment } from "../../../store/appointments/actions";
+import { useDispatch } from "react-redux";
 
 export const ReserveModal = ({ open, onClose, reserved }) => {
+  const dispatch = useDispatch();
+
   const [checked, setChecked] = useState({
     checkedA: false,
     checkedB: false,
@@ -71,7 +75,26 @@ export const ReserveModal = ({ open, onClose, reserved }) => {
               />
             </FormGroup>
           </div>
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              checked.checkedA &&
+                dispatch(
+                  makeAppointment({
+                    begins: "2021-04-13T14:15:22Z",
+                    court: "ONE",
+                  })
+                );
+              checked.checkedB &&
+                dispatch(
+                  makeAppointment({
+                    begins: "2021-04-13T14:15:22Z",
+                    court: "TWO",
+                  })
+                );
+            }}
+          >
             Foglalás
           </Button>
         </div>
