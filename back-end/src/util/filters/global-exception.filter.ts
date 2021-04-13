@@ -21,13 +21,16 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 				: HttpStatus.INTERNAL_SERVER_ERROR;
 
 		response.status(status).json({
-			...this.parseError(exception, status),
+			...GlobalExceptionFilter.parseError(exception, status),
 			timestamp: new Date().toISOString(),
 			path: request.url
 		});
 	}
 
-	private parseError(error: { code: string | number } | any, status: number) {
+	private static parseError(
+		error: { code: string | number } | any,
+		status: number
+	) {
 		// console.log(error);
 		if (error?.code && customErrors[error.code]) {
 			return {

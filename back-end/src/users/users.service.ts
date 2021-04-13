@@ -1,4 +1,4 @@
-import { Injectable, HttpException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities';
 import { Repository } from 'typeorm';
@@ -16,6 +16,7 @@ import {
 	paginate
 } from 'nestjs-typeorm-paginate';
 import UserDataDto from './dto/user-data.dto';
+import BaseException from '../util/exceptions/base.exception';
 
 @Injectable()
 export class UsersService {
@@ -62,17 +63,64 @@ export class UsersService {
 	}
 
 	async paginate(
-		options: IPaginationOptions
+		options: IPaginationOptions,
+		search = ''
 	): Promise<Pagination<UserDataDto>> {
-		const page = await paginate<User>(this.usersRepository, options, {
-			order: { createdAt: 'DESC' }
-		});
-
-		const items = page.items.map((item) => {
-			return new UserDataDto(item);
-		});
-
-		return new Pagination<UserDataDto>(items, page.meta, page.links);
+		if (!search) {
+			const page = await paginate<User>(this.usersRepository, options, {
+				where: { isDeleted: false },
+				order: { createdAt: 'DESC' }
+			});
+			const items = page.items.map((item) => new UserDataDto(item));
+			return new Pagination<UserDataDto>(items, page.meta, page.links);
+		}
+		const concatUrl = (page = 1) => {
+			return `${options.route}?search=${encodeURIComponent(search)}${
+				page > 1 ? `&page=${page}` : ''
+			}&limit=${options.limit}`;
+		};
+		let { page, limit } = options;
+		page = typeof page === 'string' ? Number.parseInt(page, 10) : page;
+		limit = typeof limit === 'string' ? Number.parseInt(limit, 10) : limit;
+		search = search
+			.normalize('NFD')
+			.replace(/\s+/g, '')
+			.toLowerCase()
+			.replace(/[\u0300-\u036f]/g, '');
+		const query = this.usersRepository
+			.createQueryBuilder('users')
+			.leftJoinAndSelect('users.profile', 'profile')
+			.leftJoinAndSelect('users.role', 'role')
+			.where(
+				'users.isDeleted = false and (unaccent(lower(users.email)) like :search ' +
+					'or concat(unaccent(lower(profile.firstName)), unaccent(lower(profile.lastName)), ' +
+					'unaccent(lower(profile.firstName))) like :search)',
+				{ search: `%${search}%` }
+			);
+		const items = await query
+			.orderBy('users.createdAt', 'DESC')
+			.limit(limit)
+			.offset((page - 1) * limit)
+			.getMany();
+		const totalCount =
+			items.length < limit ? items.length : await query.getCount();
+		const totalPages = Math.ceil(totalCount / limit);
+		return new Pagination<UserDataDto>(
+			items.map((item) => new UserDataDto(item)),
+			{
+				currentPage: page,
+				itemCount: items.length,
+				itemsPerPage: limit,
+				totalItems: totalCount,
+				totalPages
+			},
+			{
+				first: concatUrl(),
+				last: totalPages ? concatUrl(totalPages) : '',
+				previous: page > 1 ? concatUrl(page - 1) : '',
+				next: page < totalCount ? concatUrl(page + 1) : ''
+			}
+		);
 	}
 
 	public async create(
@@ -84,7 +132,7 @@ export class UsersService {
 		});
 
 		if (isRegistered) {
-			throw new HttpException('Email already in use', 400);
+			throw new BaseException('409reg00', 409);
 		}
 
 		const hashedPassword = await bcrypt.hash(registrationData.password, 10);
@@ -118,7 +166,6 @@ export class UsersService {
 		const result = await this.usersRepository.update(
 			{ id: id },
 			{
-				email: data.email,
 				lastChangedAt: new Date(),
 				lastChangedBy: currentUser.email
 			}

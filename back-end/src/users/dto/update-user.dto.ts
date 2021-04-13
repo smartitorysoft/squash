@@ -1,17 +1,13 @@
-import ProfileDto from './profile.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, ValidateNested } from 'class-validator';
+import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import UpdateProfileDto from './update-profile.dto';
 
 export class UpdateUserDto {
-	@ApiProperty({ required: false })
-	@IsEmail()
-	email: string;
-
-	@ApiProperty({ required: false })
+	@ApiProperty({ required: true })
 	@ValidateNested({ each: true })
-	@Type(() => ProfileDto)
-	profile: ProfileDto;
+	@Type(() => UpdateProfileDto)
+	profile: UpdateProfileDto;
 }
 
 export default UpdateUserDto;

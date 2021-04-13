@@ -1,6 +1,7 @@
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
 	Param,
 	ParseUUIDPipe,
@@ -17,6 +18,7 @@ import { Target } from '../admin/permission/decorators/target.decorator';
 import { Operation } from '../admin/permission/decorators/permission.decorator';
 import CreatePaymentDto from './dto/create-payment.dto';
 import CreatePaymentResponseDto from './dto/create-payment.response.dto';
+import DeletePaymentResponseDto from './dto/delete-payment.response.dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { PaymentDataDto } from './dto/payment-data.dto';
 import { configService } from '../config/config.service';
@@ -28,7 +30,7 @@ export class PaymentsController {
 
 	@Get()
 	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
-	@Target('admin')
+	@Target('payments')
 	@Operation('read')
 	async index(
 		@Query('page') page = 1,
@@ -62,7 +64,7 @@ export class PaymentsController {
 
 	@Post(':id')
 	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
-	@Target('admin')
+	@Target('payments')
 	@Operation('create')
 	async create(
 		@Body() dto: CreatePaymentDto,
@@ -71,5 +73,15 @@ export class PaymentsController {
 		const response = new CreatePaymentResponseDto();
 		response.id = await this.paymentsService.addCredit(id, dto.value);
 		return response;
+	}
+
+	@Delete(':id')
+	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
+	@Target('payments')
+	@Operation('delete')
+	async delete(
+		@Param('id', new ParseUUIDPipe()) id: string
+	): Promise<DeletePaymentResponseDto> {
+		return new DeletePaymentResponseDto(await this.paymentsService.delete(id));
 	}
 }

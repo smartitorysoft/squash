@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Payment, User } from '../entities';
 import { getConnection, QueryRunner, Repository } from 'typeorm';
@@ -10,6 +10,7 @@ import {
 	Pagination
 } from 'nestjs-typeorm-paginate';
 import { PaymentDataDto } from './dto/payment-data.dto';
+import BaseException from '../util/exceptions/base.exception';
 
 interface transactionItem {
 	(queryRunner: QueryRunner, payment: Payment): Promise<any>;
@@ -55,7 +56,7 @@ export class PaymentsService {
 			.from(Payment, 'payment')
 			.where('payment.userId = :userId', { userId: user.id })
 			.getRawOne();
-		sum = !sum ? 0 : sum;
+		sum = !sum ? 0 : Number.parseInt(sum, 10);
 		await queryRunner.manager.update(User, { id: user.id }, { credit: sum });
 		return sum;
 	}
@@ -122,23 +123,33 @@ export class PaymentsService {
 		payment: Payment,
 		afterward: transactionItem = null
 	): Promise<string> {
-		if (payment.isRevertible) {
-			const revoke = async (queryRunner: QueryRunner) => {
-				await queryRunner.manager.update(
-					Payment,
-					{ id: payment.id },
-					{ isRevertible: false }
-				);
-			};
-			const newPayment = await this.create(
-				payment.user,
-				-payment.value,
-				PaymentType.STORNO,
-				[revoke, afterward]
-			);
-			return newPayment.id;
-		} else {
-			throw new HttpException('The payment is already reverted.', 400);
+		if (payment.type === PaymentType.STORNO) {
+			throw new BaseException('400pay02');
 		}
+		if (!payment.isRevertible) {
+			throw new BaseException('400pay01');
+		}
+		const revoke = async (queryRunner: QueryRunner) => {
+			await queryRunner.manager.update(
+				Payment,
+				{ id: payment.id },
+				{ isRevertible: false }
+			);
+		};
+		const newPayment = await this.create(
+			payment.user,
+			-payment.value,
+			PaymentType.STORNO,
+			[revoke, afterward]
+		);
+		return newPayment.id;
+	}
+
+	async delete(id: string): Promise<string> {
+		const payment = await this.repository.findOne({ id });
+		if (!payment) {
+			throw new BaseException('404pay00', 404);
+		}
+		return await this.storno(payment);
 	}
 }

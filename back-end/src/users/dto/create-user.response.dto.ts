@@ -1,5 +1,10 @@
-export class CreateUserResponseDto {
-	id: string;
-}
+import { ApiProperty } from '@nestjs/swagger';
 
-export default CreateUserResponseDto;
+export default class CreateUserResponseDto {
+	@ApiProperty({ required: true })
+	private id: string;
+
+	constructor(id: string) {
+		this.id = id;
+	}
+}
