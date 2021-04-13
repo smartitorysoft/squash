@@ -24,6 +24,7 @@ import { ApiResponse } from '@nestjs/swagger';
 import UserDataDto from './dto/user-data.dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { configService } from 'src/config/config.service';
+import UpdateUserResponseDto from './dto/update-user.response.dto';
 
 @Controller('users')
 export class UsersController {
@@ -35,14 +36,18 @@ export class UsersController {
 	@Operation('read')
 	async index(
 		@Query('page') page = 1,
-		@Query('limit') limit = 10
+		@Query('limit') limit = 10,
+		@Query('search') search = ''
 	): Promise<Pagination<UserDataDto>> {
-		limit = limit > 20 ? 20 : limit;
-		return this.usersService.paginate({
-			page,
-			limit,
-			route: configService.getApiUrl() + 'users'
-		});
+		limit = Math.max(Math.min(limit, 20), 1);
+		return this.usersService.paginate(
+			{
+				page,
+				limit,
+				route: configService.getApiUrl('users')
+			},
+			search
+		);
 	}
 
 	@Get('me')
@@ -68,24 +73,20 @@ export class UsersController {
 		@Req() request: RequestWithUser,
 		@Body() msg: CreateUserDto
 	): Promise<CreateUserResponseDto> {
-		const response = new CreateUserResponseDto();
-		response.id = await this.usersService.create(msg);
-		return response;
+		return new CreateUserResponseDto(await this.usersService.create(msg));
 	}
 
 	@Put(':id')
 	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
 	@Target('users')
 	@Operation('update')
-	@ApiResponse({ status: 200, type: CreateUserResponseDto })
+	@ApiResponse({ status: 200, type: UpdateUserResponseDto })
 	public async update(
 		@Req() request: RequestWithUser,
-		@Body() msg: UpdateUserDto,
+		@Body() dto: UpdateUserDto,
 		@Param('id') id: string
-	): Promise<CreateUserResponseDto> {
-		const response = new CreateUserResponseDto();
-		await this.usersService.update(id, msg, request.user);
-		response.id = id;
-		return response;
+	): Promise<UpdateUserResponseDto> {
+		await this.usersService.update(id, dto, request.user);
+		return new UpdateUserResponseDto();
 	}
 }

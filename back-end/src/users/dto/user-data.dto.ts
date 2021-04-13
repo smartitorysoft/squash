@@ -14,12 +14,16 @@ export class UserDataDto {
 	@ApiProperty({ required: false })
 	profile: ProfileDto;
 
+	@ApiProperty({ required: false })
+	credit: number;
+
 	constructor(data: User) {
 		if (data) {
 			this.id = data.id;
 			this.email = data.email;
 			this.role = data.role.name;
 			this.profile = data.profile;
+			this.credit = data.credit;
 		}
 	}
 }

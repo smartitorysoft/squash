@@ -68,7 +68,7 @@ class ConfigService {
 	}
 
 	public getTargetList(): string[] {
-		return ['admin', 'users', 'profile'];
+		return ['admin', 'users', 'payments', 'appointments'];
 	}
 
 	public getBaseUserCredentials() {
@@ -86,8 +86,8 @@ class ConfigService {
 		};
 	}
 
-	public getApiUrl() {
-		return this.getValue('API_URL');
+	public getApiUrl(path = '') {
+		return this.getValue('API_URL').concat(path);
 	}
 }
 

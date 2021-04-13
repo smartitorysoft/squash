@@ -5,6 +5,7 @@ import {useRouter} from 'next/router'
 import {useDispatch, useSelector} from 'react-redux'
 import { useState, useEffect } from "react";
 import {login} from '../store/auth/actions'
+import {loadMe} from '../store/me/actions'
 
 export default function Login() {
     const router = useRouter();
@@ -15,10 +16,9 @@ export default function Login() {
   
     const isSignedIn = useSelector(state => state.auth.isSignedIn)
 
-    console.log('isSignedIn', isSignedIn);
-
     useEffect(() => {
       if (isSignedIn) {
+        dispatch(loadMe());
         router.push('/')
       }
       

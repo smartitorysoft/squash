@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
 	Entity,
 	Column,
@@ -19,7 +18,7 @@ export class User extends BaseEntity {
 	@Column({ type: 'varchar', length: 256 })
 	password: string;
 
-	@ManyToOne((type) => Role, (role) => role.name, { eager: true })
+	@ManyToOne(() => Role, (role) => role.name, { eager: true })
 	role: Role;
 
 	@Column({ type: 'varchar', length: 128, nullable: true })
@@ -28,7 +27,10 @@ export class User extends BaseEntity {
 	@Column({ type: 'varchar', length: 128, nullable: true })
 	social: string;
 
-	@OneToOne((type) => Profile, { nullable: false, eager: true })
+	@OneToOne(() => Profile, { nullable: false, eager: true })
 	@JoinColumn()
 	profile: Profile;
+
+	@Column('float4', { nullable: false, default: 0 })
+	credit: number;
 }
