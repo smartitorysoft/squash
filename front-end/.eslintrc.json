@@ -43,7 +43,8 @@
 			"SwitchCase": 1,
 			"MemberExpression": 1,
 			"ArrayExpression": "first",
-			"FunctionDeclaration": {"parameters": "first"}
+			"FunctionDeclaration": {"parameters": "first"},
+			"ignoredNodes": ["TemplateLiteral"]
 			}],
 		"one-var": 0,
 		"no-console": [1, { "allow": ["warn", "error"] }],
@@ -54,10 +55,12 @@
 		"import/prefer-default-export": 0,
 		"react/jsx-uses-react": 2,
 		"react/jsx-uses-vars": 2,
-		"react/react-in-jsx-scope": 2,
+		"react/react-in-jsx-scope": 1,
+		"react/jsx-filename-extension": 1,
 		"react/jsx-indent": [2, "tab"],
 		"react/jsx-indent-props": [2, "tab"],
 		"react/jsx-props-no-spreading": [1, {"custom": "ignore"}],
+		"react/prop-types": 1,
 		"jsx-quotes": [2, "prefer-single"],
 		"implicit-arrow-linebreak": 0,
 		"function-paren-newline": 0,
