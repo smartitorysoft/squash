@@ -2,7 +2,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import cors from './cors.lib';
 
-const whitelist = ['http://nest:3000', 'http://localhost:3000'];
+const whitelist = [
+	'http://nest:3000',
+	'http://localhost:3000',
+	'http://159.89.101.123',
+	'https://159.89.101.123',
+	'http://test.smartitory.com',
+	'https://test.smartitory.com'
+];
 
 const corsDisabledEndpoints = [
 	/\/v1\/api\/files\/img\/(.*)/g,
