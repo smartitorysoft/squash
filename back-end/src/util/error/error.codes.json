@@ -49,6 +49,11 @@
     "type": "appointment",
     "code": "400apo00"
   },
+  "400apo01": {
+    "name": "StatusNotExist",
+    "type": "appointment",
+    "code": "400apo01"
+  },
   "404apo00": {
     "name": "AppointmentNotFound",
     "type": "appointment",

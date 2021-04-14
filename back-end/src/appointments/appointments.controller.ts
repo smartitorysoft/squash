@@ -24,20 +24,41 @@ import { AppointmentDataDto } from './dto/appointment-data.dto';
 import { configService } from '../config/config.service';
 import DeleteAppointmentResponseDto from './dto/delete-appointment.response.dto';
 import AppointmentTableDataResponseDto from './dto/appointment-table-data.response.dto';
+import { Status } from './enum/status.enum';
+import BaseException from '../util/exceptions/base.exception';
 
 @Controller('appointments')
 export class AppointmentsController {
 	constructor(private readonly appointmentsService: AppointmentsService) {}
 
+	private static validateFilters(filters: string): string[] {
+		if (filters) {
+			const tmp = filters.split(',');
+			tmp.forEach((item) => {
+				if (!Status[item]) {
+					throw new BaseException('400apo01');
+				}
+			});
+			return tmp;
+		}
+		return [];
+	}
+
 	@Get()
 	async index(
 		@Query('from') from = AppointmentsService.getDayByDate(new Date()),
-		@Query('days') days = 1
+		@Query('days') days = 1,
+		@Query('status') filters: string = null
 	): Promise<AppointmentTableDataResponseDto> {
 		days = Math.max(days, 1);
 		from = new Date(from);
 		return new AppointmentTableDataResponseDto(
-			await this.appointmentsService.findAll(from, days)
+			await this.appointmentsService.findAll(
+				from,
+				days,
+				false,
+				AppointmentsController.validateFilters(filters)
+			)
 		);
 	}
 
@@ -47,12 +68,18 @@ export class AppointmentsController {
 	@Operation('read')
 	async indexAdmin(
 		@Query('from') from = AppointmentsService.getDayByDate(new Date()),
-		@Query('days') days = 1
+		@Query('days') days = 1,
+		@Query('status') filters: string = null
 	): Promise<AppointmentTableDataResponseDto> {
 		days = Math.max(days, 1);
 		from = new Date(from);
 		return new AppointmentTableDataResponseDto(
-			await this.appointmentsService.findAll(from, days, true)
+			await this.appointmentsService.findAll(
+				from,
+				days,
+				true,
+				AppointmentsController.validateFilters(filters)
+			)
 		);
 	}
 
@@ -61,7 +88,8 @@ export class AppointmentsController {
 	async getMine(
 		@Query('page') page = 1,
 		@Query('limit') limit = 10,
-		@Req() req: RequestWithUser
+		@Req() req: RequestWithUser,
+		@Query('status') filters: string = null
 	): Promise<Pagination<AppointmentDataDto>> {
 		limit = Math.min(limit, 20);
 		return this.appointmentsService.findByUser(
@@ -70,7 +98,8 @@ export class AppointmentsController {
 				limit,
 				route: configService.getApiUrl('appointments/mine')
 			},
-			req.user
+			req.user,
+			AppointmentsController.validateFilters(filters)
 		);
 	}
 

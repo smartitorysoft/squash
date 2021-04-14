@@ -55,22 +55,29 @@ export class AppointmentsService {
 	private async findByInterval(
 		startTime: Date,
 		endTime: Date,
-		isAdmin: boolean
+		isAdmin: boolean,
+		filters: string[]
 	): Promise<AppointmentDataDto[] | AppointmentDataAdminDto[]> {
+		let f = '';
+		if (filters.length) {
+			filters.forEach((item, i) => {
+				if (i) {
+					f += ` or appointments.status = :${item}`;
+				} else {
+					f += `appointments.status = :${item}`;
+				}
+			});
+		}
 		const items = await this.repository
 			.createQueryBuilder('appointments')
 			.leftJoinAndSelect('appointments.user', 'User')
 			.leftJoinAndSelect('User.role', 'Role')
 			.leftJoinAndSelect('User.profile', 'Profile')
 			.where(
-				'appointments.status != :isCanceled and appointments.status != :isDeleted and appointments.begins >= :startTime and appointments.begins < :endTime',
-				{
-					isCanceled: Status.CANCELED,
-					isDeleted: Status.DELETED,
-					startTime,
-					endTime
-				}
+				`appointments.begins >= :startTime and appointments.begins < :endTime`,
+				{ startTime, endTime }
 			)
+			.andWhere(f ? f : '1 = 1', { ...Status })
 			.orderBy('begins')
 			.getMany();
 		const mapFunc = isAdmin
@@ -82,7 +89,8 @@ export class AppointmentsService {
 	async findAll(
 		from: Date,
 		days: number,
-		isAdmin = false
+		isAdmin: boolean,
+		filters: string[]
 	): Promise<AppointmentTableDataDto[]> {
 		const tmp: AppointmentTableDataDto[] = [];
 		from = AppointmentsService.getDayByDate(from);
@@ -91,7 +99,12 @@ export class AppointmentsService {
 			const endDate = new Date(from.getTime() + (i + 1) * DAY);
 			tmp.push({
 				date: startDate,
-				reserved: await this.findByInterval(startDate, endDate, isAdmin)
+				reserved: await this.findByInterval(
+					startDate,
+					endDate,
+					isAdmin,
+					filters
+				)
 			});
 		}
 		return tmp;
@@ -99,9 +112,19 @@ export class AppointmentsService {
 
 	async findByUser(
 		options: IPaginationOptions,
-		user: User
+		user: User,
+		filters: string[]
 	): Promise<Pagination<AppointmentListDataDto>> {
-		return this.paginate(false, options, { where: { user } });
+		let where;
+		if (!filters.length) {
+			where = { user };
+		} else {
+			where = [];
+			filters.forEach((item) => {
+				where.push({ user, status: item });
+			});
+		}
+		return this.paginate(false, options, { where });
 	}
 
 	static getDayByDate(date: Date): Date {
