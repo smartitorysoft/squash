@@ -4,8 +4,36 @@ import AddIcon from "@material-ui/icons/Add";
 import { ReserveModal } from "../ReserveModal/ReserveModal";
 import { IconButton } from "@material-ui/core";
 
-export const Card = ({ reserved }) => {
+export const Card = ({ date, reservedAppointments, day, hour }) => {
   const [open, setOpen] = useState(false);
+
+  const ifReserved = (day, hour) => {
+    let obj = [];
+    reservedAppointments.map((e) => {
+      if (
+        e.day === day &&
+        e.reservation.hour === hour &&
+        !obj.includes(e.reservation.court)
+      ) {
+        obj.push(e.reservation.court);
+      }
+    });
+    return obj;
+  };
+
+  const reserved = ifReserved(day, hour);
+
+  date.setHours(hour);
+  date.setMinutes(0);
+  const reserveDate = new Date(
+    Date.UTC(
+      date.getFullYear(),
+      date.getMonth(),
+      day,
+      date.getHours(),
+      date.getMinutes()
+    )
+  ).toISOString();
 
   if (reserved && reserved.length > 0) {
     if (reserved.length === 2) {
@@ -13,8 +41,8 @@ export const Card = ({ reserved }) => {
     } else {
       return (
         <div className={"container"}>
-          <div className={reserved[0] === "2" ? "segment" : "half"}>
-            {reserved[0] === "2" ? (
+          <div className={reserved[0] === "TWO" ? "segment" : "half"}>
+            {reserved[0] === "TWO" ? (
               <div>
                 <IconButton onClick={() => setOpen(true)}>
                   <AddIcon />
@@ -23,6 +51,7 @@ export const Card = ({ reserved }) => {
                   reserved={reserved}
                   open={open}
                   onClose={() => setOpen(false)}
+                  date={reserveDate}
                 />
               </div>
             ) : (
@@ -30,8 +59,8 @@ export const Card = ({ reserved }) => {
             )}
           </div>
           <div className={"verticalLine"} />
-          <div className={reserved[0] === "1" ? "segment" : "half"}>
-            {reserved[0] === "1" ? (
+          <div className={reserved[0] === "ONE" ? "segment" : "half"}>
+            {reserved[0] === "ONE" ? (
               <div>
                 <IconButton onClick={() => setOpen(true)}>
                   <AddIcon />
@@ -40,6 +69,7 @@ export const Card = ({ reserved }) => {
                   reserved={reserved}
                   open={open}
                   onClose={() => setOpen(false)}
+                  date={reserveDate}
                 />
               </div>
             ) : (
@@ -59,6 +89,7 @@ export const Card = ({ reserved }) => {
           reserved={reserved}
           open={open}
           onClose={() => setOpen(false)}
+          date={reserveDate}
         />
       </div>
     );

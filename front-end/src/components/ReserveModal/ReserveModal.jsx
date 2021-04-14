@@ -11,7 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { makeAppointment } from "../../../store/appointments/actions";
 import { useDispatch } from "react-redux";
 
-export const ReserveModal = ({ open, onClose, reserved }) => {
+export const ReserveModal = ({ open, onClose, reserved, date }) => {
   const dispatch = useDispatch();
 
   const [checked, setChecked] = useState({
@@ -52,7 +52,7 @@ export const ReserveModal = ({ open, onClose, reserved }) => {
           >
             <FormGroup row>
               <FormControlLabel
-                disabled={reserved && reserved.includes("1")}
+                disabled={reserved && reserved.includes("ONE")}
                 control={
                   <Checkbox
                     checked={checked.checkedA}
@@ -63,7 +63,7 @@ export const ReserveModal = ({ open, onClose, reserved }) => {
                 label="1-es pálya"
               />
               <FormControlLabel
-                disabled={reserved && reserved.includes("2")}
+                disabled={reserved && reserved.includes("TWO")}
                 control={
                   <Checkbox
                     checked={checked.checkedB}
@@ -82,14 +82,14 @@ export const ReserveModal = ({ open, onClose, reserved }) => {
               checked.checkedA &&
                 dispatch(
                   makeAppointment({
-                    begins: "2021-04-13T14:15:22Z",
+                    begins: date,
                     court: "ONE",
                   })
                 );
               checked.checkedB &&
                 dispatch(
                   makeAppointment({
-                    begins: "2021-04-13T14:15:22Z",
+                    begins: date,
                     court: "TWO",
                   })
                 );
