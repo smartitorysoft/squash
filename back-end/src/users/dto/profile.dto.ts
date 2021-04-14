@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsPhoneNumber } from 'class-validator';
+import { Profile } from '../../entities';
 
 export class ProfileDto {
 	@ApiProperty({ required: false })
@@ -13,6 +14,14 @@ export class ProfileDto {
 	@ApiProperty({ required: true })
 	@IsPhoneNumber()
 	phone: string;
+
+	constructor(data: Profile) {
+		if (data) {
+			this.firstName = data.firstName;
+			this.lastName = data.lastName;
+			this.phone = data.phone;
+		}
+	}
 }
 
 export default ProfileDto;

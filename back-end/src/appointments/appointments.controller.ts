@@ -20,10 +20,10 @@ import { PermissionGuard } from '../admin/permission/guard/permission.guard';
 import { Target } from '../admin/permission/decorators/target.decorator';
 import { Operation } from '../admin/permission/decorators/permission.decorator';
 import { Pagination } from 'nestjs-typeorm-paginate';
-import { AppointmentDataAdminDto } from './dto/appointment-data-admin.dto';
 import { AppointmentDataDto } from './dto/appointment-data.dto';
 import { configService } from '../config/config.service';
 import DeleteAppointmentResponseDto from './dto/delete-appointment.response.dto';
+import AppointmentTableDataResponseDto from './dto/appointment-table-data.response.dto';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -31,15 +31,14 @@ export class AppointmentsController {
 
 	@Get()
 	async index(
-		@Query('page') page = 1,
-		@Query('limit') limit = 10
-	): Promise<Pagination<AppointmentDataDto>> {
-		limit = Math.min(limit, 20);
-		return this.appointmentsService.findAll({
-			page,
-			limit,
-			route: configService.getApiUrl('appointments')
-		});
+		@Query('from') from = AppointmentsService.getDayByDate(new Date()),
+		@Query('days') days = 1
+	): Promise<AppointmentTableDataResponseDto> {
+		days = Math.max(days, 1);
+		from = new Date(from);
+		return new AppointmentTableDataResponseDto(
+			await this.appointmentsService.findAll(from, days)
+		);
 	}
 
 	@Get('/admin')
@@ -47,15 +46,14 @@ export class AppointmentsController {
 	@Target('appointments')
 	@Operation('read')
 	async indexAdmin(
-		@Query('page') page = 1,
-		@Query('limit') limit = 10
-	): Promise<Pagination<AppointmentDataAdminDto>> {
-		limit = Math.min(limit, 20);
-		return this.appointmentsService.findAllAdmin({
-			page,
-			limit,
-			route: configService.getApiUrl('appointments/admin')
-		});
+		@Query('from') from = AppointmentsService.getDayByDate(new Date()),
+		@Query('days') days = 1
+	): Promise<AppointmentTableDataResponseDto> {
+		days = Math.max(days, 1);
+		from = new Date(from);
+		return new AppointmentTableDataResponseDto(
+			await this.appointmentsService.findAll(from, days, true)
+		);
 	}
 
 	@Get('/mine')

@@ -9,13 +9,17 @@ import {
 	paginate,
 	Pagination
 } from 'nestjs-typeorm-paginate';
-import { AppointmentDataDto } from './dto/appointment-data.dto';
-import { AppointmentDataAdminDto } from './dto/appointment-data-admin.dto';
+import { AppointmentListDataDto } from './dto/appointment-list-data.dto';
+import { AppointmentListDataAdminDto } from './dto/appointment-list-data-admin.dto';
 import BaseException from '../util/exceptions/base.exception';
 import { Status } from './enum/status.enum';
+import { AppointmentTableDataDto } from './dto/appointment-table-data.dto';
+import { AppointmentDataDto } from './dto/appointment-data.dto';
+import { AppointmentDataAdminDto } from './dto/appointment-data-admin.dto';
 
 const COST = 10;
-const WEEK = 7 * 24 * 60 * 60 * 1000;
+const DAY = 24 * 60 * 60 * 1000;
+const WEEK = 7 * DAY;
 
 @Injectable()
 export class AppointmentsService {
@@ -35,36 +39,78 @@ export class AppointmentsService {
 			...searchOptions
 		});
 		if (isAdmin) {
-			return new Pagination<AppointmentDataAdminDto>(
-				page.items.map((item) => new AppointmentDataAdminDto(item)),
+			return new Pagination<AppointmentListDataAdminDto>(
+				page.items.map((item) => new AppointmentListDataAdminDto(item)),
 				page.meta,
 				page.links
 			);
 		}
-		return new Pagination<AppointmentDataDto>(
-			page.items.map((item) => new AppointmentDataDto(item)),
+		return new Pagination<AppointmentListDataDto>(
+			page.items.map((item) => new AppointmentListDataDto(item)),
 			page.meta,
 			page.links
 		);
 	}
 
-	async findAll(
-		options: IPaginationOptions
-	): Promise<Pagination<AppointmentDataDto>> {
-		return this.paginate(false, options);
+	private async findByInterval(
+		startTime: Date,
+		endTime: Date,
+		isAdmin: boolean
+	): Promise<AppointmentDataDto[] | AppointmentDataAdminDto[]> {
+		const items = await this.repository
+			.createQueryBuilder('appointments')
+			.leftJoinAndSelect('appointments.user', 'User')
+			.leftJoinAndSelect('User.role', 'Role')
+			.leftJoinAndSelect('User.profile', 'Profile')
+			.where(
+				'appointments.status != :isCanceled and appointments.status != :isDeleted and appointments.begins >= :startTime and appointments.begins < :endTime',
+				{
+					isCanceled: Status.CANCELED,
+					isDeleted: Status.DELETED,
+					startTime,
+					endTime
+				}
+			)
+			.orderBy('begins')
+			.getMany();
+		const mapFunc = isAdmin
+			? (item) => new AppointmentDataAdminDto(item)
+			: (item) => new AppointmentDataDto(item);
+		return items.map(mapFunc);
 	}
 
-	async findAllAdmin(
-		options: IPaginationOptions
-	): Promise<Pagination<AppointmentDataAdminDto>> {
-		return this.paginate(true, options);
+	async findAll(
+		from: Date,
+		days: number,
+		isAdmin = false
+	): Promise<AppointmentTableDataDto[]> {
+		const tmp: AppointmentTableDataDto[] = [];
+		from = AppointmentsService.getDayByDate(from);
+		for (let i = 0; i < days; i += 1) {
+			const startDate = new Date(from.getTime() + i * DAY);
+			const endDate = new Date(from.getTime() + (i + 1) * DAY);
+			tmp.push({
+				date: startDate,
+				reserved: await this.findByInterval(startDate, endDate, isAdmin)
+			});
+		}
+		return tmp;
 	}
 
 	async findByUser(
 		options: IPaginationOptions,
 		user: User
-	): Promise<Pagination<AppointmentDataDto>> {
+	): Promise<Pagination<AppointmentListDataDto>> {
 		return this.paginate(false, options, { where: { user } });
+	}
+
+	static getDayByDate(date: Date): Date {
+		const tmp = date;
+		tmp.setHours(0);
+		tmp.setMinutes(0);
+		tmp.setSeconds(0);
+		tmp.setMilliseconds(0);
+		return tmp;
 	}
 
 	async create(dto: CreateAppointmentDto, user: User): Promise<string> {
