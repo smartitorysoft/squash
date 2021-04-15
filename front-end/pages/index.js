@@ -9,6 +9,11 @@ import { Store } from '@material-ui/icons'
 
 function Home() {
 
+  const date = new Date()
+
+  const formattedDate = [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-')
+  console.log(formattedDate);
+
   return (
     <div className={styles.container}>
       <HomeHeader/>
@@ -17,9 +22,10 @@ function Home() {
 }
 
 Home.getInitialProps = async (ctx) => {
-  console.log("getInitialProps");
- await ctx.store.dispatch(getAppointments())
- console.log("getInitialProps after dispatch");
+  const date = new Date()
+  const formattedDate = [date.getFullYear(), date.getMonth() + 1 < 10 ? '0'+ (date.getMonth() + 1) : date.getMonth(), date.getDate()].join('-')
+  // console.log(formattedDate);
+  await ctx.store.dispatch(getAppointments(formattedDate))
   // const appointments = useSelector(state => state.appointments.appointments)
   return {lorem:'ipsum'}
 }

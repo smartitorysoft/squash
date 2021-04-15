@@ -20,13 +20,13 @@ export const GridComponent = () => {
   const reservedAppointments = [];
   useEffect(() => {
     console.log("Appointments", appointments);
-    appointments.items &&
-      appointments.items.map((appointment) => {
+    appointments.list &&
+      appointments.list.map((appointment) => {
         let rd = new Date(appointment.begins);
         reservedAppointments.push({
-          day: rd.getDate(),
+          date: appointment.date,
           reservation: {
-            hour: rd.getHours(),
+            begins: appointment.begins,
             court: appointment.court,
           },
         });
