@@ -7,8 +7,8 @@ const whitelist = [
 	'http://localhost:3000',
 	'http://159.89.101.123',
 	'https://159.89.101.123',
-	'http://test.smartitory.com',
-	'https://test.smartitory.com'
+	'http://squash.smartitory.com',
+	'https://squash.smartitory.com'
 ];
 
 const corsDisabledEndpoints = [
