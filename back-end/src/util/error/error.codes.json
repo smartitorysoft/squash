@@ -68,5 +68,10 @@
     "name": "EmailTaken",
     "type": "registration",
     "code": "409reg00"
+  },
+  "404use00": {
+    "name": "UserNotFound",
+    "type": "user",
+    "code": "404use00"
   }
 }

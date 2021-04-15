@@ -16,6 +16,7 @@ import { Status } from './enum/status.enum';
 import { AppointmentTableDataDto } from './dto/appointment-table-data.dto';
 import { AppointmentDataDto } from './dto/appointment-data.dto';
 import { AppointmentDataAdminDto } from './dto/appointment-data-admin.dto';
+import { UsersService } from '../users/users.service';
 
 const COST = 10;
 const DAY = 24 * 60 * 60 * 1000;
@@ -26,7 +27,8 @@ export class AppointmentsService {
 	constructor(
 		@InjectRepository(Appointment)
 		private readonly repository: Repository<Appointment>,
-		private readonly paymentsService: PaymentsService
+		private readonly paymentsService: PaymentsService,
+		private readonly usersService: UsersService
 	) {}
 
 	private async paginate(
@@ -157,6 +159,10 @@ export class AppointmentsService {
 		} else {
 			throw new BaseException('400pay00');
 		}
+	}
+
+	async createByUserId(dto: CreateAppointmentDto, userId): Promise<string> {
+		return this.create(dto, await this.usersService.getById(userId));
 	}
 
 	private async deleteById(
