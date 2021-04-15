@@ -10,14 +10,23 @@ export const Card = ({ date, reservedAppointments, day, hour }) => {
   const ifReserved = (day, hour) => {
     let obj = [];
     reservedAppointments.map((e) => {
+      // console.log(
+      //   e.day,
+      //   day,
+      //   e.day === day &&
+      //     e.reservation.hour === hour &&
+      //     !obj.includes(e.reservation.court)
+      // );
       if (
         e.day === day &&
         e.reservation.hour === hour &&
         !obj.includes(e.reservation.court)
       ) {
         obj.push(e.reservation.court);
+        console.log("in", obj);
       }
     });
+    // console.log("out", obj);
     return obj;
   };
 

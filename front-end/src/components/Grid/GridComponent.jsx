@@ -8,9 +8,9 @@ import { useEffect } from "react";
 export const GridComponent = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getAppointments());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getAppointments());
+  // }, []);
 
   const appointments = useSelector((state) => state.appointments.appointments);
 
@@ -35,7 +35,7 @@ export const GridComponent = () => {
 
   // const ifReserved = (rd, rh) => {
   //   let obj = [];
-  //   reservedAppointments.map((e) => {
+  // reservedAppointments.map((e) => {
   //     console.log(rd, rh, e.day);
   //     if (
   //       e.day === rd &&

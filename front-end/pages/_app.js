@@ -1,14 +1,12 @@
 import { Provider } from 'react-redux';
 import '../styles/globals.css';
 import App from 'next/app';
-import makeStore from '../store/store';
+import {wrapper } from '../store/store'
+import withRedux from 'next-redux-wrapper'
 
-const store = makeStore();
 function MyApp({ Component, pageProps }) {
 	return (
-		<Provider store={store}>
-			<Component {...pageProps} />
-		</Provider>
+		<Component {...pageProps} />
 	);
 }
 
@@ -17,4 +15,4 @@ MyApp.getInitialProps = async (ctx) => {
 	return { ...appProps };
 };
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);

@@ -5,6 +5,8 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import reducers from './reducers';
 
+import {createWrapper} from 'next-redux-wrapper'
+
 const { backendApi } = getConfig().publicRuntimeConfig;
 
 const composeEnhancers =  process.env.NODE_ENV === 'development'
@@ -17,6 +19,7 @@ const headers = {
 };
 
 const makeStore = (initialState, ctx) => {
+	// console.log(ctx);
 	const jsonApi = () => {
 		const instance = axios.create({
 			baseURL: backendApi,
@@ -40,4 +43,4 @@ const makeStore = (initialState, ctx) => {
 	return store;
 };
 
-export default makeStore;
+export const wrapper = createWrapper(makeStore, {debug: false});

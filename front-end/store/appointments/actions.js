@@ -1,9 +1,10 @@
 export const GET_APPOINTMENTS = 'GET_APPOINTMENTS'
-export const getAppointments = () => (dispatch, getState, {jsonApi}) => {
+export const getAppointments =  () =>  (dispatch, getState, {jsonApi}) => {
+    console.log("getAppointments");
     jsonApi()
     .get(`appointments`)
     .then(res => {
-        console.log("res");
+        // console.log("res", res.data);
         dispatch({
             type: GET_APPOINTMENTS,
             payload: res.data
