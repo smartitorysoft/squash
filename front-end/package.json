@@ -8,8 +8,8 @@
     "start": "next start",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "lint": "eslint src/**/*.js src/**/*.jsx",
-    "lint:fix": "eslint src/**/*.js src/**/*.jsx --fix"
+    "lint": "eslint src/**/*.js src/**/*.jsx pages/**/*.js",
+    "lint:fix": "eslint src/**/*.js src/**/*.jsx pages/**/*.js --fix"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",

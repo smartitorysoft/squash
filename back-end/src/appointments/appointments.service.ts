@@ -9,12 +9,17 @@ import {
 	paginate,
 	Pagination
 } from 'nestjs-typeorm-paginate';
+import { AppointmentListDataDto } from './dto/appointment-list-data.dto';
+import { AppointmentListDataAdminDto } from './dto/appointment-list-data-admin.dto';
+import BaseException from '../util/exceptions/base.exception';
+import { Status } from './enum/status.enum';
+import { AppointmentTableDataDto } from './dto/appointment-table-data.dto';
 import { AppointmentDataDto } from './dto/appointment-data.dto';
 import { AppointmentDataAdminDto } from './dto/appointment-data-admin.dto';
-import BaseException from '../util/exceptions/base.exception';
 
 const COST = 10;
-const WEEK = 7 * 24 * 60 * 60 * 1000;
+const DAY = 24 * 60 * 60 * 1000;
+const WEEK = 7 * DAY;
 
 @Injectable()
 export class AppointmentsService {
@@ -34,36 +39,101 @@ export class AppointmentsService {
 			...searchOptions
 		});
 		if (isAdmin) {
-			return new Pagination<AppointmentDataAdminDto>(
-				page.items.map((item) => new AppointmentDataAdminDto(item)),
+			return new Pagination<AppointmentListDataAdminDto>(
+				page.items.map((item) => new AppointmentListDataAdminDto(item)),
 				page.meta,
 				page.links
 			);
 		}
-		return new Pagination<AppointmentDataDto>(
-			page.items.map((item) => new AppointmentDataDto(item)),
+		return new Pagination<AppointmentListDataDto>(
+			page.items.map((item) => new AppointmentListDataDto(item)),
 			page.meta,
 			page.links
 		);
 	}
 
-	async findAll(
-		options: IPaginationOptions
-	): Promise<Pagination<AppointmentDataDto>> {
-		return this.paginate(false, options);
+	private async findByInterval(
+		startTime: Date,
+		endTime: Date,
+		isAdmin: boolean,
+		filters: string[]
+	): Promise<AppointmentDataDto[] | AppointmentDataAdminDto[]> {
+		let f = '';
+		if (filters.length) {
+			filters.forEach((item, i) => {
+				if (i) {
+					f += ` or appointments.status = :${item}`;
+				} else {
+					f += `appointments.status = :${item}`;
+				}
+			});
+		}
+		const items = await this.repository
+			.createQueryBuilder('appointments')
+			.leftJoinAndSelect('appointments.user', 'User')
+			.leftJoinAndSelect('User.role', 'Role')
+			.leftJoinAndSelect('User.profile', 'Profile')
+			.where(
+				`appointments.begins >= :startTime and appointments.begins < :endTime`,
+				{ startTime, endTime }
+			)
+			.andWhere(f ? f : '1 = 1', { ...Status })
+			.orderBy('begins')
+			.getMany();
+		const mapFunc = isAdmin
+			? (item) => new AppointmentDataAdminDto(item)
+			: (item) => new AppointmentDataDto(item);
+		return items.map(mapFunc);
 	}
 
-	async findAllAdmin(
-		options: IPaginationOptions
-	): Promise<Pagination<AppointmentDataAdminDto>> {
-		return this.paginate(true, options);
+	async findAll(
+		from: Date,
+		days: number,
+		isAdmin: boolean,
+		filters: string[]
+	): Promise<AppointmentTableDataDto[]> {
+		const tmp: AppointmentTableDataDto[] = [];
+		from = AppointmentsService.getDayByDate(from);
+		for (let i = 0; i < days; i += 1) {
+			const startDate = new Date(from.getTime() + i * DAY);
+			const endDate = new Date(from.getTime() + (i + 1) * DAY);
+			tmp.push({
+				date: startDate,
+				reserved: await this.findByInterval(
+					startDate,
+					endDate,
+					isAdmin,
+					filters
+				)
+			});
+		}
+		return tmp;
 	}
 
 	async findByUser(
 		options: IPaginationOptions,
-		user: User
-	): Promise<Pagination<AppointmentDataDto>> {
-		return this.paginate(false, options, { where: { user } });
+		user: User,
+		filters: string[]
+	): Promise<Pagination<AppointmentListDataDto>> {
+		let where;
+		if (!filters.length) {
+			where = { user };
+		} else {
+			where = [];
+			filters.forEach((item) => {
+				where.push({ user, status: item });
+			});
+		}
+		return this.paginate(false, options, { where });
+	}
+
+	static getDayByDate(date: Date): Date {
+		const tmp = date;
+		tmp.setHours(0);
+		tmp.setMinutes(0);
+		tmp.setSeconds(0);
+		tmp.setMilliseconds(0);
+		return tmp;
 	}
 
 	async create(dto: CreateAppointmentDto, user: User): Promise<string> {
@@ -73,7 +143,8 @@ export class AppointmentsService {
 					begins: dto.begins,
 					user,
 					payment,
-					court: dto.court
+					court: dto.court,
+					status: Status.PENDING
 				});
 				return await queryRunner.manager.save(newAppointment);
 			};
@@ -88,25 +159,33 @@ export class AppointmentsService {
 		}
 	}
 
-	async deleteById(id: string, user: User): Promise<boolean> {
-		const appointment = await this.repository.findOne({
-			id,
-			user,
-			isDeleted: false
-		});
+	private async deleteById(
+		isAdmin: boolean,
+		id: string,
+		user: User = null
+	): Promise<boolean> {
+		const appointment = await this.repository.findOne(
+			isAdmin ? { id } : { id, user }
+		);
 		if (!appointment) {
 			throw new BaseException('404apo00', 404);
+		}
+		if (appointment.status !== Status.PENDING) {
+			throw new BaseException('400apo00', 400);
 		}
 		try {
 			const timeDiff = appointment.begins.getTime() - new Date().getTime();
 			if (timeDiff <= WEEK) {
-				await this.repository.update({ id }, { isDeleted: true });
+				await this.repository.update(
+					{ id },
+					{ status: isAdmin ? Status.DELETED : Status.CANCELED }
+				);
 			} else {
 				const afterward = async (queryRunner: QueryRunner) => {
 					await queryRunner.manager.update(
 						Appointment,
 						{ id },
-						{ isDeleted: true }
+						{ status: isAdmin ? Status.DELETED : Status.CANCELED }
 					);
 				};
 				await this.paymentsService.storno(appointment.payment, afterward);
@@ -118,5 +197,13 @@ export class AppointmentsService {
 			}
 			throw new BaseException('500gen00', 500);
 		}
+	}
+
+	async delete(id, user: User): Promise<boolean> {
+		return await this.deleteById(false, id, user);
+	}
+
+	async deleteAdmin(id): Promise<boolean> {
+		return await this.deleteById(true, id);
 	}
 }

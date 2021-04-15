@@ -22,7 +22,7 @@ export class UserDataDto {
 			this.id = data.id;
 			this.email = data.email;
 			this.role = data.role.name;
-			this.profile = data.profile;
+			this.profile = new ProfileDto(data.profile);
 			this.credit = data.credit;
 		}
 	}
