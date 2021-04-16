@@ -27,6 +27,7 @@ export default function Register() {
 				phone: number,
 			},
 		}));
+		router.back();
 	};
 
 	return (
