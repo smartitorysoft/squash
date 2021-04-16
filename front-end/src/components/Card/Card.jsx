@@ -3,34 +3,26 @@ import "../../../styles/Card.module.css";
 import AddIcon from "@material-ui/icons/Add";
 import { ReserveModal } from "../ReserveModal/ReserveModal";
 import { IconButton } from "@material-ui/core";
+import { useEffect } from "react";
 
 export const Card = ({ date, reservedAppointments, day, hour }) => {
   const [open, setOpen] = useState(false);
 
-  const ifReserved = (day, hour) => {
-    let obj = [];
+  // console.log("card", reservedAppointments);
+
+  let reserved = [];
+  useEffect(() => {
     reservedAppointments.map((e) => {
-      // console.log(
-      //   e.day,
-      //   day,
-      //   e.day === day &&
-      //     e.reservation.hour === hour &&
-      //     !obj.includes(e.reservation.court)
-      // );
       if (
         e.day === day &&
         e.reservation.hour === hour &&
-        !obj.includes(e.reservation.court)
+        !reserved.includes(e.reservation.court)
       ) {
-        obj.push(e.reservation.court);
-        console.log("in", obj);
+        reserved.push(e.reservation.court);
       }
     });
-    // console.log("out", obj);
-    return obj;
-  };
-
-  const reserved = ifReserved(day, hour);
+    console.log(reserved);
+  }, [reservedAppointments]);
 
   date.setHours(hour);
   date.setMinutes(0);

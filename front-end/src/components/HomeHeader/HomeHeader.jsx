@@ -8,8 +8,6 @@ import EditIcon from "@material-ui/icons/Edit";
 import { useSelector, useDispatch } from "react-redux";
 import { GridComponent } from "../Grid/GridComponent";
 import { makeStyles } from "@material-ui/core";
-import { makeAppointment } from "../../../store/appointments/actions";
-import { giveCredit } from "../../../store/credit/actions";
 
 export const HomeHeader = () => {
   const dispatch = useDispatch();
@@ -23,6 +21,12 @@ export const HomeHeader = () => {
   const useStyles = makeStyles((theme) => ({
     container: {
       marginLeft: `calc(100% / 8)`,
+    },
+    header: {
+      flexDirection: "row",
+    },
+    div: {
+      width: "45%",
     },
   }));
 
@@ -52,19 +56,19 @@ export const HomeHeader = () => {
         Foglalás
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <div className={styles.header}>
-          <div className={styles.div}>
+        <div className={classes.header}>
+          <div className={classes.div}>
             <p> Vezetéknév Keresztnév</p>
             <p>Telefonszám</p>
             <p>Email</p>
           </div>
-          <div className={styles.div}>
+          <div className={classes.div}>
             <p>Kreditek száma</p>
             <p>Következő foglalás</p>
             <p>Kártyaszám</p>
           </div>
 
-          <div className={styles.div}>
+          <div className={classes.div}>
             <IconButton onClick={() => setOpen(true)}>
               <EditIcon />
             </IconButton>

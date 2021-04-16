@@ -8,25 +8,18 @@ import { useSelector } from 'react-redux'
 import { Store } from '@material-ui/icons'
 
 function Home() {
-
-  const date = new Date()
-
-  const formattedDate = [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-')
-  console.log(formattedDate);
-
-  return (
+ return (
     <div className={styles.container}>
       <HomeHeader/>
     </div>
   )
 }
 
-Home.getInitialProps = async (ctx) => {
+Home.getInitialProps = (ctx) => {
   const date = new Date()
   const formattedDate = [date.getFullYear(), date.getMonth() + 1 < 10 ? '0'+ (date.getMonth() + 1) : date.getMonth(), date.getDate()].join('-')
-  // console.log(formattedDate);
-  await ctx.store.dispatch(getAppointments(formattedDate))
-  // const appointments = useSelector(state => state.appointments.appointments)
+  console.log(formattedDate);
+  ctx.store.dispatch(getAppointments(formattedDate))
   return {lorem:'ipsum'}
 }
 

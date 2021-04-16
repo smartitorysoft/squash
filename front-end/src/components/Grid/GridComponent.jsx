@@ -8,10 +8,6 @@ import { useEffect } from "react";
 export const GridComponent = () => {
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(getAppointments());
-  // }, []);
-
   const appointments = useSelector((state) => state.appointments.appointments);
 
   const date = new Date();
@@ -22,32 +18,19 @@ export const GridComponent = () => {
     console.log("Appointments", appointments);
     appointments.list &&
       appointments.list.map((appointment) => {
-        let rd = new Date(appointment.begins);
-        reservedAppointments.push({
-          date: appointment.date,
-          reservation: {
-            begins: appointment.begins,
-            court: appointment.court,
-          },
+        appointment.reserved.map((app) => {
+          let rd = new Date(app.begins);
+          reservedAppointments.push({
+            day: rd.getDate(),
+            reservation: {
+              hour: rd.getHours(),
+              court: app.court,
+            },
+          });
         });
       });
+    console.log("changed", reservedAppointments);
   }, [appointments]);
-
-  // const ifReserved = (rd, rh) => {
-  //   let obj = [];
-  // reservedAppointments.map((e) => {
-  //     console.log(rd, rh, e.day);
-  //     if (
-  //       e.day === rd &&
-  //       e.reservation.hour === rh &&
-  //       !obj.includes(e.reservation.court)
-  //     ) {
-  //       obj.push(e.reservation.court);
-  //     }
-  //   });
-  //   console.log("obj", obj);
-  //   return obj;
-  // };
 
   return (
     <div>

@@ -1,6 +1,6 @@
 export const GET_APPOINTMENTS = 'GET_APPOINTMENTS'
 export const getAppointments =  (date) =>  (dispatch, getState, {jsonApi}) => {
-    console.log("getAppointments", date);
+    // console.log("getAppointments", date);
     jsonApi()
     .get(date ? `appointments?from=${date}&days=7` : `appointments` )
     .then(res => {

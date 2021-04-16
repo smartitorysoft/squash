@@ -93,6 +93,7 @@ export const ReserveModal = ({ open, onClose, reserved, date }) => {
                     court: "TWO",
                   })
                 );
+              onClose();
             }}
           >
             Foglalás
