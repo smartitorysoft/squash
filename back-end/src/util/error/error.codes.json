@@ -73,5 +73,15 @@
     "name": "UserNotFound",
     "type": "user",
     "code": "404use00"
+  },
+  "400ope00": {
+    "name": "InvalidDefaultOpeningModification",
+    "type": "opening",
+    "code": "400ope00"
+  },
+  "400ope01": {
+    "name": "CannotDeleteDefaultOpening",
+    "type": "opening",
+    "code": "404use01"
   }
 }

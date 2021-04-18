@@ -5,3 +5,4 @@ export { User } from './user/user.entity';
 export { Profile } from './user/profile.entity';
 export { Payment } from './payment/payment.entity';
 export { Appointment } from './appointment/appointment.entity';
+export { Opening } from './opening/opening.entity';
