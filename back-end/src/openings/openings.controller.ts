@@ -1,31 +1,50 @@
-import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Body, Controller, Get, Put, Query, UseGuards } from '@nestjs/common';
 import { OpeningsService } from './openings.service';
-import { UpdateOpeningDataDto } from './dto/update-opening-data.dto';
-import { OpeningDataDto } from './dto/opening-data.dto';
+import { UpdateOpeningRuleDataDto } from './dto/update-opening-rule-data.dto';
+import { OpeningRuleDataDto } from './dto/opening-rule-data.dto';
 import { ModificationResponseDto } from '../dto/modification.response.dto';
 import JwtAuthenticationGuard from '../auth/guards/jwt-authentication.guard';
 import { PermissionGuard } from '../admin/permission/guard/permission.guard';
 import { Target } from '../admin/permission/decorators/target.decorator';
 import { Operation } from '../admin/permission/decorators/permission.decorator';
+import { AppointmentsService } from '../appointments/appointments.service';
+import BaseException from '../util/exceptions/base.exception';
+import { OpeningDataListDto } from './dto/opening-data-list.dto';
 
 @Controller('openings')
 export class OpeningsController {
 	constructor(private openingsService: OpeningsService) {}
 
 	@Get()
+	async index(
+		@Query('date') date = AppointmentsService.getDayByDate(new Date()),
+		@Query('days') days = 1
+	): Promise<OpeningDataListDto> {
+		const firstDate = new Date(date);
+		if (Number.isNaN(firstDate.getTime())) {
+			throw new BaseException('400ope03');
+		}
+		date = AppointmentsService.getDayByDate(firstDate);
+		return new OpeningDataListDto({
+			list: await this.openingsService.getOpeningByDay(date, days)
+		});
+	}
+
+	@Get('/rules')
 	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
 	@Target('admin')
 	@Operation('read')
-	async index(): Promise<OpeningDataDto[]> {
+	async getRules(): Promise<OpeningRuleDataDto[]> {
 		return await this.openingsService.findAll();
 	}
 
-	@Put()
+	@Put('/rules')
 	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
 	@Target('admin')
 	@Operation('update')
-	async update(
-		@Body() dto: UpdateOpeningDataDto
+	async updateRules(
+		@Body() dto: UpdateOpeningRuleDataDto
 	): Promise<ModificationResponseDto> {
 		await this.openingsService.update(dto);
 		return new ModificationResponseDto();

@@ -17,10 +17,13 @@ import { AppointmentTableDataDto } from './dto/appointment-table-data.dto';
 import { AppointmentDataDto } from './dto/appointment-data.dto';
 import { AppointmentDataAdminDto } from './dto/appointment-data-admin.dto';
 import { UsersService } from '../users/users.service';
+import { OpeningsService } from '../openings/openings.service';
 
 const COST = 10;
-const DAY = 24 * 60 * 60 * 1000;
+const HOUR = 60 * 60 * 1000;
+const DAY = 24 * HOUR;
 const WEEK = 7 * DAY;
+const UTC_OFFSET = 3 * HOUR;
 
 @Injectable()
 export class AppointmentsService {
@@ -28,7 +31,8 @@ export class AppointmentsService {
 		@InjectRepository(Appointment)
 		private readonly repository: Repository<Appointment>,
 		private readonly paymentsService: PaymentsService,
-		private readonly usersService: UsersService
+		private readonly usersService: UsersService,
+		private readonly openingsService: OpeningsService
 	) {}
 
 	private async paginate(
@@ -130,7 +134,7 @@ export class AppointmentsService {
 	}
 
 	static getDayByDate(date: Date): Date {
-		const tmp = date;
+		const tmp = new Date(date);
 		tmp.setHours(0);
 		tmp.setMinutes(0);
 		tmp.setSeconds(0);
@@ -138,27 +142,61 @@ export class AppointmentsService {
 		return tmp;
 	}
 
+	static getHourByDate(date: Date): Date {
+		const tmp = new Date(date);
+		tmp.setMinutes(0);
+		tmp.setSeconds(0);
+		tmp.setMilliseconds(0);
+		return tmp;
+	}
+
 	async create(dto: CreateAppointmentDto, user: User): Promise<string> {
-		if (user.credit >= COST) {
-			const afterward = async (queryRunner: QueryRunner, payment: Payment) => {
-				const newAppointment = await this.repository.create({
-					begins: dto.begins,
-					user,
-					payment,
-					court: dto.court,
-					status: Status.PENDING
-				});
-				return await queryRunner.manager.save(newAppointment);
-			};
-			const newAppointment = await this.paymentsService.chargeCredit(
-				user,
-				-COST,
-				afterward
-			);
-			return newAppointment.id;
-		} else {
+		const currentDate = new Date(
+			AppointmentsService.getHourByDate(new Date()).getTime() +
+				UTC_OFFSET +
+				HOUR
+		);
+		const begins = AppointmentsService.getHourByDate(new Date(dto.begins));
+		if (begins.getTime() <= currentDate.getTime()) {
+			throw new BaseException('400apo04');
+		}
+		if (user.credit < COST) {
 			throw new BaseException('400pay00');
 		}
+		const { openingHour, closingHour } = (
+			await this.openingsService.getOpeningByDay(
+				AppointmentsService.getDayByDate(begins)
+			)
+		)[0];
+		const h = begins.getHours();
+		if (h < openingHour || h >= closingHour) {
+			throw new BaseException('400apo02');
+		}
+		const timeWindow = await this.repository.find({ begins });
+		if (
+			timeWindow.filter(
+				(item) =>
+					item.status !== Status.CANCELED && item.status !== Status.DELETED
+			).length
+		) {
+			throw new BaseException('400apo03');
+		}
+		const afterward = async (queryRunner: QueryRunner, payment: Payment) => {
+			const newAppointment = await this.repository.create({
+				begins,
+				user,
+				payment,
+				court: dto.court,
+				status: Status.PENDING
+			});
+			return await queryRunner.manager.save(newAppointment);
+		};
+		const newAppointment = await this.paymentsService.chargeCredit(
+			user,
+			-COST,
+			afterward
+		);
+		return newAppointment.id;
 	}
 
 	async createByUserId(dto: CreateAppointmentDto, userId): Promise<string> {

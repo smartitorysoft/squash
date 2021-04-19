@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsString } from 'class-validator';
 
-export class CreateOpeningDto {
+export class CreateOpeningRuleDto {
 	@ApiProperty({ required: true })
 	@IsString()
 	name: string;

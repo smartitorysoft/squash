@@ -6,13 +6,15 @@ import { Appointment } from '../entities';
 import { PaymentsModule } from '../payments/payments.module';
 import { UsersModule } from '../users/users.module';
 import { AdminModule } from '../admin/admin.module';
+import { OpeningsModule } from '../openings/openings.module';
 
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([Appointment]),
 		PaymentsModule,
 		UsersModule,
-		AdminModule
+		AdminModule,
+		OpeningsModule
 	],
 	controllers: [AppointmentsController],
 	providers: [AppointmentsService],
