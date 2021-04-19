@@ -13,6 +13,7 @@ export const getUsers = () => (dispatch, getState, {jsonApi}) => {
 
 export const SET_USER_PROFILE = 'SET_USER_PROFILE'
 export const setProfile = (data) => (dispatch, getState, {jsonApi}) => {
+    // console.log("data", data);
     jsonApi()
     .put(`users/${data.id}`, data.details)
     .then(res => {

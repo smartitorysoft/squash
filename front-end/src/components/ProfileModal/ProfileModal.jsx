@@ -3,14 +3,17 @@ import { Modal } from "@material-ui/core";
 import { TextInput } from "../TextInput/TextInput";
 import { BasicButton } from "../BasicButton/BasicButton";
 import styles from "../../../styles/ReserveModal.module.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { setProfile } from "../../../store/user/actions";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 export const ProfileModal = ({ open, onClose }) => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.me.info);
 
-  const [firstName, setFirst] = useState("");
+  const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
 
@@ -22,7 +25,7 @@ export const ProfileModal = ({ open, onClose }) => {
           profile: {
             firstName: firstName,
             lastName: lastName,
-            phone: phone,
+            phone: "+40" + phone,
           },
         },
       })
@@ -44,9 +47,14 @@ export const ProfileModal = ({ open, onClose }) => {
           <TextInput
             label="Telefonszám"
             type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">+40</InputAdornment>
+              ),
+            }}
             onChange={(text) => setPhone(text.target.value)}
           />
-          <BasicButton label="Változtat" onClick={() => {}} />
+          <BasicButton label="Változtat" onClick={onSubmit} />
         </div>
       </Modal>
     </div>
