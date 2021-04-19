@@ -5,9 +5,9 @@ import {
 	Paper,
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import TextInput from '../src/components/TextInput';
+import TextInput from '../components/TextInput';
 import styles from '../styles/Table.module.css';
-import Row from '../src/components/Row/Row';
+import Row from '../components/Row/Row';
 
 import { getUsers } from '../store/user/actions';
 

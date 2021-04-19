@@ -3,8 +3,8 @@ FROM node:alpine AS deps
 
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package*.json ./
-RUN npm install --frozen-lockfile
+COPY package.json ./
+RUN npm install
 
 # Rebuild the source code only when needed
 FROM node:alpine AS development

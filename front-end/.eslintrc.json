@@ -9,16 +9,21 @@
 		"airbnb/hooks",
 		"plugin:react/recommended"
 	],
-	"plugins": ["react-hooks"],
+	"plugins": ["react-hooks", "module-resolver"],
 	"globals": {
 		"Atomics": "readonly",
 		"SharedArrayBuffer": "readonly"
 	},
-	"parser": "babel-eslint",
+	"parser": "@babel/eslint-parser",
 	"parserOptions": {
-		"parser": "babel-eslint",
+		"parser": "@babel/eslint-parser",
 		"ecmaVersion": 2018
 	},
+	"settings": {
+    "import/resolver": {
+      "babel-module": {}
+    }
+  },
 	"rules": {
 		/*
 		 * 0 - off
@@ -26,14 +31,8 @@
 		 * 2 - error
 		 *
 		 */
-		// "max-len": [2, { 
-		// 	"code": 80, 
-		// 	"ignoreComments": true, 
-		// 	"ignoreTrailingComments":true,
-		// 	"ignoreUrls": true,
-		// 	"ignoreStrings": true,
-		// 	"ignoreTemplateLiterals": true
-		// 	}],
+		
+		"module-resolver/use-alias": 2,
 		"semi": [2, "always"],
 		"quotes": [2, "single"],
 		"no-multi-spaces": 0,
@@ -60,10 +59,11 @@
 		"react/jsx-indent": [2, "tab"],
 		"react/jsx-indent-props": [2, "tab"],
 		"react/jsx-props-no-spreading": [1, {"custom": "ignore"}],
-		"react/prop-types": 1,
+		"react/prop-types": 0,
 		"jsx-quotes": [2, "prefer-single"],
 		"implicit-arrow-linebreak": 0,
 		"function-paren-newline": 0,
+		"prefer-promise-reject-errors": 1,
 		"no-underscore-dangle": [
 			"error",
 			{

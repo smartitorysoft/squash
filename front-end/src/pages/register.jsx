@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import TextInput from '../src/components/TextInput';
-import BasicButton from '../src/components/BasicButton';
+import TextInput from '../components/TextInput';
+import BasicButton from '../components/BasicButton';
 import styles from '../styles/Register.module.css';
 import { register } from '../store/auth/actions';
 

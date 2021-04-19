@@ -6,9 +6,9 @@ import {
   FormGroup,
   Modal,
 } from "@material-ui/core";
-import styles from "../../../styles/ReserveModal.module.css";
+import styles from "../../styles/ReserveModal.module.css";
 import { makeStyles } from "@material-ui/core/styles";
-import { makeAppointment } from "../../../store/appointments/actions";
+import { makeAppointment } from "../../store/appointments/actions";
 import { useDispatch } from "react-redux";
 
 export const ReserveModal = ({ open, onClose, reserved, date }) => {

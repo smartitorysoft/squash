@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import BasicButton from '../src/components/BasicButton';
-import TextInput from '../src/components/TextInput';
+import BasicButton from '../components/BasicButton';
+import TextInput from '../components/TextInput';
 import styles from '../styles/Login.module.css';
 import { login } from '../store/auth/actions';
 import { loadMe } from '../store/me/actions';

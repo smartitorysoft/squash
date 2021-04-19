@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal } from '@material-ui/core';
 import { TextInput } from '../TextInput/TextInput';
 import { BasicButton } from '../BasicButton/BasicButton';
-import styles from '../../../styles/ReserveModal.module.css';
+import styles from '../../styles/ReserveModal.module.css';
 
 export const ProfileModal = ({ open, onClose }) => (
 	<div>
