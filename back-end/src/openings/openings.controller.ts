@@ -11,12 +11,14 @@ import { Operation } from '../admin/permission/decorators/permission.decorator';
 import { AppointmentsService } from '../appointments/appointments.service';
 import BaseException from '../util/exceptions/base.exception';
 import { OpeningDataListDto } from './dto/opening-data-list.dto';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('openings')
 export class OpeningsController {
 	constructor(private openingsService: OpeningsService) {}
 
 	@Get()
+	@ApiResponse({ status: 200, type: OpeningDataListDto })
 	async index(
 		@Query('date') date = AppointmentsService.getDayByDate(new Date()),
 		@Query('days') days = 1
@@ -35,6 +37,7 @@ export class OpeningsController {
 	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
 	@Target('admin')
 	@Operation('read')
+	@ApiResponse({ status: 200, isArray: true, type: OpeningRuleDataDto })
 	async getRules(): Promise<OpeningRuleDataDto[]> {
 		return await this.openingsService.findAll();
 	}
