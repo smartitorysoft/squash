@@ -2,11 +2,11 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
-      "components/*": ["src/components/*"],
+      "components/*": ["components/*"],
       "lib/*": ["lib/*"],
-      "pages/*": ["src/pages/*"],
+      "pages/*": ["pages/*"],
       "server/*": ["server/*"],
-      "store/*": ["src/store/*"],
+      "store/*": ["store/*"],
       "theme/*": ["theme/*"],
       "utils/*": ["utils/*"],
       "views/*": ["views/*"]

@@ -1,6 +1,6 @@
 /* eslint-disable prefer-promise-reject-errors */
 
-export default async ({ auth = null, url = null }, ctx) =>
+const pageRedirect = async ({ auth = null, url = null }, ctx) =>
 	new Promise((resolve, reject) => {
 		const { store, res } = ctx;
 
@@ -42,3 +42,5 @@ export default async ({ auth = null, url = null }, ctx) =>
 
 		return resolve();
 	});
+
+export default pageRedirect;
