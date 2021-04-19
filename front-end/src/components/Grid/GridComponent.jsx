@@ -15,7 +15,7 @@ export const GridComponent = () => {
 
   const reservedAppointments = [];
   useEffect(() => {
-    console.log("Appointments", appointments);
+    // console.log("Appointments", appointments);
     appointments.list &&
       appointments.list.map((appointment) => {
         appointment.reserved.map((app) => {
@@ -29,7 +29,7 @@ export const GridComponent = () => {
           });
         });
       });
-    console.log("changed", reservedAppointments);
+    // console.log("changed", reservedAppointments);
   }, [appointments]);
 
   return (

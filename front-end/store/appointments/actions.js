@@ -24,3 +24,17 @@ export const makeAppointment = (data) => (dispatch, getState, {jsonApi}) => {
     })
     .catch(e => console.log("make appointment error", e))
 }
+
+export const GET_USER_APPPOINTMENTS = 'GET_USER_APPOINTMENTS'
+export const getUserAppointments = () => (dispatch, getState, {jsonApi}) => {
+    jsonApi()
+    .get(`appointments/mine`)
+    .then( res => {
+        console.log("user appointments", res);
+        dispatch({
+            type: GET_USER_APPPOINTMENTS,
+            payload: res.data
+        })
+    })
+    .catch( e => console.log("user appointments error", e))
+}

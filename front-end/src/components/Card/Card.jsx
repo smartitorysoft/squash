@@ -21,7 +21,7 @@ export const Card = ({ date, reservedAppointments, day, hour }) => {
         reserved.push(e.reservation.court);
       }
     });
-    console.log(reserved);
+    // console.log(reserved);
   }, [reservedAppointments]);
 
   date.setHours(hour);

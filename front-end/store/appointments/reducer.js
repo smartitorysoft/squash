@@ -1,4 +1,4 @@
-import {GET_APPOINTMENTS} from './actions'
+import {GET_APPOINTMENTS, GET_USER_APPPOINTMENTS} from './actions'
 
 const INITIAL_STATE ={
     appointments:{
@@ -17,15 +17,17 @@ const INITIAL_STATE ={
         ]
         }
     ]
-    }
+    },
+    userAppointments:[]
 }
 
 export const appointments = (state = INITIAL_STATE, action) => {
     // console.log(action.type, action.payload);
     switch (action.type) {
         case GET_APPOINTMENTS:
-            
             return {...state, appointments: action.payload}
+        case GET_USER_APPPOINTMENTS:
+            return {...state, userAppointments: action.payload}
         default:
             return state
         }

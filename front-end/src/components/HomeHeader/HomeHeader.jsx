@@ -8,11 +8,15 @@ import EditIcon from "@material-ui/icons/Edit";
 import { useSelector, useDispatch } from "react-redux";
 import { GridComponent } from "../Grid/GridComponent";
 import { makeStyles } from "@material-ui/core";
+import { getUserAppointments } from "../../../store/appointments/actions";
+import { AppointmentsTable } from "../AppointmentsTable/AppointmentsTable";
 
 export const HomeHeader = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
+
+  dispatch(getUserAppointments());
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -53,7 +57,7 @@ export const HomeHeader = () => {
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Foglalás
+        <AppointmentsTable />
       </TabPanel>
       <TabPanel value={value} index={2}>
         <div className={classes.header}>
