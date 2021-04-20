@@ -2,12 +2,25 @@ import React from 'react';
 import '../styles/globals.css';
 import App from 'next/app';
 // import cookies from 'next-cookies';
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
+import theme from 'theme';
 import { wrapper } from '../store/store';
 
 const SmNext = (props) => {
 	const { Component, pageProps } = props;
+
+	React.useEffect(() => {
+		const jssStyles = document.querySelector('#jss-server-side');
+		if (jssStyles) {
+			jssStyles.parentElement.removeChild(jssStyles);
+		}
+	}, []);
+
 	return (
-		<Component {...pageProps} />
+		<ThemeProvider theme={theme}>
+			<CssBaseline />
+			<Component {...pageProps} />
+		</ThemeProvider>
 	);
 };
 

@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import React from 'react';
 import { HomeHeader } from 'components/HomeHeader';
 import { getAppointments } from '../store/appointments/actions';

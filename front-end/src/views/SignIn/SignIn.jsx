@@ -20,6 +20,7 @@ const useStyles = makeStyles(() => ({
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginTop: 'calc(50vh - 100px)',
+		backgroundColor: 'yellow',
 	},
 
 	fields: {
