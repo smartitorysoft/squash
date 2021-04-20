@@ -4,55 +4,86 @@ import { Profile } from "views/Profile/Profile";
 import ProfileModal from "components/ProfileModal/ProfileModal";
 import EditIcon from "@material-ui/icons/Edit";
 import { makeStyles, Box } from "@material-ui/core";
+import styles from "styles/Header.module.css";
 
-export default function profile() {
+const profile = (props) => {
   const [open, setOpen] = useState(false);
-
-  const useStyles = makeStyles(() => ({
-    container: {
-      display: "flex",
-      width: "100%",
-      height: "100%",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    header: {
-      display: "flex",
-      flexDirection: "row",
-      backgroundColor: "red",
-    },
-    div: {
-      display: "flex",
-      width: "45%",
-      backgroundColor: "red",
-    },
-  }));
-
-  const classes = useStyles();
-
   return (
-    <Box className={classes.container}>
-      <Box className={classes.header}>
-        <Box className={classes.div}>
-          <p> Vezetéknév Keresztnév</p>
-          <p>Telefonszám</p>
-          <p>Email</p>
-        </Box>
-        <Box className={classes.div}>
-          <p>Kreditek száma</p>
-          <p>Következő foglalás</p>
-          <p>Kártyaszám</p>
-        </Box>
+    <>
+      <Box className={styles.home}>
+        <Box className={styles.header}>
+          <Box className={styles.div}>
+            <p> Vezetéknév Keresztnév</p>
+            <p>Telefonszám</p>
+            <p>Email</p>
+          </Box>
 
-        <Box className={classes.div}>
-          <IconButton onClick={() => setOpen(true)}>
-            <EditIcon />
-          </IconButton>
+          <Box className={styles.div}>
+            <p>Kreditek száma</p>
+            <p>Következő foglalás</p>
+            <p>Kártyaszám</p>
+          </Box>
 
-          <ProfileModal open={open} onClose={() => setOpen(false)} />
+          <Box className={styles.div}>
+            <IconButton onClick={() => setOpen(true)}>
+              <EditIcon />
+            </IconButton>
+            <ProfileModal open={open} onClose={() => setOpen(false)} />
+          </Box>
         </Box>
+        <Profile />
       </Box>
-      <Profile />
-    </Box>
+    </>
   );
-}
+};
+
+profile.propTypes = {};
+
+export default profile;
+
+// export default function profile() {
+//   const [open, setOpen] = useState(false);
+
+//   const useStyles = makeStyles((theme) => ({
+//     container: {
+//       display: "flex",
+//       marginLeft: `calc(100% / 8)`,
+//     },
+//     header: {
+//       display: "flex",
+//       flexDirection: "row",
+//       backgroundColor: "yellow",
+//     },
+//     div: {
+//       width: "25%",
+//     },
+//   }));
+
+//   const classes = useStyles();
+
+//   return (
+//     <Box className={styles.home}>
+//       <Box className={styles.header}>
+//         <Box className={styles.div}>
+//           <p> Vezetéknév Keresztnév</p>
+//           <p>Telefonszám</p>
+//           <p>Email</p>
+//         </Box>
+//         <Box className={styles.div}>
+//           <p>Kreditek száma</p>
+//           <p>Következő foglalás</p>
+//           <p>Kártyaszám</p>
+//         </Box>
+
+//         <Box className={styles.div}>
+//           <IconButton onClick={() => setOpen(true)}>
+//             <EditIcon />
+//           </IconButton>
+
+//           <ProfileModal open={open} onClose={() => setOpen(false)} />
+//         </Box>
+//       </Box>
+//       <Profile />
+//     </Box>
+//   );
+// }
