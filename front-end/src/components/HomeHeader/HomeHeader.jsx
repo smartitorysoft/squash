@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { AppBar, Tabs, Tab, IconButton } from "@material-ui/core";
-import { Profile } from "../../views/Profile/Profile";
-import TabPanel from "../TabPanel/TabPanel";
-import styles from "styles/Header.module.css";
-import ProfileModal from "../ProfileModal/ProfileModal";
+import { ProfileHeader } from "components/ProfileHeader/ProfileHeader";
+import TabPanel from "components/TabPanel/TabPanel";
+import ProfileModal from "components/ProfileModal/ProfileModal";
 import EditIcon from "@material-ui/icons/Edit";
 import { useSelector, useDispatch } from "react-redux";
-import { GridComponent } from "../Grid/GridComponent";
-import { makeStyles } from "@material-ui/core";
+import { GridComponent } from "components/Grid/GridComponent";
+import { makeStyles, Box } from "@material-ui/core";
+import { useRouter } from "next/router";
+import { BasicButton } from "components/BasicButton/BasicButton";
 // import { getUserAppointments } from "store/appointments/actions";
 // import { AppointmentsTable } from "../AppointmentsTable/AppointmentsTable";
 
@@ -15,6 +16,8 @@ export const HomeHeader = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
+
+  const router = useRouter();
 
   // dispatch(getUserAppointments());
 
@@ -33,6 +36,14 @@ export const HomeHeader = () => {
     div: {
       width: "45%",
     },
+    size: {
+      height: "75%",
+      width: "95%",
+    },
+    home: {
+      height: "100%",
+      width: "100%",
+    },
   }));
 
   const classes = useStyles();
@@ -40,7 +51,7 @@ export const HomeHeader = () => {
   const user = useSelector((state) => state.me.info);
 
   return (
-    <div className={styles.home}>
+    <div className={classes.home}>
       <AppBar style={{ alignItems: "flex-end" }} position="sticky">
         <Tabs
           value={value}
@@ -58,10 +69,14 @@ export const HomeHeader = () => {
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
+        <IconButton onClick={() => router.push("/credit")}>
+          <EditIcon />
+        </IconButton>
         {/* <AppointmentsTable /> */}
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <div className={classes.header}>
+        <BasicButton label="Profile" onClick={() => router.push("/profile")} />
+        {/* <div className={classes.header}>
           <div className={classes.div}>
             <p> Vezetéknév Keresztnév</p>
             <p>Telefonszám</p>
@@ -81,7 +96,9 @@ export const HomeHeader = () => {
             <ProfileModal open={open} onClose={() => setOpen(false)} />
           </div>
         </div>
-        <Profile />
+        <Box className={classes.size}>
+          <ProfileHeader />
+        </Box> */}
       </TabPanel>
     </div>
   );

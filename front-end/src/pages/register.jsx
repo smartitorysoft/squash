@@ -1,73 +1,19 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
-import TextInput from "../components/TextInput";
-import BasicButton from "../components/BasicButton";
-import styles from "../styles/Register.module.css";
-import { register } from "../store/auth/actions";
-import { Box } from "@material-ui/core";
+import React from "react";
 
-const Register = (props) => {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [number, setNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordCheck, setPasswordCheck] = useState("");
+import pageRedirect from "lib/pageRedirect";
+import Page from "views/Register";
 
-  const onSubmit = () => {
-    dispatch(
-      register({
-        email,
-        password,
-        role: "root",
-        profile: {
-          firstName,
-          lastName,
-          phone: number,
-        },
-      })
-    );
+const Register = (props) => <Page {...props} />;
+
+Register.getInitialProps = async (ctx) => {
+  try {
+    await pageRedirect({ auth: false, url: "/register" }, ctx);
+  } catch (error) {
+    throw error;
+  }
+  return {
+    namespacesRequired: ["error", "global", "register"],
   };
-
-  return (
-    <Box className={styles.container}>
-      <TextInput
-        label="Vezetéknév"
-        onChange={(text) => setLastName(text.target.value)}
-      />
-      <TextInput
-        label="Keresztnév"
-        onChange={(text) => setFirstName(text.target.value)}
-      />
-      <TextInput
-        label="Email cím"
-        onChange={(text) => setEmail(text.target.value)}
-      />
-      <TextInput
-        label="Telefonszám"
-        onChange={(text) => setNumber(text.target.value)}
-      />
-      <TextInput
-        label="Jelszó"
-        type="password"
-        onChange={(text) => setPassword(text.target.value)}
-      />
-      <TextInput
-        label="Jelszó megerősítése"
-        type="password"
-        onChange={(text) => setPasswordCheck(text.target.value)}
-      />
-      <Box className={styles.buttons}>
-        <BasicButton label="Regisztrálás" onClick={onSubmit} />
-        <BasicButton label="Vissza" onClick={() => router.back()} />
-      </Box>
-    </Box>
-  );
 };
-
-Register.propTypes = {};
 
 export default Register;

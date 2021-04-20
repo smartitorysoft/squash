@@ -4,6 +4,7 @@ const pageRedirect = async ({ auth = null, url = null }, ctx) =>
 	new Promise((resolve, reject) => {
 		const { store, res } = ctx;
 
+		console.log('res', res);
 		// -- Redirect --//
 		const redirectHandler = () => {
 			if (res) {

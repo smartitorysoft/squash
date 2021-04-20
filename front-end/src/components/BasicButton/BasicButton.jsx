@@ -1,11 +1,14 @@
-import Button from '@material-ui/core/Button';
+import { Box } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 
-import React from 'react';
+import React from "react";
 
 export const BasicButton = ({ label, onClick }) => (
-	<div>
-		<Button onClick={onClick} variant='contained' color='primary'>{label}</Button>
-	</div>
+  <Box>
+    <Button onClick={onClick} variant="contained" color="primary">
+      {label}
+    </Button>
+  </Box>
 );
 
 export default BasicButton;
