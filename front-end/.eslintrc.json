@@ -7,10 +7,9 @@
 	"extends": [
 		"airbnb", 
 		"airbnb/hooks",
-		"plugin:react/recommended",
-		"prettier"
+		"plugin:react/recommended"
 	],
-	"plugins": ["react-hooks", "module-resolver", "prettier"],
+	"plugins": ["react-hooks", "module-resolver"],
 	"globals": {
 		"Atomics": "readonly",
 		"SharedArrayBuffer": "readonly"
@@ -36,7 +35,14 @@
 		 * 2 - error
 		 *
 		 */
-		
+		 "max-len": [2, { 
+			"code": 80, 
+			"ignoreComments": true, 
+			"ignoreTrailingComments":true,
+			"ignoreUrls": true,
+			"ignoreStrings": true,
+			"ignoreTemplateLiterals": true
+			}],
 		"module-resolver/use-alias": 2,
 		"semi": [2, "always"],
 		"quotes": [1, "single"],
@@ -94,21 +100,7 @@
 			}
 		],
 		"react-hooks/rules-of-hooks": "error",
-		"react-hooks/exhaustive-deps": "warn",
-		"prettier/prettier": [
-			2,
-			{
-				"useTabs": true,
-				"printWidth": 80,
-				"tabWidth": 2,
-				"singleQuote": true,
-				"trailingComma": "always",
-				"jsxSingleQuote": true,
-				"jsxBracketSameLine": true,
-				"semi": true,
-				"bracketSpacing": true,
-				"endOfLine": "crlf"
-			}
-		]
+		"react-hooks/exhaustive-deps": "warn"
+		
 	}
 }
