@@ -6,6 +6,8 @@ import TextInput from "components/TextInput";
 import { useDispatch, useSelector } from "react-redux";
 import { loadMe } from "store/me/actions";
 import { login } from "store/auth/actions";
+import { Formik } from 'formik'
+import * as Yup from 'yup'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,9 +59,16 @@ const SignIn = () => {
     }
   }, [isSignedIn]);
 
+  const LoginSchema = Yup.object().shape({
+    email: Yup.string().email().required('Required'),
+    password: Yup.string(),
+  })
+
+
   return (
     <Box className={classes.root}>
       <Box className={classes.container}>
+        <Formik validationSchema = {LoginSchema}>
         <TextInput
           className={classes.field}
           label="Email cím"
@@ -71,6 +80,18 @@ const SignIn = () => {
           type="password"
           onChange={(text) => setPassword(text.target.value)}
         />
+        </Formik>
+        {/* <TextInput
+          className={classes.field}
+          label="Email cím"
+          onChange={(text) => setEmail(text.target.value)}
+        />
+        <TextInput
+          className={classes.field}
+          label="Jelszó"
+          type="password"
+          onChange={(text) => setPassword(text.target.value)}
+        /> */}
 
         <Box className={classes.buttons}>
           <BasicButton
