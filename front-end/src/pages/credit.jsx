@@ -7,7 +7,7 @@ const Credit = (props) => <Page {...props} />;
 
 Credit.getInitialProps = async (ctx) => {
   try {
-    await pageRedirect({ auth: true, url: "/credit" }, ctx);
+    await pageRedirect({ auth: true, url: "/sign-in" }, ctx);
   } catch (error) {
     throw error;
   }

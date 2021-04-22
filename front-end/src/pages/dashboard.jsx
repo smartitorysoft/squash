@@ -7,7 +7,7 @@ const Dashboard = (props) => <Page {...props} />;
 
 Dashboard.getInitialProps = async (ctx) => {
   try {
-    await pageRedirect({ auth: true, url: "/dashboard" }, ctx);
+    await pageRedirect({ auth: true, url: "/sign-in" }, ctx);
   } catch (error) {
     throw error;
   }

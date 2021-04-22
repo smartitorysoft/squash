@@ -12,7 +12,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import TextInput from "components/TextInput";
 import Row from "components/Row/Row";
-import { Box } from "@material-ui/core";
+import { Box } from "@material-ui/core";s
 
 import { getUsers } from "store/user/actions";
 

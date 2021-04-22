@@ -7,7 +7,7 @@ const Profile = (props) => <Page {...props} />;
 
 Profile.getInitialProps = async (ctx) => {
   try {
-    await pageRedirect({ auth: true, url: "/profile" }, ctx);
+    await pageRedirect({ auth: true, url: "/sign-in" }, ctx);
   } catch (error) {
     throw error;
   }
