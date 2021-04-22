@@ -1,5 +1,6 @@
 export const LOG_IN = 'LOG_IN';
 export const login = (data) => (dispatch, getState, { jsonApi }) => {
+	console.log(data);
 	jsonApi()
 		.post('auth', data)
 		.then((res) => {

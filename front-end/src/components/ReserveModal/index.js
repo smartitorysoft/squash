@@ -1,1 +1,1 @@
-export {default} from './ReserveModal'
+export { default } from './ReserveModal';
