@@ -21,7 +21,11 @@
 		"sourceType": "module",
 		"ecmaFeatures": {
       "jsx": true
-    }
+    },
+		"requireConfigFile" : "false",
+		"babelOptions": { 
+			"configFile": "./.babelrc" 
+		}
 	},
 	"settings": {
     "import/resolver": {
