@@ -35,10 +35,17 @@
 		 * 2 - error
 		 *
 		 */
-		
+		 "max-len": [2, { 
+			"code": 80, 
+			"ignoreComments": true, 
+			"ignoreTrailingComments":true,
+			"ignoreUrls": true,
+			"ignoreStrings": true,
+			"ignoreTemplateLiterals": true
+			}],
 		"module-resolver/use-alias": 2,
 		"semi": [2, "always"],
-		"quotes": [2, "single"],
+		"quotes": [1, "single"],
 		"no-multi-spaces": 0,
 		"no-tabs": 0,
 		"airbnb/no-tabs": 0,
@@ -94,5 +101,6 @@
 		],
 		"react-hooks/rules-of-hooks": "error",
 		"react-hooks/exhaustive-deps": "warn"
+		
 	}
 }
