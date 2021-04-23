@@ -38,11 +38,15 @@ const Register = (props) => {
 		lastName: Yup.string().required('Required'),
 		email: Yup.string().email().required('Required'),
 		phone: Yup.number().required('Required'),
-		password: Yup.string().required('Required'),
-		passwordCheck: Yup.string().required('Required'),
+		password: Yup.string()
+			.required('Required'),
+		passwordCheck: Yup.string()
+			.oneOf([Yup.ref('password'), null], 'Passwords don\'t match!')
+			.required('Required'),
 	});
 
 	const onSubmit = () => {
+		console.log(formRef);
 		if (formRef && formRef.current.isValid) {
 			dispatch(register({
 				email: formRef.current.values.email,
