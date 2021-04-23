@@ -5,7 +5,7 @@ import {
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { useDispatch } from 'react-redux';
-import { giveCredit } from '../../../store/credit/actions';
+import { giveCredit } from '../../store/credit/actions';
 import { TextInput } from '../TextInput/TextInput';
 import { BasicButton } from '../BasicButton/BasicButton';
 
