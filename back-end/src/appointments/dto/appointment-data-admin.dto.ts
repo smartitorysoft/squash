@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Appointment } from '../../entities';
-import { AppointmentDataDto } from './appointment-data.dto';
 import UserDataDto from '../../users/dto/user-data.dto';
+import { AppointmentDataDto } from './appointment-data.dto';
 
 export class AppointmentDataAdminDto extends AppointmentDataDto {
 	@ApiProperty({ required: true })

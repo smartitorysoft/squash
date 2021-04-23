@@ -11,3 +11,13 @@ export const getUsers = () => (dispatch, getState, {jsonApi}) => {
     .catch(e => console.log("Get users error", e))
 }
 
+export const SET_USER_PROFILE = 'SET_USER_PROFILE'
+export const setProfile = (data) => (dispatch, getState, {jsonApi}) => {
+    // console.log("data", data);
+    jsonApi()
+    .put(`users/${data.id}`, data.details)
+    .then(res => {
+        console.log("Profile updated");
+    })
+    .catch(e => console.log("Profile update error", e))
+}

@@ -21,6 +21,15 @@ export class User extends BaseEntity {
 	@ManyToOne(() => Role, (role) => role.name, { eager: true })
 	role: Role;
 
+	@Column({
+		type: 'varchar',
+		length: 256,
+		nullable: true,
+		default: null,
+		unique: true
+	})
+	cardId: string;
+
 	@Column({ type: 'varchar', length: 128, nullable: true })
 	resetToken: string;
 

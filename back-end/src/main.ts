@@ -22,13 +22,13 @@ async function bootstrap() {
 	app.setGlobalPrefix(configService.getGlobalPrefix());
 
 	const options = new DocumentBuilder()
-		.setTitle('Madefalva Web App')
+		.setTitle('Squash')
 		.setVersion('1.0.0')
 		.build();
 	const document = SwaggerModule.createDocument(app, options);
 
 	const redocOptions: RedocOptions = {
-		title: 'Madefalva',
+		title: 'Squash',
 		logo: {
 			url:
 				'https://smartitory.com/wp-content/uploads/2020/03/Smartitory_logo_transparent_small.png',

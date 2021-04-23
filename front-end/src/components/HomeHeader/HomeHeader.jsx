@@ -1,67 +1,83 @@
-import React, { useState } from 'react';
-import {
-	AppBar, Tabs, Tab, IconButton,
-} from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
-import { useRouter } from 'next/router';
-import { Profile } from '../../views/Profile';
-import TabPanel from '../TabPanel/TabPanel';
-import styles from '../../../styles/Header.module.css';
-import ProfileModal from '../ProfileModal';
+import React, { useState, useEffect } from "react";
+import { AppBar, Tabs, Tab, IconButton } from "@material-ui/core";
+import { Profile } from "../../views/Profile/Profile";
+import TabPanel from "../TabPanel/TabPanel";
+import styles from "../../../styles/Header.module.css";
+import ProfileModal from "../ProfileModal/ProfileModal";
+import EditIcon from "@material-ui/icons/Edit";
+import { useSelector, useDispatch } from "react-redux";
+import { GridComponent } from "../Grid/GridComponent";
+import { makeStyles } from "@material-ui/core";
 
 export const HomeHeader = () => {
-	const router = useRouter();
-	const [value, setValue] = useState(0);
-	const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
 
-	const handleChange = (event, newValue) => {
-		setValue(newValue);
-	};
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
-	return (
-		<div className={styles.home}>
-			<AppBar style={{ alignItems: 'flex-end' }} position='sticky'>
-				<Tabs
-					value={value}
-					onChange={handleChange}
-					aria-label='simple tabs example'
-				>
-					<Tab label='Home' />
-					<Tab label='Foglalás' />
-					<Tab label='Profil' />
-				</Tabs>
-			</AppBar>
-			<TabPanel value={value} index={0}>
-				<IconButton onClick={() => router.push('/credit')}>
-					<p>Home</p>
-				</IconButton>
-			</TabPanel>
-			<TabPanel value={value} index={1}>
-				Foglalás
-			</TabPanel>
-			<TabPanel value={value} index={2}>
-				<div className={styles.header}>
-					<div className={styles.div}>
-						<p> Vezetéknév Keresztnév</p>
-						<p>Telefonszám</p>
-						<p>Email</p>
-					</div>
-					<div className={styles.div}>
-						<p>Kreditek száma</p>
-						<p>Következő foglalás</p>
-						<p>Kártyaszám</p>
-					</div>
+  const useStyles = makeStyles((theme) => ({
+    container: {
+      marginLeft: `calc(100% / 8)`,
+    },
+    header: {
+      flexDirection: "row",
+    },
+    div: {
+      width: "45%",
+    },
+  }));
 
-					<div className={styles.div}>
-						<IconButton onClick={() => setOpen(true)}>
-							<EditIcon />
-						</IconButton>
+  const classes = useStyles();
 
-						<ProfileModal open={open} onClose={() => setOpen(false)} />
-					</div>
-				</div>
-				<Profile />
-			</TabPanel>
-		</div>
-	);
+  const user = useSelector((state) => state.me.info);
+
+  return (
+    <div className={styles.home}>
+      <AppBar style={{ alignItems: "flex-end" }} position="sticky">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="simple tabs example"
+        >
+          <Tab label="Home" />
+          <Tab label="Foglalás" />
+          <Tab label="Profil" />
+        </Tabs>
+      </AppBar>
+      <TabPanel value={value} index={0}>
+        <div className={classes.container}>
+          <GridComponent />
+        </div>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        Foglalás
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <div className={classes.header}>
+          <div className={classes.div}>
+            <p> Vezetéknév Keresztnév</p>
+            <p>Telefonszám</p>
+            <p>Email</p>
+          </div>
+          <div className={classes.div}>
+            <p>Kreditek száma</p>
+            <p>Következő foglalás</p>
+            <p>Kártyaszám</p>
+          </div>
+
+          <div className={classes.div}>
+            <IconButton onClick={() => setOpen(true)}>
+              <EditIcon />
+            </IconButton>
+
+            <ProfileModal open={open} onClose={() => setOpen(false)} />
+          </div>
+        </div>
+        <Profile />
+      </TabPanel>
+    </div>
+  );
 };

@@ -1,26 +1,64 @@
-import React from 'react';
-import { Modal } from '@material-ui/core';
-import { TextInput } from '../TextInput/TextInput';
-import { BasicButton } from '../BasicButton/BasicButton';
-import styles from '../../../styles/ReserveModal.module.css';
+import React from "react";
+import { Modal } from "@material-ui/core";
+import { TextInput } from "../TextInput/TextInput";
+import { BasicButton } from "../BasicButton/BasicButton";
+import styles from "../../../styles/ReserveModal.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { setProfile } from "../../../store/user/actions";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
-export const ProfileModal = ({ open, onClose }) => (
-	<div>
-		<Modal open={open} onClose={onClose}>
-			<div className={styles.modal}>
-				<TextInput label='Vezetéknév' />
-				<TextInput label='Keresztnév' />
-				<TextInput label='Email cím' />
-				<TextInput label='Telefonszám' type='number' />
-				<BasicButton
-					label='Változtat'
-					onClick={() => {
-						alert('clicked');
-					}}
-				/>
-			</div>
-		</Modal>
-	</div>
-);
+export const ProfileModal = ({ open, onClose }) => {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.me.info);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+
+  const onSubmit = () => {
+    dispatch(
+      setProfile({
+        id: user.id,
+        details: {
+          profile: {
+            firstName: firstName,
+            lastName: lastName,
+            phone: "+40" + phone,
+          },
+        },
+      })
+    );
+  };
+
+  return (
+    <div>
+      <Modal open={open} onClose={onClose}>
+        <div className={styles.modal}>
+          <TextInput
+            label="Vezetéknév"
+            onChange={(text) => setFirstName(text.target.value)}
+          />
+          <TextInput
+            label="Keresztnév"
+            onChange={(text) => setLastName(text.target.value)}
+          />
+          <TextInput
+            label="Telefonszám"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">+40</InputAdornment>
+              ),
+            }}
+            onChange={(text) => setPhone(text.target.value)}
+          />
+          <BasicButton label="Változtat" onClick={onSubmit} />
+        </div>
+      </Modal>
+    </div>
+  );
+};
 
 export default ProfileModal;

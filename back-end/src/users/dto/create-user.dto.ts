@@ -35,7 +35,7 @@ export class CreateUserDto {
 			this.email = data.email;
 			this.password = data.password;
 			this.role = data.role;
-			this.profile = new ProfileDto();
+			this.profile = new ProfileDto(null);
 		}
 	}
 }

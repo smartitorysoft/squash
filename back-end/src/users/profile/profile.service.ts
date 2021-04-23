@@ -12,7 +12,7 @@ export class ProfileService {
 	) {}
 
 	public async create(profileData: ProfileDto): Promise<Profile> {
-		const data = profileData ? profileData : new ProfileDto();
+		const data = profileData ? profileData : new ProfileDto(null);
 
 		const newProfile = await this.profileRepository.create({
 			...data
