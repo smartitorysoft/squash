@@ -17,7 +17,7 @@ import { Response } from 'express';
 import JwtAuthenticationGuard from './guards/jwt-authentication.guard';
 import LoginDto from './dto/login.dto';
 import ResetPasswordDto from './dto/reset-password.dto';
-import { ModifyResponseDto } from 'src/dto/modifyResponse.dto';
+import { ModificationResponseDto } from 'src/dto/modification.response.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import SetPasswordTokenDto from './dto/set-password-token.dto';
 import SetPasswordUserDto from './dto/set-password-user.dto';
@@ -54,19 +54,19 @@ export class AuthController {
 	}
 
 	@Post('reset-password')
-	@ApiResponse({ status: 200, type: ModifyResponseDto })
+	@ApiResponse({ status: 200, type: ModificationResponseDto })
 	async solicitPasswordReset(
 		@Body() dto: ResetPasswordDto
-	): Promise<ModifyResponseDto> {
+	): Promise<ModificationResponseDto> {
 		const result = await this.authService.solicitPasswordReset(dto.email);
-		return new ModifyResponseDto(result);
+		return new ModificationResponseDto(result);
 	}
 
 	@Post('password')
-	@ApiResponse({ status: 200, type: ModifyResponseDto })
+	@ApiResponse({ status: 200, type: ModificationResponseDto })
 	async setPasswordWithToken(
 		@Body() dto: SetPasswordTokenDto
-	): Promise<ModifyResponseDto> {
+	): Promise<ModificationResponseDto> {
 		if (dto.password !== dto.confirmPassword) {
 			throw new HttpException(
 				'Passwords do not match!',
@@ -77,17 +77,17 @@ export class AuthController {
 				dto.token,
 				dto.password
 			);
-			return new ModifyResponseDto(result);
+			return new ModificationResponseDto(result);
 		}
 	}
 
 	@UseGuards(JwtAuthenticationGuard)
 	@Put('password')
-	@ApiResponse({ status: 200, type: ModifyResponseDto })
+	@ApiResponse({ status: 200, type: ModificationResponseDto })
 	async setPasswordWithUser(
 		@Req() request: RequestWithUser,
 		@Body() dto: SetPasswordUserDto
-	): Promise<ModifyResponseDto> {
+	): Promise<ModificationResponseDto> {
 		if (dto.password !== dto.confirmPassword) {
 			throw new HttpException(
 				'Passwords do not match!',
@@ -98,7 +98,7 @@ export class AuthController {
 				request.user,
 				dto.password
 			);
-			return new ModifyResponseDto(result);
+			return new ModificationResponseDto(result);
 		}
 	}
 }
