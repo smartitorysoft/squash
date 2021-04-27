@@ -46,7 +46,6 @@ const Register = (props) => {
 	});
 
 	const onSubmit = () => {
-		console.log(formRef);
 		if (formRef && formRef.current.isValid) {
 			dispatch(register({
 				email: formRef.current.values.email,

@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		minWidth: '400',
+		minWidth: '500',
 	},
 }));
 
@@ -89,12 +89,7 @@ const SignIn = () => {
 					{({
 						handleChange,
 						handleBlur,
-						// handleSubmit,
 						values,
-						// errors,
-						// setFieldValue,
-						// touched,
-						// setTouched,
 					}) => (
 						<Box>
 							<TextInput

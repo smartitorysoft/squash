@@ -1,13 +1,11 @@
 import { HomeHeader } from 'components/HomeHeader/HomeHeader';
 import React from 'react';
-import { Box } from '@material-ui/core';
+import Dashboard from 'components/Layout/Navigation/Dashboard';
 
-const Dashboard = (props) => (
-	<>
-		<Box>
-			<HomeHeader />
-		</Box>
-	</>
+const DashboardPage = (props) => (
+	<Dashboard>
+		{/* <HomeHeader /> */}
+	</Dashboard>
 );
 
-export default Dashboard;
+export default DashboardPage;

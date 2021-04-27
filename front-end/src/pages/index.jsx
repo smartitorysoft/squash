@@ -1,25 +1,19 @@
 import React from 'react';
-import { HomeHeader } from 'components/HomeHeader';
-import { getAppointments } from '../store/appointments/actions';
 
-function Home() {
-	return (
-		<div className={styles.container}>
-			<HomeHeader />
-		</div>
-	);
-}
+import pageRedirect from 'lib/pageRedirect';
+import Page from 'views/Home';
 
-Home.getInitialProps = (ctx) => {
-	const date = new Date();
-	const formattedDate = [
-		date.getFullYear(),
-		date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth(),
-		date.getDate(),
-	].join('-');
-	// console.log(formattedDate);
-	ctx.store.dispatch(getAppointments(formattedDate));
-	return { lorem: 'ipsum' };
+const Index = (props) => <Page {...props} />;
+
+Index.getInitialProps = async (ctx) => {
+	try {
+		await pageRedirect({ auth: false, url: '/' }, ctx);
+	} catch (error) {
+		throw error;
+	}
+	return {
+		namespacesRequired: ['error', 'global', 'home'],
+	};
 };
 
-export default Home;
+export default Index;

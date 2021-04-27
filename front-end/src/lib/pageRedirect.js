@@ -4,11 +4,11 @@ const pageRedirect = async ({ auth = null, url = null }, ctx) =>
 	new Promise((resolve, reject) => {
 		const { store, res } = ctx;
 
-		console.log('res', res);
 		// -- Redirect --//
 		const redirectHandler = () => {
+			console.log('auth:', auth, 'redirectTo: ', url);
 			if (res) {
-				return res.redirect(url);
+				return res.writeHead(302, { Location: url }).end();
 			}
 
 			return window.scrollTo(0, 0);
@@ -16,6 +16,7 @@ const pageRedirect = async ({ auth = null, url = null }, ctx) =>
 
 		// -- Check redirect type --//
 		const { isSignedIn } = store.getState().auth;
+		console.log('isSignedIn:', isSignedIn);
 
 		switch (auth) {
 			case true:

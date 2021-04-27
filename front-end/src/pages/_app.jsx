@@ -4,7 +4,7 @@ import App from 'next/app';
 // import cookies from 'next-cookies';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import theme from 'theme';
-import { wrapper } from '../store/store';
+import { wrapper } from '../store/makeStore';
 
 const SmNext = (props) => {
 	const { Component, pageProps } = props;

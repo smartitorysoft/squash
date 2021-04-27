@@ -15,6 +15,27 @@ import { BasicButton } from 'components/BasicButton/BasicButton';
 // import { getUserAppointments } from "store/appointments/actions";
 // import { AppointmentsTable } from "../AppointmentsTable/AppointmentsTable";
 
+const useStyles = makeStyles((theme) => ({
+	container: {
+		marginLeft: 'calc(100% / 8)',
+	},
+	header: {
+		display: 'flex',
+		flexDirection: 'row',
+	},
+	div: {
+		width: '45%',
+	},
+	size: {
+		height: '75%',
+		width: '95%',
+	},
+	home: {
+		height: '100%',
+		width: '100%',
+	},
+}));
+
 export const HomeHeader = () => {
 	const dispatch = useDispatch();
 	const [value, setValue] = useState(0);
@@ -27,27 +48,6 @@ export const HomeHeader = () => {
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
-
-	const useStyles = makeStyles((theme) => ({
-		container: {
-			marginLeft: 'calc(100% / 8)',
-		},
-		header: {
-			display: 'flex',
-			flexDirection: 'row',
-		},
-		div: {
-			width: '45%',
-		},
-		size: {
-			height: '75%',
-			width: '95%',
-		},
-		home: {
-			height: '100%',
-			width: '100%',
-		},
-	}));
 
 	const classes = useStyles();
 
