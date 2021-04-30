@@ -10,6 +10,7 @@ import { MailModule } from './util/mail/mail.module';
 import { PaymentsModule } from './payments/payments.module';
 import { configService } from './config/config.service';
 import { AppointmentsModule } from './appointments/appointments.module';
+import { OpeningsModule } from './openings/openings.module';
 
 @Module({
 	imports: [
@@ -20,7 +21,8 @@ import { AppointmentsModule } from './appointments/appointments.module';
 		ProfileModule,
 		MailModule,
 		PaymentsModule,
-		AppointmentsModule
+		AppointmentsModule,
+		OpeningsModule
 	],
 	controllers: [AppController],
 	providers: [AppService]

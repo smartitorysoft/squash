@@ -12,4 +12,5 @@ module.exports = {
     staticFolder: '/static',
     backendApi: process.env.API_URL
   },
+	pageExtensions: ['jsx'],
 }

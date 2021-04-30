@@ -54,6 +54,21 @@
     "type": "appointment",
     "code": "400apo01"
   },
+  "400apo02": {
+    "name": "OutsideTheOpeningHours",
+    "type": "appointment",
+    "code": "400apo02"
+  },
+  "400apo03": {
+    "name": "TimeWindowBusy",
+    "type": "appointment",
+    "code": "400apo03"
+  },
+  "400apo04": {
+    "name": "InvalidDate",
+    "type": "appointment",
+    "code": "400apo04"
+  },
   "404apo00": {
     "name": "AppointmentNotFound",
     "type": "appointment",
@@ -68,5 +83,30 @@
     "name": "EmailTaken",
     "type": "registration",
     "code": "409reg00"
+  },
+  "404use00": {
+    "name": "UserNotFound",
+    "type": "user",
+    "code": "404use00"
+  },
+  "400ope00": {
+    "name": "InvalidDefaultOpeningModification",
+    "type": "opening",
+    "code": "400ope00"
+  },
+  "400ope01": {
+    "name": "CannotDeleteDefaultOpening",
+    "type": "opening",
+    "code": "400ope01"
+  },
+  "400ope02": {
+    "name": "InvalidOpeningRule",
+    "type": "opening",
+    "code": "400ope02"
+  },
+  "400ope03": {
+    "name": "InvalidDate",
+    "type": "opening",
+    "code": "400ope03"
   }
 }

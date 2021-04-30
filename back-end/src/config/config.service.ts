@@ -78,6 +78,13 @@ class ConfigService {
 		};
 	}
 
+	getDefaultOpeningHours(name: string) {
+		return {
+			openingHour: this.getValue(`${name.toUpperCase()}_OPENING`),
+			closingHour: this.getValue(`${name.toUpperCase()}_CLOSING`)
+		};
+	}
+
 	public getSmtpConfig() {
 		return {
 			domain: this.getValue('SMTP_DOMAIN'),
@@ -106,7 +113,11 @@ const configService = new ConfigService(process.env).ensureValues([
 	'SMTP_USER',
 	'SMTP_PASSWORD',
 	'API_URL',
-	'API_GLOBAL_PREFIX'
+	'API_GLOBAL_PREFIX',
+	'WEEKDAY_OPENING',
+	'WEEKDAY_CLOSING',
+	'WEEKEND_OPENING',
+	'WEEKEND_CLOSING'
 ]);
 
 export { configService, ConfigService };

@@ -14,7 +14,6 @@ import {
 import { AppointmentsService } from './appointments.service';
 import JwtAuthenticationGuard from '../auth/guards/jwt-authentication.guard';
 import CreateAppointmentDto from './dto/create-appointment.dto';
-import CreateAppointmentResponseDto from './dto/create-appointment.response.dto';
 import RequestWithUser from '../auth/interfaces/requestWithUser.interface';
 import { PermissionGuard } from '../admin/permission/guard/permission.guard';
 import { Target } from '../admin/permission/decorators/target.decorator';
@@ -26,6 +25,7 @@ import DeleteAppointmentResponseDto from './dto/delete-appointment.response.dto'
 import AppointmentTableDataResponseDto from './dto/appointment-table-data.response.dto';
 import { Status } from './enum/status.enum';
 import BaseException from '../util/exceptions/base.exception';
+import { CreationResponseDto } from '../dto/creation.response.dto';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -108,10 +108,23 @@ export class AppointmentsController {
 	async create(
 		@Req() req: RequestWithUser,
 		@Body() dto: CreateAppointmentDto
-	): Promise<CreateAppointmentResponseDto> {
-		const response = new CreateAppointmentResponseDto();
-		response.id = await this.appointmentsService.create(dto, req.user);
-		return response;
+	): Promise<CreationResponseDto> {
+		return new CreationResponseDto(
+			await this.appointmentsService.create(dto, req.user)
+		);
+	}
+
+	@Post(':id')
+	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
+	@Target('appointments')
+	@Operation('create')
+	async createByUserId(
+		@Param('id', new ParseUUIDPipe()) id: string,
+		@Body() dto: CreateAppointmentDto
+	): Promise<CreationResponseDto> {
+		return new CreationResponseDto(
+			await this.appointmentsService.createByUserId(dto, id)
+		);
 	}
 
 	@Delete(':id')

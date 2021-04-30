@@ -55,11 +55,19 @@ export class UsersService {
 	}
 
 	async getByEmail(email: string): Promise<User> {
-		return await this.usersRepository.findOneOrFail({ email });
+		const user = await this.usersRepository.findOne({ email });
+		if (!user) {
+			throw new BaseException('404use00', 404);
+		}
+		return user;
 	}
 
 	async getById(id: string): Promise<User> {
-		return await this.usersRepository.findOneOrFail({ id });
+		const user = await this.usersRepository.findOne({ id });
+		if (!user) {
+			throw new BaseException('404use00', 404);
+		}
+		return user;
 	}
 
 	async paginate(
