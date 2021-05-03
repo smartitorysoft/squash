@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-	Drawer, Divider, Paper, Avatar, Typography, Hidden, Link, NoSsr,
+	Drawer, Divider, Paper, Avatar, Typography, Hidden, NoSsr,
 } from '@material-ui/core';
 
+import { useTranslation } from 'next-i18next';
 import Navigation from '../NavigationList';
 
 import navigationConfig from './navigationConfig';
@@ -90,7 +91,8 @@ const NavBar = (props) => {
 	const { openMobile, onMobileClose } = props;
 
 	const classes = useStyles();
-	const { base: navigation, other: otherNavigation } = navigationConfig();
+	const { t } = useTranslation('components');
+	const { base: navigation, other: otherNavigation } = navigationConfig(t);
 
 	useEffect(() => {
 		if (openMobile && onMobileClose) {

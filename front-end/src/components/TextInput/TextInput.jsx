@@ -1,17 +1,10 @@
-import React from "react";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
 
-export const TextInput = ({ label, type, onChange, InputProps }) => (
-  <div>
-    <TextField
-      InputProps={InputProps}
-      onChange={onChange}
-      label={label}
-      type={type}
-      style={{ width: 300 }}
-    />
-  </div>
+export const TextInput = (props) => (
+	<TextField
+		{...props}
+	/>
 );
 
 export default TextInput;

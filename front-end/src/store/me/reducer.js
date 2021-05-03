@@ -1,4 +1,4 @@
-import { LOAD_ME } from './actions';
+import { GET_ME } from './actions';
 
 const INITIAL_STATE = {
 	info: {},
@@ -6,10 +6,8 @@ const INITIAL_STATE = {
 
 export const me = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
-		case LOAD_ME:
+		case GET_ME:
 			return { ...state, info: action.payload };
-		case 'LOREM':
-			return { ...state, lorem: 'ipsum' };
 		default:
 			return state;
 	}

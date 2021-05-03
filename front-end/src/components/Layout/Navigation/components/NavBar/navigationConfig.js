@@ -12,37 +12,58 @@ const navigationConfig = (t) => {
 
 	const adminNavigation = [
 		{
-			title: 'components.nav-bar.dashboard',
+			title: t('components.nav-bar.dashboard'),
 			href: '/dashboard',
 			icon: BarChartIcon,
 		},
 		{
-			title: 'components.nav-bar.profile',
+			title: t('components.nav-bar.profile'),
 			href: '/profile',
 			icon: PersonIcon,
 		},
 		{
-			title: 'components.nav-bar.credit',
+			title: t('components.nav-bar.credit'),
 			href: '/credit',
 			icon: MonetizationOnIcon,
 		},
-		// {
-		// 	title: 'components.nav-bar.sets',
-		// 	icon: BarChartIcon,
-		// 	pages: [
-		// 		{
-		// 			title: 'components.nav-bar.items',
-		// 			href: '/items',
-		// 		},
-		// 		{
-		// 			title: 'components.nav-bar.products',
-		// 			href: '/products',
-		// 		},
-		// 	],
-		// },
+		{
+			title: t('components.nav-bar.courts'),
+			icon: BarChartIcon,
+			pages: [
+				{
+					title: t('components.nav-bar.court-types'),
+					href: '/items',
+				},
+				{
+					title: t('components.nav-bar.edit-courts'),
+					href: '/products',
+				},
+			],
+		},
+		{
+			title: t('components.nav-bar.timesheet'),
+			href: '/timesheet',
+			icon: MonetizationOnIcon,
+		},
 	];
 
-	const userNavigation = adminNavigation;
+	const userNavigation = [
+		{
+			title: t('components.nav-bar.dashboard'),
+			href: '/dashboard',
+			icon: BarChartIcon,
+		},
+		{
+			title: t('components.nav-bar.profile'),
+			href: '/profile',
+			icon: PersonIcon,
+		},
+		{
+			title: t('components.nav-bar.credit'),
+			href: '/credit',
+			icon: MonetizationOnIcon,
+		},
+	];
 
 	const otherNavigation = [
 		{

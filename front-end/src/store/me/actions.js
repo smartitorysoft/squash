@@ -1,10 +1,10 @@
-export const LOAD_ME = 'LOAD_ME';
-export const loadMe = () => (dispatch, getState, { jsonApi }) => {
+export const GET_ME = 'GET_ME';
+export const getMe = () => (dispatch, getState, { jsonApi }) => {
 	jsonApi()
 		.get('users/me')
 		.then((res) => {
 			dispatch({
-				type: LOAD_ME,
+				type: GET_ME,
 				payload: res.data,
 			});
 		})

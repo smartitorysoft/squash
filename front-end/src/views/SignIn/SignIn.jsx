@@ -1,13 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Box, makeStyles } from '@material-ui/core';
+import React from 'react';
+import {
+	Box, Button, makeStyles, TextField,
+} from '@material-ui/core';
 import { useRouter } from 'next/router';
 import BasicButton from 'components/BasicButton';
-import TextInput from 'components/TextInput';
-import { useDispatch, useSelector } from 'react-redux';
-import { loadMe } from 'store/me/actions';
-import { login } from 'store/auth/actions';
-import { Formik } from 'formik';
+import { useDispatch } from 'react-redux';
+import { getMe } from 'store/me/actions';
+import { signIn, signOut } from 'store/auth/actions';
+import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import { useErrorHandling } from 'components/error';
+import { useTranslation } from 'next-i18next';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -24,12 +27,9 @@ const useStyles = makeStyles((theme) => ({
 		marginTop: 'calc(50vh - 100px)',
 	},
 
-	fields: {
-		padding: 16,
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'center',
-		alignItems: 'center',
+	field: {
+		marginTop: theme.spacing(2),
+		width: 300,
 	},
 
 	buttons: {
@@ -47,24 +47,25 @@ const SignIn = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 
-	const formRef = useRef();
+	const { errorHandling, errorChecker } = useErrorHandling(useTranslation('error'));
 
-	const isSignedIn = useSelector((state) => state.auth.isSignedIn);
+	const onSubmit = async (values, { setSubmitting }) => {
+		try {
+			await dispatch(signIn(values));
+			try {
+				await dispatch(getMe());
+			} catch (error) {
+				console.log('Lefut a hibakezeles');
+				await dispatch(signOut());
+				errorHandling(error);
+			}
 
-	useEffect(() => {
-		if (isSignedIn) {
-			dispatch(loadMe());
-			router.push('/dashboard');
+			router.push('/dashboard').then(() => window.scrollTo(0, 0));
+		} catch (error) {
+			errorHandling(error);
 		}
-	}, [isSignedIn]);
 
-	const onSubmit = () => {
-		if (formRef && formRef.current.isValid) {
-			dispatch(login({
-				email: formRef.current.values.email,
-				password: formRef.current.values.password,
-			}));
-		}
+		setSubmitting(false);
 	};
 
 	const LoginSchema = Yup.object().shape({
@@ -74,65 +75,65 @@ const SignIn = () => {
 
 	return (
 		<Box className={classes.root}>
-			<Box className={classes.container}>
-				<Formik
-					innerRef={formRef}
-					validationSchema={LoginSchema}
-					validateOnChange
-					validateOnBlur
-					validateOnMount
-					initialValues={{
-						email: '',
-						password: '',
-					}}
-				>
-					{({
-						handleChange,
-						handleBlur,
-						values,
-					}) => (
-						<Box>
-							<TextInput
-								value={values.email}
-								className={classes.field}
+			<Formik
+				validationSchema={LoginSchema}
+				onSubmit={onSubmit}
+				initialValues={{
+					email: '',
+					password: '',
+				}}
+			>
+				{(formikProps) => {
+					const {
+						isSubmitting, values, handleChange, handleBlur,
+					} = formikProps;
+					return (
+						<Form className={classes.container}>
+							<TextField
+								fullWidth
 								label='Email cím'
-								onBlur={handleBlur('email')}
-								onChange={handleChange('email')}
-
-							/>
-							<TextInput
-								value={values.password}
+								name='email'
 								className={classes.field}
-								label='Jelszó'
-								type='password'
-								onBlur={handleBlur('password')}
-								onChange={handleChange('password')}
-
+								onChange={handleChange}
+								onBlur={handleBlur}
+								value={values.email}
+								error={!!errorChecker(formikProps, 'email')}
+								helperText={errorChecker(formikProps, 'email')}
 							/>
-						</Box>
-					)}
-				</Formik>
+							<TextField
+								fullWidth
+								label='Jelszó'
+								name='password'
+								className={classes.field}
+								type='password'
+								onChange={handleChange}
+								onBlur={handleBlur}
+								value={values.password}
+								error={!!errorChecker(formikProps, 'password')}
+								helperText={errorChecker(formikProps, 'password')}
+							/>
 
-				<Box className={classes.buttons}>
-					<BasicButton
-						label='Belépés'
-						onClick={onSubmit}
-						// onClick={() =>
-						// 	dispatch(
-						// 		login({
-						// 			email,
-						// 			password,
-						// 		}),
-						// 	)}
-					/>
-					<BasicButton
-						onClick={() => {
-							router.push('/register');
-						}}
-						label='Regisztráció'
-					/>
-				</Box>
-			</Box>
+							<Box className={classes.buttons}>
+								<Button
+									color='primary'
+									disabled={isSubmitting}
+									size='large'
+									type='submit'
+									variant='contained'
+								>
+									Belépés
+								</Button>
+								<BasicButton
+									onClick={() => {
+										router.push('/register');
+									}}
+									label='Regisztráció'
+								/>
+							</Box>
+						</Form>
+					);
+				}}
+			</Formik>
 		</Box>
 	);
 };

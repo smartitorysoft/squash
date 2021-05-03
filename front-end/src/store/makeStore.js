@@ -6,7 +6,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { createWrapper } from 'next-redux-wrapper';
 import reducers from './reducers';
 
-const { backendApi } = getConfig().publicRuntimeConfig;
+const { BACKEND_API } = getConfig().publicRuntimeConfig;
 
 const composeEnhancers =  process.env.NODE_ENV === 'development'
 	? composeWithDevTools || compose
@@ -24,7 +24,7 @@ const makeStore = () => {
 	if (isServer) {
 		const jsonApi = () => {
 			const instance = axios.create({
-				baseURL: backendApi,
+				baseURL: BACKEND_API.API,
 				headers: {
 					...headers,
 					'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ const makeStore = () => {
 	if (!window[NEXT_REDUX_STORE]) {
 		const jsonApi = () => {
 			const instance = axios.create({
-				baseURL: backendApi,
+				baseURL: BACKEND_API.API,
 				headers: {
 					...headers,
 					'Content-Type': 'application/json',
