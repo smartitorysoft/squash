@@ -4,24 +4,24 @@ import {
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
+import * as moment from 'moment';
 import  Row  from './components/Row/Row';
 
 const useStyles = makeStyles((theme) => ({
 	table: {
-		width: '80%',
-		backgroundColor: 'grey',
+		width: '100%',
 	},
 }));
 
 const UserAppointments = (props) => {
 	const appointments = useSelector((state) => state.appointments.appointments);
 
-	// console.log('appointments', appointments);
+	console.log('appointments', appointments);
 
 	const classes = useStyles();
 
 	return (
-		<Box>
+		<Box className={classes.table}>
 			<TableContainer>
 				<Table>
 					<TableHead>

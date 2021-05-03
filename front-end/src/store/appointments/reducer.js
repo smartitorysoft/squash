@@ -22,7 +22,7 @@ const INITIAL_STATE = {
 };
 
 export const appointments = (state = INITIAL_STATE, action) => {
-	// console.log(action.type, action.payload);
+	console.log(action.type, action.payload);
 	switch (action.type) {
 		case GET_APPOINTMENTS:
 

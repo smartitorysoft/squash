@@ -1,8 +1,17 @@
 import { LOAD_ME } from './actions';
 
 const INITIAL_STATE = {
-	info: {},
-	alphaVantageAPIKey: 'XAA1CYAY75KB63MT',
+	info: {
+		// id: 'e6504ce9-b736-4df6-880f-a59bf083c082',
+		// email: 'vgtamas@example.com',
+		// role: 'root',
+		// profile: {
+		// 	firstName: 'Lorem',
+		// 	lastName: 'Ipsum',
+		// 	phone: '0755279691',
+		// },
+		// credit: '499440',
+	},
 };
 
 export const me = (state = INITIAL_STATE, action) => {
