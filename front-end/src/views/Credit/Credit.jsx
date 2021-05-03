@@ -16,8 +16,6 @@ import Row from 'components/Row/Row';
 
 import { getUsers } from 'store/user/actions';
 
-s;
-
 const useStyles = makeStyles((theme) => ({
 	table: {
 		width: '80%',

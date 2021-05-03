@@ -5,6 +5,7 @@ import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import PersonIcon from '@material-ui/icons/Person';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 const navigationConfig = (t) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
@@ -43,7 +44,7 @@ const navigationConfig = (t) => {
 		{
 			title: t('components.nav-bar.timesheet'),
 			href: '/timesheet',
-			icon: MonetizationOnIcon,
+			icon: AccessTimeIcon,
 		},
 	];
 
@@ -62,6 +63,11 @@ const navigationConfig = (t) => {
 			title: t('components.nav-bar.credit'),
 			href: '/credit',
 			icon: MonetizationOnIcon,
+		},
+		{
+			title: t('components.nav-bar.timesheet'),
+			href: '/timesheet',
+			icon: AccessTimeIcon,
 		},
 	];
 

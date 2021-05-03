@@ -123,12 +123,17 @@ const SignIn = () => {
 								>
 									Belépés
 								</Button>
-								<BasicButton
+								<Button
+									color='primary'
+									disabled={isSubmitting}
+									size='large'
+									variant='contained'
 									onClick={() => {
 										router.push('/register');
 									}}
-									label='Regisztráció'
-								/>
+								>
+									Regisztráció
+								</Button>
 							</Box>
 						</Form>
 					);

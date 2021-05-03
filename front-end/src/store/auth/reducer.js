@@ -2,7 +2,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 import { AUTH, SIGN_IN, SIGN_OUT } from './actions';
 
 const INITIAL_STATE = {
-	isSignedIn: false,
+	isSignedIn: true,
 	token: null,
 };
 
