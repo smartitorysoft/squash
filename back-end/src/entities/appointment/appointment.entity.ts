@@ -4,7 +4,7 @@ import {
 	Index,
 	JoinColumn,
 	ManyToOne,
-	OneToOne
+	OneToOne,
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Court } from '../../appointments/enum/court.enum';

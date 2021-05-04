@@ -7,7 +7,7 @@ import { PaymentType } from './enum/payment-type.enum';
 import {
 	IPaginationOptions,
 	paginate,
-	Pagination
+	Pagination,
 } from 'nestjs-typeorm-paginate';
 import { PaymentDataDto } from './dto/payment-data.dto';
 import BaseException from '../util/exceptions/base.exception';
@@ -21,30 +21,30 @@ export class PaymentsService {
 	constructor(
 		@InjectRepository(Payment)
 		private readonly repository: Repository<Payment>,
-		private readonly usersService: UsersService
+		private readonly usersService: UsersService,
 	) {}
 
 	private async paginate(
 		options: IPaginationOptions,
-		searchOptions = {}
+		searchOptions = {},
 	): Promise<Pagination<PaymentDataDto>> {
 		const page = await paginate<Payment>(this.repository, options, {
 			order: { createdAt: 'DESC' },
-			...searchOptions
+			...searchOptions,
 		});
 		const items = page.items.map((item) => new PaymentDataDto(item));
 		return new Pagination<PaymentDataDto>(items, page.meta, page.links);
 	}
 
 	async findAll(
-		options: IPaginationOptions
+		options: IPaginationOptions,
 	): Promise<Pagination<PaymentDataDto>> {
 		return this.paginate(options);
 	}
 
 	async findByUser(
 		options: IPaginationOptions,
-		user: User
+		user: User,
 	): Promise<Pagination<PaymentDataDto>> {
 		return this.paginate(options, { where: { user } });
 	}
@@ -65,7 +65,7 @@ export class PaymentsService {
 		user: User,
 		value: number,
 		type: PaymentType,
-		afterward: transactionItem | transactionItem[] = null
+		afterward: transactionItem | transactionItem[] = null,
 	): Promise<Payment> {
 		const queryRunner = getConnection().createQueryRunner();
 		await queryRunner.connect();
@@ -114,14 +114,14 @@ export class PaymentsService {
 	async chargeCredit(
 		user: User,
 		value: number,
-		afterward = null
+		afterward = null,
 	): Promise<Payment> {
 		return await this.create(user, value, PaymentType.CHARGE, afterward);
 	}
 
 	async storno(
 		payment: Payment,
-		afterward: transactionItem = null
+		afterward: transactionItem = null,
 	): Promise<string> {
 		if (payment.type === PaymentType.STORNO) {
 			throw new BaseException('400pay02');
@@ -133,14 +133,14 @@ export class PaymentsService {
 			await queryRunner.manager.update(
 				Payment,
 				{ id: payment.id },
-				{ isRevertible: false }
+				{ isRevertible: false },
 			);
 		};
 		const newPayment = await this.create(
 			payment.user,
 			-payment.value,
 			PaymentType.STORNO,
-			[revoke, afterward]
+			[revoke, afterward],
 		);
 		return newPayment.id;
 	}

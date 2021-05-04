@@ -29,7 +29,7 @@ export class CreateUserDto {
 					role: string;
 					profile: ProfileDto | any;
 			  }
-			| any
+			| any,
 	) {
 		if (data) {
 			this.email = data.email;

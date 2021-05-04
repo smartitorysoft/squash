@@ -8,19 +8,19 @@ import {
 	Res,
 	Put,
 	HttpException,
-	HttpStatus
+	HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthenticationGuard } from './guards/local.guard';
 import RequestWithUser from './interfaces/requestWithUser.interface';
 import { Response } from 'express';
-import JwtAuthenticationGuard from './guards/jwt-authentication.guard';
-import LoginDto from './dto/login.dto';
+import JwtAuthGuard from './guards/jwt-auth.guard';
 import ResetPasswordDto from './dto/reset-password.dto';
 import { ModificationResponseDto } from 'src/dto/modification.response.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import SetPasswordTokenDto from './dto/set-password-token.dto';
 import SetPasswordUserDto from './dto/set-password-user.dto';
+import RefreshTokenDto from './dto/refreshToken.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -29,34 +29,53 @@ export class AuthController {
 	@HttpCode(200)
 	@UseGuards(LocalAuthenticationGuard)
 	@Post()
-	async logIn(
+	async logInWithPassword(
 		@Req() request: RequestWithUser,
-		@Body() dto: LoginDto,
-		@Res() response: Response
+		@Res() response: Response,
 	): Promise<Response> {
 		const { user } = request;
-		const cookie = this.authService.getCookieWithJwtToken(user.id);
-		response.setHeader('Set-Cookie', cookie);
+		const refreshCookie = await this.authService.getCookieWithRefreshToken(
+			user,
+		);
+		const accessCookie = this.authService.getCookieWithAccessToken(user.id);
+		response.setHeader('Set-Cookie', [refreshCookie, accessCookie]);
 		response.json({
-			success: true
+			success: true,
 		});
 		return response.send();
 	}
 
-	@UseGuards(JwtAuthenticationGuard)
-	@Post('logout')
-	async logOut(
-		@Req() request: RequestWithUser,
-		@Res() response: Response
+	@HttpCode(200)
+	@Put('refresh-token')
+	async logInWithRefreshToken(
+		@Body() dto: RefreshTokenDto,
+		@Res() response: Response,
 	): Promise<Response> {
-		response.setHeader('Set-Cookie', this.authService.getCookieForLogOut());
+		const { refreshToken } = dto;
+		if (typeof refreshToken === undefined || typeof refreshToken === null) {
+			response.sendStatus(401);
+		} else {
+			const token = await this.authService.authWithRefreshToken(refreshToken);
+			response.setHeader('Set-Cookie', token.access);
+			response.json({
+				success: true,
+			});
+			return response.send();
+		}
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Put('logout')
+	async logOut(@Res() response: Response): Promise<Response> {
+		const cookies = this.authService.getCookiesForLogOut();
+		response.setHeader('Set-Cookie', [cookies.refresh, cookies.access]);
 		return response.sendStatus(200);
 	}
 
 	@Post('reset-password')
 	@ApiResponse({ status: 200, type: ModificationResponseDto })
 	async solicitPasswordReset(
-		@Body() dto: ResetPasswordDto
+		@Body() dto: ResetPasswordDto,
 	): Promise<ModificationResponseDto> {
 		const result = await this.authService.solicitPasswordReset(dto.email);
 		return new ModificationResponseDto(result);
@@ -65,38 +84,38 @@ export class AuthController {
 	@Post('password')
 	@ApiResponse({ status: 200, type: ModificationResponseDto })
 	async setPasswordWithToken(
-		@Body() dto: SetPasswordTokenDto
+		@Body() dto: SetPasswordTokenDto,
 	): Promise<ModificationResponseDto> {
 		if (dto.password !== dto.confirmPassword) {
 			throw new HttpException(
 				'Passwords do not match!',
-				HttpStatus.NOT_ACCEPTABLE
+				HttpStatus.NOT_ACCEPTABLE,
 			);
 		} else {
 			const result = await this.authService.setPasswordToken(
 				dto.token,
-				dto.password
+				dto.password,
 			);
 			return new ModificationResponseDto(result);
 		}
 	}
 
-	@UseGuards(JwtAuthenticationGuard)
+	@UseGuards(JwtAuthGuard)
 	@Put('password')
 	@ApiResponse({ status: 200, type: ModificationResponseDto })
 	async setPasswordWithUser(
 		@Req() request: RequestWithUser,
-		@Body() dto: SetPasswordUserDto
+		@Body() dto: SetPasswordUserDto,
 	): Promise<ModificationResponseDto> {
 		if (dto.password !== dto.confirmPassword) {
 			throw new HttpException(
 				'Passwords do not match!',
-				HttpStatus.NOT_ACCEPTABLE
+				HttpStatus.NOT_ACCEPTABLE,
 			);
 		} else {
 			const result = await this.authService.setPasswordUser(
 				request.user,
-				dto.password
+				dto.password,
 			);
 			return new ModificationResponseDto(result);
 		}

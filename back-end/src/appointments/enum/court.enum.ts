@@ -1,4 +1,4 @@
 export enum Court {
 	ONE = 'ONE',
-	TWO = 'TWO'
+	TWO = 'TWO',
 }

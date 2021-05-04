@@ -8,14 +8,14 @@ const whitelist = [
 	'http://159.89.101.123',
 	'https://159.89.101.123',
 	'http://squash.smartitory.com',
-	'https://squash.smartitory.com'
+	'https://squash.smartitory.com',
 ];
 
 const corsDisabledEndpoints = [
 	/\/v1\/api\/files\/img\/(.*)/g,
 	/\/v1\/api\/files\/docs\/(.*)/g,
 	/\/docs/g,
-	/\/docs\/(.*)/g
+	/\/docs\/(.*)/g,
 ];
 
 const corsOptions = {
@@ -27,7 +27,7 @@ const corsOptions = {
 		}
 	},
 	credentials: true,
-	preflightContinue: false
+	preflightContinue: false,
 };
 
 const checkIfNoOriginAllowed = (url: string) => {

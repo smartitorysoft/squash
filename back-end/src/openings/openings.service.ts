@@ -16,7 +16,7 @@ interface transactionItem {
 export class OpeningsService {
 	constructor(
 		@InjectRepository(Opening)
-		private readonly repository: Repository<Opening>
+		private readonly repository: Repository<Opening>,
 	) {}
 
 	async onApplicationBootstrap(): Promise<void> {
@@ -27,13 +27,13 @@ export class OpeningsService {
 				if (!(await haveDefault(name))) {
 					const {
 						openingHour,
-						closingHour
+						closingHour,
 					} = configService.getDefaultOpeningHours(name);
 					await this.repository.save({
 						name,
 						isDefault: true,
 						openingHour: Number.parseInt(openingHour, 10),
-						closingHour: Number.parseInt(closingHour, 10)
+						closingHour: Number.parseInt(closingHour, 10),
 					});
 					return true;
 				}
@@ -47,14 +47,14 @@ export class OpeningsService {
 			}
 		} catch (error) {
 			console.error(
-				'Failed to set the default rules. Fix the database, or the ENV file, and restart the program.'
+				'Failed to set the default rules. Fix the database, or the ENV file, and restart the program.',
 			);
 		}
 	}
 
 	static async inTransaction(
-		method: transactionItem | transactionItem[] = null
-	) {
+		method: transactionItem | transactionItem[] = null,
+	): Promise<void> {
 		const queryRunner = getConnection().createQueryRunner();
 		await queryRunner.connect();
 		await queryRunner.startTransaction('SERIALIZABLE');
@@ -83,16 +83,16 @@ export class OpeningsService {
 		}
 	}
 
-	async findAll() {
+	async findAll(): Promise<OpeningRuleDataDto[]> {
 		const items = await this.repository.find({
 			where: { isDeleted: false },
-			order: { isDefault: 'DESC', order: 'ASC' }
+			order: { isDefault: 'DESC', order: 'ASC' },
 		});
 		return items.map((item) => new OpeningRuleDataDto(item));
 	}
 
 	private static ruleRegexp = /^[0-9]{4}(-[0-9]{2}){2}(:([0-9]{4}(-[0-9]{2}){2}|[wmy])$|$)/;
-	static isValidRule(rule: string) {
+	static isValidRule(rule: string): boolean {
 		if (!rule.match(OpeningsService.ruleRegexp)) {
 			return false;
 		}
@@ -110,7 +110,9 @@ export class OpeningsService {
 		return true;
 	}
 
-	static parseRule(rule: string) {
+	static parseRule(
+		rule: string,
+	): { firstDate: Date; lastDate: Date; repeater: string } {
 		const res: any = {};
 		const parts = rule.split(':');
 		res.firstDate = new Date(parts[0]);
@@ -124,7 +126,7 @@ export class OpeningsService {
 		return res;
 	}
 
-	async update(data: UpdateOpeningRuleDataDto) {
+	async update(data: UpdateOpeningRuleDataDto): Promise<void> {
 		const methods: transactionItem[] = [];
 		const defaults = await this.repository.find({ where: { isDefault: true } });
 		const defaultIds = defaults.map((item) => item.id);
@@ -164,7 +166,7 @@ export class OpeningsService {
 					await queryRunner.manager.update(
 						Opening,
 						{ id },
-						{ isDeleted: true, name: null }
+						{ isDeleted: true, name: null },
 					);
 				});
 			}
@@ -172,10 +174,10 @@ export class OpeningsService {
 		await OpeningsService.inTransaction(methods);
 	}
 
-	async getOpeningByDay(date: Date, days = 1) {
+	async getOpeningByDay(date: Date, days = 1): Promise<OpeningDataDto[]> {
 		const allRules = await this.repository.find({
 			where: { isDeleted: false },
-			order: { isDefault: 'DESC', order: 'ASC' }
+			order: { isDefault: 'DESC', order: 'ASC' },
 		});
 		const rules: Opening[] = [];
 		const defaultRules: Opening[] = [];
@@ -193,12 +195,12 @@ export class OpeningsService {
 			const dayOfWeek = currentDay.getDay();
 			const getOpeningHours = (rule: Opening) => ({
 				openingHour: rule.openingHour,
-				closingHour: rule.closingHour
+				closingHour: rule.closingHour,
 			});
 			const getListItem = (date: Date, rule: Opening) => {
 				return new OpeningDataDto({
 					day: date,
-					...getOpeningHours(rule)
+					...getOpeningHours(rule),
 				});
 			};
 			for (let i = 0; i < rules.length; i += 1) {
@@ -206,7 +208,7 @@ export class OpeningsService {
 					throw new BaseException('500gen00', 500);
 				}
 				const { firstDate, lastDate, repeater } = OpeningsService.parseRule(
-					rules[i].rule
+					rules[i].rule,
 				);
 				if (dayTime >= firstDate.getTime()) {
 					if (lastDate) {
@@ -253,9 +255,9 @@ export class OpeningsService {
 					defaultRules.find((item) =>
 						dayOfWeek === 0 || dayOfWeek === 6
 							? item.name === 'weekend'
-							: item.name === 'weekday'
-					)
-				)
+							: item.name === 'weekday',
+					),
+				),
 			);
 		}
 		return list;

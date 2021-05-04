@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { RolesService } from './roles.service';
+import { RefreshTokenService } from './refresh-token.service';
 
-describe('RolesService', () => {
-	let service: RolesService;
+describe('RefreshTokenService', () => {
+	let service: RefreshTokenService;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [RolesService],
+			providers: [RefreshTokenService],
 		}).compile();
 
-		service = module.get<RolesService>(RolesService);
+		service = module.get<RefreshTokenService>(RefreshTokenService);
 	});
 
 	it('should be defined', () => {
