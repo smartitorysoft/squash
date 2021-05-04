@@ -24,3 +24,19 @@ export const getRules = (date) => (dispatch, getState, { jsonApi }) => {
 		})
 		.catch((error) => console.log('Get Rules error', error));
 };
+
+export const DELETE_RULE = 'DELETE_RULE';
+export const deleteRule = (data) => (dispatch, getState, { jsonApi }) => {
+	jsonApi()
+		.put('openings/rules', { delete: data })
+		.then;
+};
+
+export const NEW_RULE = 'NEW_RULE';
+export const createRule = (data) => (dispatch, getState, { jsonApi }) => {
+	console.log('opening action data', data);
+	jsonApi()
+		.put('openings/rules', { create: data })
+		.then((res) => console.log('Rules created'))
+		.catch((error) => console.log('Error creating rule'));
+};

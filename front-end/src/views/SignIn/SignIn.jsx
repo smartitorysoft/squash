@@ -55,7 +55,6 @@ const SignIn = () => {
 			try {
 				await dispatch(getMe());
 			} catch (error) {
-				console.log('Lefut a hibakezeles');
 				await dispatch(signOut());
 				errorHandling(error);
 			}
