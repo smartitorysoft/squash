@@ -9,6 +9,6 @@ import { AdminModule } from '../admin/admin.module';
 	imports: [TypeOrmModule.forFeature([Opening]), AdminModule],
 	controllers: [OpeningsController],
 	providers: [OpeningsService],
-	exports: [OpeningsService]
+	exports: [OpeningsService],
 })
 export class OpeningsModule {}

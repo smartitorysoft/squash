@@ -6,6 +6,7 @@ import { UsersModule } from 'src/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { configService } from 'src/config/config.service';
 import { JwtStrategy } from './guards/jwt.strategy';
+import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 
 @Module({
 	imports: [
@@ -14,12 +15,14 @@ import { JwtStrategy } from './guards/jwt.strategy';
 			useFactory: async () => ({
 				secret: configService.getJwtConfig().jwtSecret,
 				signOptions: {
-					expiresIn: `${configService.getJwtConfig().jwtExpirationTime}s`
-				}
-			})
-		})
+					audience: `${configService.getJwtConfig().audience}`,
+					issuer: `${configService.getJwtConfig().issuer}`,
+				},
+			}),
+		}),
+		RefreshTokenModule,
 	],
 	controllers: [AuthController],
-	providers: [AuthService, LocalStrategy, JwtStrategy]
+	providers: [AuthService, LocalStrategy, JwtStrategy],
 })
 export class AuthModule {}

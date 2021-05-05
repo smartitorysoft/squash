@@ -4,7 +4,7 @@ import {
 	Column,
 	ManyToOne,
 	PrimaryGeneratedColumn,
-	Index
+	Index,
 } from 'typeorm';
 import { Role } from 'src/entities';
 

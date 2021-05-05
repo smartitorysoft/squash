@@ -7,7 +7,7 @@ import { PaymentsService } from '../payments/payments.service';
 import {
 	IPaginationOptions,
 	paginate,
-	Pagination
+	Pagination,
 } from 'nestjs-typeorm-paginate';
 import { AppointmentListDataDto } from './dto/appointment-list-data.dto';
 import { AppointmentListDataAdminDto } from './dto/appointment-list-data-admin.dto';
@@ -32,29 +32,29 @@ export class AppointmentsService {
 		private readonly repository: Repository<Appointment>,
 		private readonly paymentsService: PaymentsService,
 		private readonly usersService: UsersService,
-		private readonly openingsService: OpeningsService
+		private readonly openingsService: OpeningsService,
 	) {}
 
 	private async paginate(
 		isAdmin: boolean,
 		options: IPaginationOptions,
-		searchOptions = {}
+		searchOptions = {},
 	): Promise<Pagination<any>> {
 		const page = await paginate<Appointment>(this.repository, options, {
 			order: { createdAt: 'DESC' },
-			...searchOptions
+			...searchOptions,
 		});
 		if (isAdmin) {
 			return new Pagination<AppointmentListDataAdminDto>(
 				page.items.map((item) => new AppointmentListDataAdminDto(item)),
 				page.meta,
-				page.links
+				page.links,
 			);
 		}
 		return new Pagination<AppointmentListDataDto>(
 			page.items.map((item) => new AppointmentListDataDto(item)),
 			page.meta,
-			page.links
+			page.links,
 		);
 	}
 
@@ -62,7 +62,7 @@ export class AppointmentsService {
 		startTime: Date,
 		endTime: Date,
 		isAdmin: boolean,
-		filters: string[]
+		filters: string[],
 	): Promise<AppointmentDataDto[] | AppointmentDataAdminDto[]> {
 		let f = '';
 		if (filters.length) {
@@ -81,7 +81,7 @@ export class AppointmentsService {
 			.leftJoinAndSelect('User.profile', 'Profile')
 			.where(
 				`appointments.begins >= :startTime and appointments.begins < :endTime`,
-				{ startTime, endTime }
+				{ startTime, endTime },
 			)
 			.andWhere(f ? f : '1 = 1', { ...Status })
 			.orderBy('begins')
@@ -96,7 +96,7 @@ export class AppointmentsService {
 		from: Date,
 		days: number,
 		isAdmin: boolean,
-		filters: string[]
+		filters: string[],
 	): Promise<AppointmentTableDataDto[]> {
 		const tmp: AppointmentTableDataDto[] = [];
 		from = AppointmentsService.getDayByDate(from);
@@ -109,8 +109,8 @@ export class AppointmentsService {
 					startDate,
 					endDate,
 					isAdmin,
-					filters
-				)
+					filters,
+				),
 			});
 		}
 		return tmp;
@@ -119,7 +119,7 @@ export class AppointmentsService {
 	async findByUser(
 		options: IPaginationOptions,
 		user: User,
-		filters: string[]
+		filters: string[],
 	): Promise<Pagination<AppointmentListDataDto>> {
 		let where;
 		if (!filters.length) {
@@ -154,7 +154,7 @@ export class AppointmentsService {
 		const currentDate = new Date(
 			AppointmentsService.getHourByDate(new Date()).getTime() +
 				UTC_OFFSET +
-				HOUR
+				HOUR,
 		);
 		const begins = AppointmentsService.getHourByDate(new Date(dto.begins));
 		if (begins.getTime() <= currentDate.getTime()) {
@@ -165,7 +165,7 @@ export class AppointmentsService {
 		}
 		const { openingHour, closingHour } = (
 			await this.openingsService.getOpeningByDay(
-				AppointmentsService.getDayByDate(begins)
+				AppointmentsService.getDayByDate(begins),
 			)
 		)[0];
 		const h = begins.getHours();
@@ -176,7 +176,7 @@ export class AppointmentsService {
 		if (
 			timeWindow.filter(
 				(item) =>
-					item.status !== Status.CANCELED && item.status !== Status.DELETED
+					item.status !== Status.CANCELED && item.status !== Status.DELETED,
 			).length
 		) {
 			throw new BaseException('400apo03');
@@ -187,29 +187,32 @@ export class AppointmentsService {
 				user,
 				payment,
 				court: dto.court,
-				status: Status.PENDING
+				status: Status.PENDING,
 			});
 			return await queryRunner.manager.save(newAppointment);
 		};
 		const newAppointment = await this.paymentsService.chargeCredit(
 			user,
 			-COST,
-			afterward
+			afterward,
 		);
 		return newAppointment.id;
 	}
 
-	async createByUserId(dto: CreateAppointmentDto, userId): Promise<string> {
+	async createByUserId(
+		dto: CreateAppointmentDto,
+		userId: string,
+	): Promise<string> {
 		return this.create(dto, await this.usersService.getById(userId));
 	}
 
 	private async deleteById(
 		isAdmin: boolean,
 		id: string,
-		user: User = null
+		user: User = null,
 	): Promise<boolean> {
 		const appointment = await this.repository.findOne(
-			isAdmin ? { id } : { id, user }
+			isAdmin ? { id } : { id, user },
 		);
 		if (!appointment) {
 			throw new BaseException('404apo00', 404);
@@ -222,14 +225,14 @@ export class AppointmentsService {
 			if (timeDiff <= WEEK) {
 				await this.repository.update(
 					{ id },
-					{ status: isAdmin ? Status.DELETED : Status.CANCELED }
+					{ status: isAdmin ? Status.DELETED : Status.CANCELED },
 				);
 			} else {
 				const afterward = async (queryRunner: QueryRunner) => {
 					await queryRunner.manager.update(
 						Appointment,
 						{ id },
-						{ status: isAdmin ? Status.DELETED : Status.CANCELED }
+						{ status: isAdmin ? Status.DELETED : Status.CANCELED },
 					);
 				};
 				await this.paymentsService.storno(appointment.payment, afterward);
@@ -243,11 +246,11 @@ export class AppointmentsService {
 		}
 	}
 
-	async delete(id, user: User): Promise<boolean> {
+	async delete(id: string, user: User): Promise<boolean> {
 		return await this.deleteById(false, id, user);
 	}
 
-	async deleteAdmin(id): Promise<boolean> {
+	async deleteAdmin(id: string): Promise<boolean> {
 		return await this.deleteById(true, id);
 	}
 }

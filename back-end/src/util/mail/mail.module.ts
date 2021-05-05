@@ -17,18 +17,18 @@ import { configService } from 'src/config/config.service';
 				'@mail.' +
 				configService.getSmtpConfig().domain,
 			defaults: {
-				from: '"noreply" <noreply@webframe.com>'
+				from: '"noreply" <noreply@webframe.com>',
 			},
 			template: {
 				dir: __dirname + '/templates',
 				adapter: new PugAdapter(),
 				options: {
-					strict: true
-				}
-			}
-		})
+					strict: true,
+				},
+			},
+		}),
 	],
 	providers: [MailService],
-	exports: [MailService]
+	exports: [MailService],
 })
 export class MailModule {}

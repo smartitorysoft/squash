@@ -3,14 +3,13 @@ import {
 	Catch,
 	ArgumentsHost,
 	HttpException,
-	HttpStatus
+	HttpStatus,
 } from '@nestjs/common';
 import * as customErrors from '../error/error.codes.json';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
 	catch(exception: unknown, host: ArgumentsHost): any {
-		console.log(exception);
 		const ctx = host.switchToHttp();
 		const response = ctx.getResponse();
 		const request = ctx.getRequest();
@@ -23,21 +22,21 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 		response.status(status).json({
 			...GlobalExceptionFilter.parseError(exception, status),
 			timestamp: new Date().toISOString(),
-			path: request.url
+			path: request.url,
 		});
 	}
 
 	private static parseError(
 		error: { code: string | number } | any,
-		status: number
+		status: number,
 	) {
 		// console.log(error);
 		if (error?.code && customErrors[error.code]) {
 			return {
 				status: status,
 				error: {
-					...customErrors[error.code]
-				}
+					...customErrors[error.code],
+				},
 			};
 		} else if (error?.name && customErrors[error.name]) {
 			return {
@@ -46,8 +45,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 					...customErrors[error.name],
 					message: error.message
 						? error.message
-						: `Error code not recodnized: ${error.code}`
-				}
+						: `Error code not recodnized: ${error.code}`,
+				},
 			};
 		} else {
 			return {
@@ -56,8 +55,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 					name: error.name ? error.name : `Unknown error`,
 					message: error.message
 						? error.message
-						: `Error code not recodnized: ${error.code}`
-				}
+						: `Error code not recodnized: ${error.code}`,
+				},
 			};
 		}
 	}

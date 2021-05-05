@@ -10,7 +10,7 @@ export class RolesService {
 	constructor(
 		@InjectRepository(Role)
 		private readonly roleRepository: Repository<Role>,
-		private permService: PermissionService
+		private permService: PermissionService,
 	) {}
 
 	async onApplicationBootstrap(): Promise<void> {
@@ -47,12 +47,12 @@ export class RolesService {
 
 		for (const role of roles) {
 			const nonExistentPermissions = await this.permService.checkAgainstTargetList(
-				role
+				role,
 			);
 
 			if (nonExistentPermissions.length > 0) {
 				nonExistentPermissions.forEach((nep) =>
-					result.push({ role: role, target: nep })
+					result.push({ role: role, target: nep }),
 				);
 			}
 		}
@@ -60,23 +60,23 @@ export class RolesService {
 	}
 
 	private async createRolePermissions(
-		toCreate: { role: Role; target: string }[]
+		toCreate: { role: Role; target: string }[],
 	): Promise<void> {
 		for (const item of toCreate) {
 			await this.permService.create(item.role, item.target);
 			console.log(
-				`Created permmission for role ${item.role.name} on target ${item.target}`
+				`Created permmission for role ${item.role.name} on target ${item.target}`,
 			);
 		}
 	}
 
 	public async createRole(
 		name: string,
-		description: string | null
+		description: string | null,
 	): Promise<string> {
 		const newRole = await this.roleRepository.create({
 			name: name,
-			description: description
+			description: description,
 		});
 
 		await this.roleRepository.save(newRole);

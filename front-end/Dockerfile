@@ -4,7 +4,7 @@ FROM node:alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package*.json ./
-RUN npm install --frozen-lockfile
+RUN npm install
 
 # Rebuild the source code only when needed
 FROM node:alpine AS development
@@ -25,8 +25,8 @@ WORKDIR /app
 
 ENV NODE_ENV production
 
-# You only need to copy next.config.js if you are NOT using the default configuration
 COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/i18n.js ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules

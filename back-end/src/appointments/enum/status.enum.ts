@@ -3,5 +3,5 @@ export enum Status {
 	SHOWED = 'SHOWED',
 	MISSED = 'MISSED',
 	CANCELED = 'CANCELED',
-	DELETED = 'DELETED'
+	DELETED = 'DELETED',
 }

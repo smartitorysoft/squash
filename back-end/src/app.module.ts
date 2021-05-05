@@ -22,9 +22,9 @@ import { OpeningsModule } from './openings/openings.module';
 		MailModule,
 		PaymentsModule,
 		AppointmentsModule,
-		OpeningsModule
+		OpeningsModule,
 	],
 	controllers: [AppController],
-	providers: [AppService]
+	providers: [AppService],
 })
 export class AppModule {}

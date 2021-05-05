@@ -14,10 +14,10 @@ import { OpeningsModule } from '../openings/openings.module';
 		PaymentsModule,
 		UsersModule,
 		AdminModule,
-		OpeningsModule
+		OpeningsModule,
 	],
 	controllers: [AppointmentsController],
 	providers: [AppointmentsService],
-	exports: [AppointmentsService]
+	exports: [AppointmentsService],
 })
 export class AppointmentsModule {}

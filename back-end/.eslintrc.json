@@ -8,7 +8,7 @@
 	"extends": [
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier",
+		"prettier",
     "prettier/@typescript-eslint"
   ],
   "parser": "@typescript-eslint/parser",
@@ -21,8 +21,9 @@
   "rules": {
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
 		"prettier/prettier": [
 			2,
 			{
@@ -30,12 +31,10 @@
 				"printWidth": 80,
 				"tabWidth": 2,
 				"singleQuote": true,
-				"trailingComma": "none",
-				"jsxSingleQuote": true,
-				"jsxBracketSameLine": true,
+				"trailingComma": "all",
 				"semi": true,
 				"bracketSpacing": true,
-				"endOfLine": "crlf"
+				"endOfLine": "lf"
 			}
 		]
   }	

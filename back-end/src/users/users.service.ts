@@ -13,7 +13,7 @@ import { v4 as uuid } from 'uuid';
 import {
 	IPaginationOptions,
 	Pagination,
-	paginate
+	paginate,
 } from 'nestjs-typeorm-paginate';
 import UserDataDto from './dto/user-data.dto';
 import BaseException from '../util/exceptions/base.exception';
@@ -25,7 +25,7 @@ export class UsersService {
 		private readonly usersRepository: Repository<User>,
 		private readonly rolesService: RolesService,
 		private readonly profileService: ProfileService,
-		private readonly mailService: MailService
+		private readonly mailService: MailService,
 	) {}
 
 	async onApplicationBootstrap(): Promise<void> {
@@ -45,9 +45,9 @@ export class UsersService {
 					new CreateUserDto({
 						email: baseUser.email,
 						password: baseUser.password,
-						role: rootRole.name
+						role: rootRole.name,
 					}),
-					true
+					true,
 				);
 				console.log('Generated base user!');
 			}, 5 * 1000);
@@ -72,12 +72,12 @@ export class UsersService {
 
 	async paginate(
 		options: IPaginationOptions,
-		search = ''
+		search = '',
 	): Promise<Pagination<UserDataDto>> {
 		if (!search) {
 			const page = await paginate<User>(this.usersRepository, options, {
 				where: { isDeleted: false },
-				order: { createdAt: 'DESC' }
+				order: { createdAt: 'DESC' },
 			});
 			const items = page.items.map((item) => new UserDataDto(item));
 			return new Pagination<UserDataDto>(items, page.meta, page.links);
@@ -103,7 +103,7 @@ export class UsersService {
 				'users.isDeleted = false and (unaccent(lower(users.email)) like :search ' +
 					'or concat(unaccent(lower(profile.firstName)), unaccent(lower(profile.lastName)), ' +
 					'unaccent(lower(profile.firstName))) like :search)',
-				{ search: `%${search}%` }
+				{ search: `%${search}%` },
 			);
 		const items = await query
 			.orderBy('users.createdAt', 'DESC')
@@ -120,23 +120,23 @@ export class UsersService {
 				itemCount: items.length,
 				itemsPerPage: limit,
 				totalItems: totalCount,
-				totalPages
+				totalPages,
 			},
 			{
 				first: concatUrl(),
 				last: totalPages ? concatUrl(totalPages) : '',
 				previous: page > 1 ? concatUrl(page - 1) : '',
-				next: page < totalCount ? concatUrl(page + 1) : ''
-			}
+				next: page < totalCount ? concatUrl(page + 1) : '',
+			},
 		);
 	}
 
 	public async create(
 		registrationData: CreateUserDto,
-		createdBySystem = false
+		createdBySystem = false,
 	): Promise<string> {
 		const isRegistered = await this.usersRepository.findOne({
-			email: registrationData.email
+			email: registrationData.email,
 		});
 
 		if (isRegistered) {
@@ -148,7 +148,7 @@ export class UsersService {
 		const role = await this.rolesService.getRole(registrationData.role);
 
 		const newProfile = await this.profileService.create(
-			registrationData.profile
+			registrationData.profile,
 		);
 
 		const newUser = await this.usersRepository.create({
@@ -157,7 +157,7 @@ export class UsersService {
 			role: role,
 			profile: newProfile,
 			createdBy: createdBySystem ? 'system' : 'self',
-			lastChangedBy: createdBySystem ? 'system' : 'self'
+			lastChangedBy: createdBySystem ? 'system' : 'self',
 		});
 
 		await this.usersRepository.save(newUser);
@@ -168,15 +168,15 @@ export class UsersService {
 	public async update(
 		id: string,
 		data: UpdateUserDto,
-		currentUser: User
+		currentUser: User,
 	): Promise<boolean> {
 		const user = await this.getById(id);
 		const result = await this.usersRepository.update(
 			{ id: id },
 			{
 				lastChangedAt: new Date(),
-				lastChangedBy: currentUser.email
-			}
+				lastChangedBy: currentUser.email,
+			},
 		);
 
 		const profileResult = data.profile
@@ -193,7 +193,7 @@ export class UsersService {
 		this.mailService.sendPasswordReset(
 			email,
 			user.profile.firstName + user.profile.lastName,
-			resetToken
+			resetToken,
 		);
 
 		const result = await this.usersRepository.update(
@@ -201,8 +201,8 @@ export class UsersService {
 			{
 				resetToken: resetToken,
 				lastChangedAt: new Date(),
-				lastChangedBy: 'system'
-			}
+				lastChangedBy: 'system',
+			},
 		);
 
 		return result.affected === 1;
@@ -210,10 +210,10 @@ export class UsersService {
 
 	public async setPassWithToken(
 		resetToken: string,
-		password: string
+		password: string,
 	): Promise<boolean> {
 		const user = await this.usersRepository.findOneOrFail({
-			resetToken: resetToken
+			resetToken: resetToken,
 		});
 
 		const newPassword = await bcrypt.hash(password, 10);
@@ -224,8 +224,8 @@ export class UsersService {
 				resetToken: null,
 				password: newPassword,
 				lastChangedAt: new Date(),
-				lastChangedBy: 'system'
-			}
+				lastChangedBy: 'system',
+			},
 		);
 
 		return result.affected === 1;
@@ -239,8 +239,8 @@ export class UsersService {
 			{
 				password: newPassword,
 				lastChangedAt: new Date(),
-				lastChangedBy: user.email
-			}
+				lastChangedBy: user.email,
+			},
 		);
 
 		return result.affected === 1;
