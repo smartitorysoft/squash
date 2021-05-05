@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
-	getOpenings, getRules, deleteRule, createRule,
+	getOpenings, getRules, deleteRule, createRule, updateRule,
 } from 'store/openings/actions';
 import {
 	Box, Button, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, TextField, IconButton,
@@ -9,12 +9,18 @@ import { useEffect, useState } from 'react';
 import * as moment from 'moment';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckIcon from '@material-ui/icons/Check';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import DefaultOpenings from './components/DefaultOpenings/DefaultOpenings';
 import RulesTable from './components/RulesTable/RulesTable';
 
 const TimeSheet = () => {
 	const [newRule, setNewRule] = useState(false);
 	const [saving, setSaving] = useState(false);
+	const [name, setName] = useState('');
+	const [opening, setOpening] = useState('');
+	const [closing, setClosing] = useState('');
+	const [date, setDate] = useState('');
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -22,36 +28,52 @@ const TimeSheet = () => {
 		dispatch(getRules());
 	}, []);
 
-	const [name, setName] = useState('');
-	const [opening, setOpening] = useState('');
-	const [closing, setClosing] = useState('');
-
 	const openings = useSelector((state) => state.openings.openings);
 	const rules = useSelector((state) => state.openings.rules);
 
 	const newRulesList = [];
 
-	const addNewRule = () => {
+	const addNewRule = async () => {
 		if (opening > -1 && opening < 25 && closing > -1 && closing < 25 && parseInt(opening, 10) < parseInt(closing, 10)) {
+			// console.log(rules[rules.length - 1].order + 1);
 			newRulesList.push({
 				name,
-				openingHour: opening,
-				closingHour: closing,
-				order: 4,
-				rule: new Date(),
+				openingHour: parseInt(opening),
+				closingHour: parseInt(closing),
+				order: rules[rules.length - 1].order + 1,
+				rule: date,
 			});
 		}
+		await dispatch(createRule(newRulesList));
+		dispatch(getRules());
 		setNewRule(false);
 	};
 
-	const removeRule = (id) => {
+	const removeRule = async (id) => {
 		const del = [];
 		del.push({ id });
-		dispatch(deleteRule(del));
+		await dispatch(deleteRule(del));
+		dispatch(getRules());
 	};
 
-	const saveRules = () => {
-		dispatch(createRule(newRulesList));
+	const switchOrder = async (direction, id) => {
+		console.log(rules[rules.indexOf(rules.find((rule) => rule.id === id))], rules[rules.indexOf(rules.find((rule) => rule.id === id)) + direction]);
+		if (rules.indexOf(rules.find((rule) => rule.id === id)) + 1 < rules.length || rules.indexOf(rules.find((rule) => rule.id === id)) - 1 > 2) {
+			const updateList = [];
+			updateList.push({
+				...rules[rules.indexOf(rules.find((rule) => rule.id === id))],
+				order: rules[rules.indexOf(rules.find((rule) => rule.id === id)) + direction].order,
+			});
+			updateList.push({
+				 ...rules[rules.indexOf(rules.find((rule) => rule.id === id)) + direction],
+				 order: rules[rules.indexOf(rules.find((rule) => rule.id === id))].order,
+			});
+			delete updateList[0].isDefault;
+			delete updateList[1].isDefault;
+			console.log(updateList);
+			await dispatch(updateRule(updateList));
+			dispatch(getRules());
+		}
 	};
 
 	return (
@@ -71,7 +93,7 @@ const TimeSheet = () => {
 					<TableBody>
 						{
 							rules && rules.map((rule) => (
-								<TableRow key={rule.isDefault}>
+								<TableRow key={rule.order}>
 									<TableCell>
 										{rule.name}
 									</TableCell>
@@ -85,10 +107,26 @@ const TimeSheet = () => {
 										{rule.closingHour}
 									</TableCell>
 									<TableCell>
-										{rule.isDefault
+										{!rule.isDefault
 									&& (
 										<IconButton onClick={() => removeRule(rule.id)}>
 											<DeleteIcon />
+										</IconButton>
+									)}
+									</TableCell>
+									<TableCell>
+										{!rule.isDefault
+									&& (
+										<IconButton onClick={() => switchOrder(-1, rule.id)}>
+											<KeyboardArrowUpIcon />
+										</IconButton>
+									)}
+									</TableCell>
+									<TableCell>
+										{!rule.isDefault
+									&& (
+										<IconButton onClick={() => switchOrder(+1, rule.id)}>
+											<KeyboardArrowDownIcon />
 										</IconButton>
 									)}
 									</TableCell>
@@ -107,6 +145,9 @@ const TimeSheet = () => {
 									</TableCell>
 									<TableCell>
 										<TextField label='Zárás' onChange={(text) => setClosing(text.target.value)} />
+									</TableCell>
+									<TableCell>
+										<TextField label='Dátum' onChange={(text) => setDate(text.target.value)} />
 									</TableCell>
 									<TableCell>
 										<IconButton onClick={addNewRule}>
@@ -128,14 +169,14 @@ const TimeSheet = () => {
 				Új szabály
 
 			</Button>
-			<Button
+			{/* <Button
 				color='primary'
 				size='large'
 				variant='contained'
 				onClick={saveRules}
 			>
 				Mentés
-			</Button>
+			</Button> */}
 		</Box>
 	);
 };

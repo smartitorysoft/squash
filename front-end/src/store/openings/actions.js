@@ -16,7 +16,7 @@ export const getRules = (date) => (dispatch, getState, { jsonApi }) => {
 	jsonApi()
 		.get('openings/rules')
 		.then((res) => {
-			// console.log(res);
+			// console.log('rules', res);
 			dispatch({
 				type: GET_OPENING_RULES,
 				payload: res.data,
@@ -26,17 +26,19 @@ export const getRules = (date) => (dispatch, getState, { jsonApi }) => {
 };
 
 export const DELETE_RULE = 'DELETE_RULE';
-export const deleteRule = (data) => (dispatch, getState, { jsonApi }) => {
-	jsonApi()
-		.put('openings/rules', { delete: data })
-		.then;
-};
+export const deleteRule = (data) => (dispatch, getState, { jsonApi }) => jsonApi()
+	.put('openings/rules', { delete: data })
+	.then((res) =>  res);
 
 export const NEW_RULE = 'NEW_RULE';
-export const createRule = (data) => (dispatch, getState, { jsonApi }) => {
-	console.log('opening action data', data);
-	jsonApi()
+export const createRule = (data) => (dispatch, getState, { jsonApi }) =>
+	// console.log('opening action data', data);
+	 jsonApi()
 		.put('openings/rules', { create: data })
-		.then((res) => console.log('Rules created'))
+		.then((res) => { console.log('Rules created'); return res; })
 		.catch((error) => console.log('Error creating rule'));
-};
+
+export const UPDATE_RULE = 'UPDATE_RULE';
+export const updateRule = (data) => (dispatch, getState, { jsonApi }) => jsonApi()
+	.put('openings/rules', { update: data })
+	.then((res) => res);
