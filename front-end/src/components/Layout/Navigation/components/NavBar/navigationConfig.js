@@ -6,42 +6,42 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import PersonIcon from '@material-ui/icons/Person';
 
-const navigationConfig = (t) => {
+const navigationConfig = ({ t }) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const role = useSelector((state) => state.me.role);
 
 	const adminNavigation = [
 		{
-			title: t('components.nav-bar.dashboard'),
+			title: t('nav-bar.dashboard'),
 			href: '/dashboard',
 			icon: BarChartIcon,
 		},
 		{
-			title: t('components.nav-bar.profile'),
+			title: t('nav-bar.profile'),
 			href: '/profile',
 			icon: PersonIcon,
 		},
 		{
-			title: t('components.nav-bar.credit'),
+			title: t('nav-bar.credit'),
 			href: '/credit',
 			icon: MonetizationOnIcon,
 		},
 		{
-			title: t('components.nav-bar.courts'),
+			title: t('nav-bar.courts'),
 			icon: BarChartIcon,
 			pages: [
 				{
-					title: t('components.nav-bar.court-types'),
+					title: t('nav-bar.court-types'),
 					href: '/items',
 				},
 				{
-					title: t('components.nav-bar.edit-courts'),
+					title: t('nav-bar.edit-courts'),
 					href: '/products',
 				},
 			],
 		},
 		{
-			title: t('components.nav-bar.timesheet'),
+			title: t('nav-bar.timesheet'),
 			href: '/timesheet',
 			icon: MonetizationOnIcon,
 		},
@@ -49,17 +49,17 @@ const navigationConfig = (t) => {
 
 	const userNavigation = [
 		{
-			title: t('components.nav-bar.dashboard'),
+			title: t('nav-bar.dashboard'),
 			href: '/dashboard',
 			icon: BarChartIcon,
 		},
 		{
-			title: t('components.nav-bar.profile'),
+			title: t('nav-bar.profile'),
 			href: '/profile',
 			icon: PersonIcon,
 		},
 		{
-			title: t('components.nav-bar.credit'),
+			title: t('nav-bar.credit'),
 			href: '/credit',
 			icon: MonetizationOnIcon,
 		},
@@ -67,12 +67,12 @@ const navigationConfig = (t) => {
 
 	const otherNavigation = [
 		{
-			title: 'components.nav-bar.feedback',
+			title: 'nav-bar.feedback',
 			href: '/feedback',
 			icon: HelpOutlineIcon,
 		},
 		{
-			title: 'components.nav-bar.customer-service',
+			title: 'nav-bar.customer-service',
 			href: '/support',
 			icon: HelpOutlineIcon,
 		},

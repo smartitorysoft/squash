@@ -5,7 +5,7 @@ import React from 'react';
 
 export const BasicButton = ({ label, onClick }) => (
 	<Box>
-		<Button onClick={onClick} variant='contained' color='primary'>
+		<Button onClick={onClick} variant="contained" color="primary">
 			{label}
 		</Button>
 	</Box>

@@ -43,17 +43,21 @@ export class AuthService {
 
 	public async authWithRefreshToken(
 		refreshString: string,
-	): Promise<{ access: string; refresh?: string }> {
+	): Promise<{ access: string; refresh?: string; valid: boolean }> {
 		const refreshResult = await this.refreshTokenService.validate(
 			refreshString,
 		);
-
+		console.log(refreshResult.valid);
 		if (refreshResult.valid) {
 			return {
+				valid: refreshResult.valid,
 				access: this.getCookieWithAccessToken(refreshResult.user.id),
 			};
 		} else {
-			return this.getCookiesForLogOut();
+			return {
+				valid: refreshResult.valid,
+				...this.getCookiesForLogOut(),
+			};
 		}
 	}
 
@@ -84,6 +88,13 @@ export class AuthService {
 			refresh: `refreshToken=; Path=/; Max-Age=0`,
 			access: `accessToken=; Path=/; Max-Age=0`,
 		};
+	}
+
+	public async logOut(
+		token: string,
+	): Promise<{ refresh: string; access: string }> {
+		await this.refreshTokenService.invalidate(token);
+		return this.getCookiesForLogOut();
 	}
 
 	public async solicitPasswordReset(email: string): Promise<boolean> {

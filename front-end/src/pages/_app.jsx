@@ -1,12 +1,17 @@
 import React from 'react';
 import '../styles/globals.css';
 import App from 'next/app';
-import cookies from 'next-cookies';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import theme from 'theme';
-import { appWithTranslation } from 'next-i18next';
 import { SnackbarProvider } from 'components/Snackbar';
+import { getMe } from 'store/me/actions';
+import { autoSignIn, signInWithRefreshToken } from 'store/auth/actions';
+import cookies from 'next-cookies';
+import appWithI18n from 'next-translate/appWithI18n';
 import { wrapper } from '../store/makeStore';
+import i18n from '../../i18n';
+
+const cookieDelArray = ['refreshToken=; Max-Age=0', 'accessToken=; Max-Age=0'];
 
 const SmNext = (props) => {
 	const { Component, pageProps } = props;
@@ -29,33 +34,76 @@ const SmNext = (props) => {
 };
 
 SmNext.getInitialProps = async (appContext) => {
-	// const { router, ctx } = appContext;
+	const { router, ctx } = appContext;
 
-	// const { store, req, res } = ctx;
+	const { store, res } = ctx;
 
-	// const { render, refreshToken } = ctx.query;
+	const { accessToken, refreshToken } = cookies(ctx);
 
-	// // -- Cookie check --//
-	// const { accessToken } = cookies(ctx);
+	const handleRedirect = () =>
+		res.writeHead(302, { Location: '/sign-in' }).end();
 
-	// if (accessToken) {
-	// 	await store.dispatch(autoSignIn(cookies(ctx)));
+	switch (true) {
+		case !!accessToken && !!refreshToken:
+			try {
+				await Promise.all([
+					store.dispatch(
+						getMe(typeof window === 'undefined' ? accessToken : null),
+					),
+				]);
+				await store.dispatch(autoSignIn());
+			} catch (error) {
+				try {
+					const isRefreshSuccessful = await store.dispatch(
+						signInWithRefreshToken(refreshToken, res),
+					);
 
-	// 	if (req) {
-	// 		try {
-	// 			await Promise.all([store.dispatch(getMe())]);
-	// 		} catch (error) {
-	// 			res.clearCookie('accessToken');
-	// 			res.clearCookie('refreshToken');
-	// 			return res.redirect('/sign-in');
-	// 		}
-	// 	}
+					if (isRefreshSuccessful) {
+						await store.dispatch(getMe());
+					} else if (router.pathname !== '/sign-in') {
+						return handleRedirect();
+					}
+				} catch (err) {
+					if (router.pathname !== '/sign-in') {
+						return handleRedirect();
+					}
+				}
+			}
+			break;
+		case !!accessToken && !refreshToken:
+			res.setHeader('Set-Cookie', cookieDelArray);
+			break;
+		case !accessToken && !!refreshToken:
+			try {
+				const isRefreshSuccessful = await store.dispatch(
+					signInWithRefreshToken(refreshToken, res),
+				);
 
-	// 	await store.dispatch(logged());
-	// }
+				if (isRefreshSuccessful) {
+					await store.dispatch(getMe());
+					await store.dispatch(autoSignIn());
+				} else if (router.pathname !== '/sign-in') {
+					return handleRedirect();
+				}
+			} catch (err) {
+				if (router.pathname !== '/sign-in') {
+					return handleRedirect();
+				}
+			}
+			break;
+		default:
+			break;
+	}
 
 	const appProps = await App.getInitialProps(appContext);
-	return { ...appProps };
+	return {
+		...appProps,
+	};
 };
 
-export default appWithTranslation(wrapper.withRedux(SmNext));
+export default wrapper.withRedux(
+	appWithI18n(SmNext, {
+		...i18n,
+		skipInitialProps: false,
+	}),
+);

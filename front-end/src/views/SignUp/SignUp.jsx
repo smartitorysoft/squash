@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import TextInput from 'components/TextInput';
@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const Register = (props) => {
+const SignUp = () => {
 	const router = useRouter();
 	const dispatch = useDispatch();
 
@@ -38,25 +38,26 @@ const Register = (props) => {
 		lastName: Yup.string().required('Required'),
 		email: Yup.string().email().required('Required'),
 		phone: Yup.number().required('Required'),
-		password: Yup.string()
-			.required('Required'),
+		password: Yup.string().required('Required'),
 		passwordCheck: Yup.string()
-			.oneOf([Yup.ref('password'), null], 'Passwords don\'t match!')
+			.oneOf([Yup.ref('password'), null], 'Passwords do not match!')
 			.required('Required'),
 	});
 
 	const onSubmit = () => {
 		if (formRef && formRef.current.isValid) {
-			dispatch(register({
-				email: formRef.current.values.email,
-				password: formRef.current.values.password,
-				role: 'root',
-				profile: {
-					firstName: formRef.current.values.firstName,
-					lastName: formRef.current.values.lastName,
-					phone: formRef.current.values.phone,
-				},
-			}));
+			dispatch(
+				register({
+					email: formRef.current.values.email,
+					password: formRef.current.values.password,
+					role: 'root',
+					profile: {
+						firstName: formRef.current.values.firstName,
+						lastName: formRef.current.values.lastName,
+						phone: formRef.current.values.phone,
+					},
+				}),
+			);
 		}
 	};
 
@@ -79,7 +80,6 @@ const Register = (props) => {
 			>
 				{({
 					handleChange,
-					handleBlur,
 					// handleSubmit,
 					values,
 					// errors,
@@ -90,46 +90,45 @@ const Register = (props) => {
 					<Box>
 						<TextInput
 							value={values.firstName}
-							label='Vezetéknév'
+							label="Vezetéknév"
 							onChange={handleChange('firstName')}
 						/>
 						<TextInput
 							value={values.lastName}
-							label='Keresztnév'
+							label="Keresztnév"
 							onChange={handleChange('lastName')}
 						/>
 						<TextInput
 							value={values.email}
-							label='Email cím'
+							label="Email cím"
 							onChange={handleChange('email')}
 						/>
 						<TextInput
 							value={values.phone}
-							label='Telefonszám'
+							label="Telefonszám"
 							onChange={handleChange('phone')}
-
 						/>
 						<TextInput
 							value={values.password}
-							label='Jelszó'
-							type='password'
+							label="Jelszó"
+							type="password"
 							onChange={handleChange('password')}
 						/>
 						<TextInput
 							value={values.passwordCheck}
-							label='Jelszó megerősítése'
-							type='password'
+							label="Jelszó megerősítése"
+							type="password"
 							onChange={handleChange('passwordCheck')}
 						/>
 					</Box>
 				)}
 			</Formik>
 			<Box className={classes.buttons}>
-				<BasicButton label='Regisztrálás' onClick={onSubmit} />
-				<BasicButton label='Vissza' onClick={() => router.back()} />
+				<BasicButton label="Regisztrálás" onClick={onSubmit} />
+				<BasicButton label="Vissza" onClick={() => router.back()} />
 			</Box>
 		</Box>
 	);
 };
 
-export default Register;
+export default SignUp;

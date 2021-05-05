@@ -13,7 +13,7 @@ import {
 import { AuthService } from './auth.service';
 import { LocalAuthenticationGuard } from './guards/local.guard';
 import RequestWithUser from './interfaces/requestWithUser.interface';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import JwtAuthGuard from './guards/jwt-auth.guard';
 import ResetPasswordDto from './dto/reset-password.dto';
 import { ModificationResponseDto } from 'src/dto/modification.response.dto';
@@ -52,13 +52,20 @@ export class AuthController {
 		@Res() response: Response,
 	): Promise<Response> {
 		const { refreshToken } = dto;
-		if (typeof refreshToken === undefined || typeof refreshToken === null) {
-			response.sendStatus(401);
-		} else {
+
+		try {
 			const token = await this.authService.authWithRefreshToken(refreshToken);
 			response.setHeader('Set-Cookie', token.access);
+			console.log(token);
 			response.json({
 				success: true,
+			});
+			return response.send();
+		} catch (e) {
+			const cookies = this.authService.getCookiesForLogOut();
+			response.setHeader('Set-Cookie', [cookies.refresh, cookies.access]);
+			response.json({
+				success: false,
 			});
 			return response.send();
 		}
@@ -66,8 +73,14 @@ export class AuthController {
 
 	@UseGuards(JwtAuthGuard)
 	@Put('logout')
-	async logOut(@Res() response: Response): Promise<Response> {
-		const cookies = this.authService.getCookiesForLogOut();
+	async logOut(
+		@Res() response: Response,
+		@Req() request: Request,
+	): Promise<Response> {
+		console.log(request.cookies);
+		const cookies = await this.authService.logOut(
+			request.cookies['refreshToken'],
+		);
 		response.setHeader('Set-Cookie', [cookies.refresh, cookies.access]);
 		return response.sendStatus(200);
 	}

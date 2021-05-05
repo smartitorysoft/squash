@@ -31,6 +31,9 @@ export class RefreshTokenService {
 	): Promise<{ valid: boolean; user: User | null }> {
 		const result = await this.repository.findOne({ token });
 
+		if (result.expires < new Date()) {
+			await this.repository.delete(result);
+		}
 		return {
 			valid:
 				typeof result !== undefined &&
@@ -40,7 +43,8 @@ export class RefreshTokenService {
 		};
 	}
 
-	public async delete(user: User): Promise<void> {
-		await this.repository.delete({ user });
+	public async invalidate(token: string): Promise<void> {
+		const result = await this.repository.findOne({ token });
+		await this.repository.delete(result);
 	}
 }

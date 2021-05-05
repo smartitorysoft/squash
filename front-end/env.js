@@ -4,20 +4,6 @@ exports.publicRuntimeConfig = {
 	ADMIN_URL: 'http://localhost:3210',
 	// -- Google Tag Manager id or false --//
 	GTM_TRACKING_ID: false,
-	LANGUAGE: {
-		// -- Fallback lang --//
-		fallbackLng: 'hu',
-		// -- Default lang --//
-		defaultLanguage: 'hu',
-		// -- All lang --//
-		otherLanguages: ['hu'],
-		// -- Ignore route list. --//
-		ignoreRoutes: ['/_next', '/static', '/public', '/api'],
-		// -- Locale subpaths --//
-		localeSubpaths: {},
-		// -- Cookies name. --//
-		cookieName: 'squashLang',
-	},
 	// -- Backend API --//
 	BACKEND_API: {
 		KEY: process.env.API_KEY,

@@ -1,82 +1,76 @@
 import React from 'react';
 import {
-	Box, Button, makeStyles, TextField,
+	Button,
+	Card,
+	CardActions,
+	CardContent,
+	makeStyles,
+	TextField,
 } from '@material-ui/core';
 import { useRouter } from 'next/router';
-import BasicButton from 'components/BasicButton';
 import { useDispatch } from 'react-redux';
-import { getMe } from 'store/me/actions';
-import { signIn, signOut } from 'store/auth/actions';
+import { signIn } from 'store/auth/actions';
 import { Form, Formik } from 'formik';
-import * as Yup from 'yup';
 import { useErrorHandling } from 'components/error';
-import { useTranslation } from 'next-i18next';
+import { getMe } from 'store/me/actions';
+import useTranslation from 'next-translate/useTranslation';
+import { validation } from './validation';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		width: '100%',
-		height: '100%',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	container: {
+		height: '100vh',
 		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'center',
 		alignItems: 'center',
-		marginTop: 'calc(50vh - 100px)',
+		justifyContent: 'center',
+		padding: theme.spacing(6, 2),
 	},
 
-	field: {
-		marginTop: theme.spacing(2),
-		width: 300,
+	cardContent: {
+		padding: theme.spacing(3, 4, 3, 4),
 	},
 
+	fields: {
+		// margin: theme.spacing(-1),
+		display: 'flex',
+		flexWrap: 'wrap',
+	},
+
+	passwordField: {
+		marginTop: theme.spacing(1),
+	},
 	buttons: {
 		display: 'flex',
-		padding: 16,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		alignItems: 'center',
-		minWidth: '500',
 	},
 }));
 
-const SignIn = () => {
+const SignIn = (props) => {
+	const { defaultNamespace } = props;
+
 	const router = useRouter();
 	const classes = useStyles();
 	const dispatch = useDispatch();
 
-	const { errorHandling, errorChecker } = useErrorHandling(useTranslation('error'));
+	const { errorHandling, errorChecker } = useErrorHandling();
+	const { t } = useTranslation(defaultNamespace);
 
 	const onSubmit = async (values, { setSubmitting }) => {
 		try {
-			await dispatch(signIn(values));
-			try {
-				await dispatch(getMe());
-			} catch (error) {
-				console.log('Lefut a hibakezeles');
-				await dispatch(signOut());
-				errorHandling(error);
-			}
-
-			router.push('/dashboard').then(() => window.scrollTo(0, 0));
+			await dispatch(signIn(values))
+				.then(() => dispatch(getMe()))
+				.then(() => router.push('/dashboard'))
+				.then(() => window.scrollTo(0, 0));
 		} catch (error) {
 			errorHandling(error);
+			setSubmitting(false);
 		}
-
-		setSubmitting(false);
 	};
 
-	const LoginSchema = Yup.object().shape({
-		email: Yup.string().email().required('Required'),
-		password: Yup.string(),
-	});
-
 	return (
-		<Box className={classes.root}>
+		<div className={classes.root}>
 			<Formik
-				validationSchema={LoginSchema}
+				validationSchema={validation}
 				onSubmit={onSubmit}
 				initialValues={{
 					email: '',
@@ -85,56 +79,65 @@ const SignIn = () => {
 			>
 				{(formikProps) => {
 					const {
-						isSubmitting, values, handleChange, handleBlur,
+						isSubmitting,
+						values,
+						handleChange,
+						handleBlur,
 					} = formikProps;
 					return (
-						<Form className={classes.container}>
-							<TextField
-								fullWidth
-								label='Email cím'
-								name='email'
-								className={classes.field}
-								onChange={handleChange}
-								onBlur={handleBlur}
-								value={values.email}
-								error={!!errorChecker(formikProps, 'email')}
-								helperText={errorChecker(formikProps, 'email')}
-							/>
-							<TextField
-								fullWidth
-								label='Jelszó'
-								name='password'
-								className={classes.field}
-								type='password'
-								onChange={handleChange}
-								onBlur={handleBlur}
-								value={values.password}
-								error={!!errorChecker(formikProps, 'password')}
-								helperText={errorChecker(formikProps, 'password')}
-							/>
-
-							<Box className={classes.buttons}>
-								<Button
-									color='primary'
-									disabled={isSubmitting}
-									size='large'
-									type='submit'
-									variant='contained'
-								>
-									Belépés
-								</Button>
-								<BasicButton
-									onClick={() => {
-										router.push('/register');
-									}}
-									label='Regisztráció'
-								/>
-							</Box>
+						<Form noValidate>
+							<Card>
+								<CardContent className={classes.cardContent}>
+									<div className={classes.fiels}>
+										<TextField
+											fullWidth
+											label={t('username')}
+											name="email"
+											onChange={handleChange}
+											onBlur={handleBlur}
+											value={values.email}
+											error={!!errorChecker(formikProps, 'email')}
+											helperText={errorChecker(formikProps, 'email') || ' '}
+										/>
+										<TextField
+											fullWidth
+											label={t('password')}
+											name="password"
+											className={classes.passwordField}
+											type="password"
+											onChange={handleChange}
+											onBlur={handleBlur}
+											value={values.password}
+											error={!!errorChecker(formikProps, 'password')}
+											helperText={errorChecker(formikProps, 'password') || ' '}
+										/>
+									</div>
+								</CardContent>
+								<CardActions className={classes.buttons}>
+									<Button
+										color="primary"
+										disabled={isSubmitting}
+										onClick={() => {
+											router.push('/register');
+										}}
+									>
+										{t('sign-up')}
+									</Button>
+									<Button
+										color="primary"
+										disabled={isSubmitting}
+										type="submit"
+										variant="contained"
+									>
+										{t('sign-in')}
+									</Button>
+								</CardActions>
+							</Card>
 						</Form>
 					);
 				}}
 			</Formik>
-		</Box>
+		</div>
 	);
 };
 

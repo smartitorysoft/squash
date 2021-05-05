@@ -8,9 +8,10 @@ import reducers from './reducers';
 
 const { BACKEND_API } = getConfig().publicRuntimeConfig;
 
-const composeEnhancers =  process.env.NODE_ENV === 'development'
-	? composeWithDevTools || compose
-	: null || compose;
+const composeEnhancers =
+	process.env.NODE_ENV === 'development'
+		? composeWithDevTools || compose
+		: null || compose;
 
 const isServer = typeof window === 'undefined';
 const NEXT_REDUX_STORE = 'NEXT_REDUX_STORE';
@@ -18,17 +19,15 @@ const NEXT_REDUX_STORE = 'NEXT_REDUX_STORE';
 const headers = {
 	'X-Disable-Proto': 'enable',
 	'X-Authorization-Cookie': 'true',
+	'Content-Type': 'application/json',
 };
 
 const makeStore = () => {
 	if (isServer) {
 		const jsonApi = () => {
 			const instance = axios.create({
-				baseURL: BACKEND_API.API,
-				headers: {
-					...headers,
-					'Content-Type': 'application/json',
-				},
+				baseURL: BACKEND_API.API.replace('localhost', 'nest'),
+				headers,
 				withCredentials: true,
 			});
 			return instance;
@@ -48,10 +47,7 @@ const makeStore = () => {
 		const jsonApi = () => {
 			const instance = axios.create({
 				baseURL: BACKEND_API.API,
-				headers: {
-					...headers,
-					'Content-Type': 'application/json',
-				},
+				headers,
 				withCredentials: true,
 			});
 			return instance;

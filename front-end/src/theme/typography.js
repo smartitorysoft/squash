@@ -1,7 +1,6 @@
 import palette from './palette';
 
 export default {
-
 	h1: {
 		color: palette.text.primary,
 		fontWeight: 500,
@@ -99,5 +98,4 @@ export default {
 		lineHeight: '13px',
 		textTransform: 'uppercase',
 	},
-
 };

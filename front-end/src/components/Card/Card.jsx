@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import { IconButton, makeStyles } from '@material-ui/core';
-import { ReserveModal } from '../ReserveModal/ReserveModal';
+import ReserveModal from '../ReserveModal';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
 	container: {
 		display: 'flex',
 		flexDirection: 'row',
@@ -54,9 +54,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export const Card = ({
-	date, reservedAppointments, day, hour,
-}) => {
+export const Card = ({ date, reservedAppointments, day, hour }) => {
 	const [open, setOpen] = useState(false);
 
 	// console.log("card", reservedAppointments);
@@ -67,9 +65,9 @@ export const Card = ({
 	useEffect(() => {
 		reservedAppointments.map((e) => {
 			if (
-				e.day === day
-        && e.reservation.hour === hour
-        && !reserved.includes(e.reservation.court)
+				e.day === day &&
+				e.reservation.hour === hour &&
+				!reserved.includes(e.reservation.court)
 			) {
 				reserved.push(e.reservation.court);
 			}
@@ -112,7 +110,7 @@ export const Card = ({
 						<p>Reserved</p>
 					)}
 				</div>
-				<div className='verticalLine' />
+				<div className="verticalLine" />
 				<div className={reserved[0] === 'ONE' ? classes.segment : classes.half}>
 					{reserved[0] === 'ONE' ? (
 						<div>
