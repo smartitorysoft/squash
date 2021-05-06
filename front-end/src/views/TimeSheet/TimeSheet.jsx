@@ -32,7 +32,7 @@ const TimeSheet = () => {
 	const openings = useSelector((state) => state.openings.openings);
 	const rules = useSelector((state) => state.openings.rules);
 
-	const rulesList = [...rules];
+	const deleteRuleList = [];
 
 	// const addNewRule = async () => {
 	// 	if (opening > -1 && opening < 25 && closing > -1 && closing < 25 && parseInt(opening, 10) < parseInt(closing, 10)) {
@@ -77,19 +77,27 @@ const TimeSheet = () => {
 	// 	}
 	// };
 
+	const onSubmit = async (values) => {
+		dispatch(createRule(values.ruleList));
+		dispatch(deleteRule(deleteRuleList));
+	};
+
 	return (
 		<Box>
 			<DefaultOpenings openingsList={openings} />
 			<Formik
 				enableReinitialize
-				// onSubmit={onSubmit}
+				onSubmit={onSubmit}
+				initialValues={{
+					ruleList: [...rules],
+				}}
 			>
 				{(formikProps) => {
 					const {
 						values, handleChange, handleBlur, isSubmitting,
 					} = formikProps;
 					return (
-						<Box>
+						<Form>
 							<TableContainer>
 								<Table>
 									<TableHead>
@@ -100,89 +108,98 @@ const TimeSheet = () => {
 										<TableCell />
 									</TableHead>
 									<FieldArray
-										name='rulesList'
-										render={({
-											remove, push, swap, replace,
-										}) => (
-											<TableBody>
-												{
-													rulesList && rulesList.map((rule) => (
-														<TableRow key={rule.order}>
-															<TableCell>
-																{rule.name}
-															</TableCell>
-															<TableCell>
-																{rule.isDefault ? 'Igen' : 'Nem'}
-															</TableCell>
-															<TableCell>
-																{rule.openingHour}
-															</TableCell>
-															<TableCell>
-																{rule.closingHour}
-															</TableCell>
-															<TableCell>
-																{!rule.isDefault && (
-																	<IconButton onClick={() => removeRule(rule.id)}>
-																		<DeleteIcon />
-																	</IconButton>
-																)}
-															</TableCell>
-															<TableCell>
-																{!rule.isDefault && (
-																	<IconButton onClick={() => switchOrder(-1, rule.id)}>
-																		<KeyboardArrowUpIcon />
-																	</IconButton>
-																)}
-															</TableCell>
-															<TableCell>
-																{!rule.isDefault && (
-																	<IconButton onClick={() => switchOrder(+1, rule.id)}>
-																		<KeyboardArrowDownIcon />
-																	</IconButton>
-																)}
-															</TableCell>
-														</TableRow>
-													))
+										name='ruleList'
+									>
+										{(props) => {
+											const {
+												push, remove, swap, form,
+											} = props;
+											const { values } = form;
+											const { ruleList } = values;
+											return (
+												<TableBody>
+													{
+														ruleList && ruleList.map((rule, index) =>
+														// console.log(rule);
+														 (
+																<TableRow key={rule.order}>
+																<TableCell>
+																		{rule.name}
+																	</TableCell>
+																<TableCell>
+																		{rule.isDefault ? 'Igen' : 'Nem'}
+																	</TableCell>
+																<TableCell>
+																		{rule.openingHour}
+																	</TableCell>
+																<TableCell>
+																		{rule.closingHour}
+																	</TableCell>
+																<TableCell>
+																		{!rule.isDefault && (
+																	<IconButton onClick={() => { console.log(index); remove(index); if (rule.id) { deleteRuleList.push[rule]; } }}>
+																				<DeleteIcon />
+																			</IconButton>
+																		)}
+																	</TableCell>
+																<TableCell>
+																		{!rule.isDefault && (
+																	<IconButton onClick={() => index != 0 && swap(index, index - 1)}>
+																				<KeyboardArrowUpIcon />
+																			</IconButton>
+																		)}
+																	</TableCell>
+																<TableCell>
+																		{!rule.isDefault && (
+																	<IconButton onClick={() => index != ruleList.length - 1 && swap(index, index + 1)}>
+																				<KeyboardArrowDownIcon />
+																			</IconButton>
+																		)}
+																	</TableCell>
+															</TableRow>
+															),
+														)
 
-												}
-												{
-													newRule && (
-														<TableRow>
-															<TableCell>
-																<TextField label='Szabály' onChange={(text) => setName(text.target.value)} />
-															</TableCell>
-															<TableCell />
-															<TableCell>
-																<TextField label='Nyitás' onChange={(text) => setOpening(text.target.value)} />
-															</TableCell>
-															<TableCell>
-																<TextField label='Zárás' onChange={(text) => setClosing(text.target.value)} />
-															</TableCell>
-															<TableCell>
-																<TextField label='Dátum' onChange={(text) => setDate(text.target.value)} />
-															</TableCell>
-															<TableCell>
-																<IconButton onClick={() => {
-																	console.log(rulesList);
-																	push({
-																		name,
-																		openingHour: parseInt(opening),
-																		closingHour: parseInt(closing),
-																		order: rulesList[rulesList.length - 1].order + 1,
-																		rule: date,
-																	});
-																	setNewRule(false);
-																}}
-																>
-																	<CheckIcon />
-																</IconButton>
-															</TableCell>
-														</TableRow>
-													)
-												}
-											</TableBody>
-										)}
-									/>
+													}
+													{
+														newRule && (
+															<TableRow>
+																<TableCell>
+																	<TextField label='Szabály' onChange={(text) => setName(text.target.value)} />
+																</TableCell>
+																<TableCell />
+																<TableCell>
+																	<TextField label='Nyitás' onChange={(text) => setOpening(text.target.value)} />
+																</TableCell>
+																<TableCell>
+																	<TextField label='Zárás' onChange={(text) => setClosing(text.target.value)} />
+																</TableCell>
+																<TableCell>
+																	<TextField label='Dátum' onChange={(text) => setDate(text.target.value)} />
+																</TableCell>
+																<TableCell>
+																	<IconButton onClick={() => {
+																	// console.log(rules.length > 0);
+																		push({
+																			name,
+																			openingHour: parseInt(opening),
+																			closingHour: parseInt(closing),
+																			order: ruleList.length > 0 ? ruleList[ruleList.length - 1].order + 1 : 1,
+																			rule: date,
+																		});
+																		setNewRule(false);
+																	}}
+																	>
+																		<CheckIcon />
+																	</IconButton>
+																</TableCell>
+															</TableRow>
+														)
+													}
+												</TableBody>
+											);
+										}}
+									</FieldArray>
 
 								</Table>
 							</TableContainer>
@@ -194,7 +211,16 @@ const TimeSheet = () => {
 							>
 								Új szabály
 							</Button>
-						</Box>
+							<Button
+								color='primary'
+								size='large'
+								variant='contained'
+								type='submit'
+								onClick={() => setNewRule(true)}
+							>
+								Mentés
+							</Button>
+						</Form>
 					);
 				}}
 
