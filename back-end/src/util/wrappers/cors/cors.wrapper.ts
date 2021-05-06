@@ -3,8 +3,10 @@
 import cors from './cors.lib';
 
 const whitelist = [
-	'http://nest:3000',
 	'http://localhost:3000',
+	'http://localhost',
+	'http://next',
+	'https://next',
 	'http://159.89.101.123',
 	'https://159.89.101.123',
 	'http://squash.smartitory.com',
