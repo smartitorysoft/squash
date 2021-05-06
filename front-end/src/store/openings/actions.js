@@ -39,6 +39,9 @@ export const createRule = (data) => (dispatch, getState, { jsonApi }) =>
 		.catch((error) => console.log('Error creating rule'));
 
 export const UPDATE_RULE = 'UPDATE_RULE';
-export const updateRule = (data) => (dispatch, getState, { jsonApi }) => jsonApi()
-	.put('openings/rules', { update: data })
-	.then((res) => res);
+export const updateRule = (data) => (dispatch, getState, { jsonApi }) => {
+	console.log(data);
+	return jsonApi()
+		.put('openings/rules', { update: data })
+		.then((res) => res);
+};
