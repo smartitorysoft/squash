@@ -34,7 +34,7 @@ const SmNext = (props) => {
 };
 
 SmNext.getInitialProps = async (appContext) => {
-	const { router, ctx } = appContext;
+	const { Component, router, ctx } = appContext;
 
 	const { store, res } = ctx;
 
@@ -95,9 +95,15 @@ SmNext.getInitialProps = async (appContext) => {
 			break;
 	}
 
+	let pageProps = {};
+	if (Component.getInitialProps) {
+		pageProps = await Component.getInitialProps(ctx);
+	}
+
 	const appProps = await App.getInitialProps(appContext);
 	return {
 		...appProps,
+		pageProps,
 	};
 };
 
