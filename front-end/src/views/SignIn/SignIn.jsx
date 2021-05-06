@@ -118,7 +118,7 @@ const SignIn = (props) => {
 										color="primary"
 										disabled={isSubmitting}
 										onClick={() => {
-											router.push('/register');
+											router.push('/sign-in');
 										}}
 									>
 										{t('sign-up')}
