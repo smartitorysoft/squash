@@ -15,7 +15,7 @@ const pageRedirect = async ({ auth = null, url = null }, ctx) =>
 
 		// -- Check redirect type --//
 		const { isSignedIn } = store.getState().auth;
-		// console.log('isSignedIn', isSignedIn, 'auth:', auth, 'redirectTo: ', url);
+
 		switch (auth) {
 			case true:
 				if (!isSignedIn) {

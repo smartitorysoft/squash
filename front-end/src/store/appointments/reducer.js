@@ -1,3 +1,4 @@
+import { HYDRATE } from 'next-redux-wrapper';
 import { GET_APPOINTMENTS } from './actions';
 
 const INITIAL_STATE = {
@@ -43,8 +44,9 @@ const INITIAL_STATE = {
 };
 
 export const appointments = (state = INITIAL_STATE, action) => {
-	// console.log(action.type, action.payload);
 	switch (action.type) {
+		case HYDRATE:
+			return { ...state, ...action.payload.appointments };
 		case GET_APPOINTMENTS:
 			return { ...state, appointments: action.payload };
 		default:

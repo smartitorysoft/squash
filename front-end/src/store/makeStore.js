@@ -7,14 +7,12 @@ import { createWrapper } from 'next-redux-wrapper';
 import reducers from './reducers';
 
 const { BACKEND_API } = getConfig().publicRuntimeConfig;
+const isServer = typeof window === 'undefined';
 
 const composeEnhancers =
 	process.env.NODE_ENV === 'development'
 		? composeWithDevTools || compose
 		: null || compose;
-
-const isServer = typeof window === 'undefined';
-const NEXT_REDUX_STORE = 'NEXT_REDUX_STORE';
 
 const headers = {
 	'X-Disable-Proto': 'enable',
@@ -26,8 +24,11 @@ const makeStore = () => {
 	if (isServer) {
 		const jsonApi = () => {
 			const instance = axios.create({
-				baseURL: BACKEND_API.API.replace('localhost', 'nest'),
-				headers,
+				baseURL: `http://${BACKEND_API.API}/`,
+				headers: {
+					...headers,
+					origin: 'http://next',
+				},
 				withCredentials: true,
 			});
 			return instance;
@@ -35,35 +36,27 @@ const makeStore = () => {
 
 		const middleware = [thunk.withExtraArgument({ jsonApi })];
 
-		const store = createStore(
+		return createStore(
 			reducers,
 			composeEnhancers(applyMiddleware(...middleware)),
 		);
-
-		return store;
 	}
 
-	if (!window[NEXT_REDUX_STORE]) {
-		const jsonApi = () => {
-			const instance = axios.create({
-				baseURL: BACKEND_API.API,
-				headers,
-				withCredentials: true,
-			});
-			return instance;
-		};
+	const jsonApi = () => {
+		const instance = axios.create({
+			baseURL: '/api',
+			headers,
+			withCredentials: true,
+		});
+		return instance;
+	};
 
-		const middleware = [thunk.withExtraArgument({ jsonApi })];
+	const middleware = [thunk.withExtraArgument({ jsonApi })];
 
-		const store = createStore(
-			reducers,
-			composeEnhancers(applyMiddleware(...middleware)),
-		);
-
-		window[NEXT_REDUX_STORE] = store;
-	}
-
-	return window[NEXT_REDUX_STORE];
+	return createStore(
+		reducers,
+		composeEnhancers(applyMiddleware(...middleware)),
+	);
 };
 
 export const wrapper = createWrapper(makeStore, { debug: false });

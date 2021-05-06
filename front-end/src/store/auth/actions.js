@@ -32,12 +32,12 @@ export const signInWithRefreshToken = (refreshToken, res) => async (
 	jsonApi()
 		.put('auth/refresh-token', { refreshToken })
 		.then((response) => {
+			res.setHeader('Set-Cookie', response.headers['set-cookie']);
 			dispatch({
 				type: SIGN_IN,
 				payload: response.data.success,
 			});
-			res.setHeader('Set-Cookie', response.headers['set-cookie']);
-			return response.data.success;
+			return Promise.resolve();
 		});
 
 export const REGISTER_USER = 'REGISTER_USER';

@@ -15,8 +15,10 @@ export const withErrorPage = (ChildComponent) => {
 		};
 
 		delete propsNoStore.store;
-
-		if (error) {
+		// FIXME: itt valami bug van, a redux alapbol {}-t ad
+		//  vissza a nullos initialstate helyett,
+		// vagy code-ra kell szurni, vagy kideriteni mi a fasz baja van
+		if (error && Object.keys(error).length !== 0) {
 			switch (error.code) {
 				case 'INTERNAL_SERVER_ERROR':
 					return <Error status="INTERNAL_SERVER_ERROR" />;
@@ -46,8 +48,9 @@ export const withErrorPage = (ChildComponent) => {
 					? await ChildComponent.getInitialProps(ctx)
 					: null) || {};
 		} catch (error) {
+			console.error('FASZOM', error);
 			if (error.code === '200aa06') {
-				return pageRedirect({ url: '/sign-out' }, ctx);
+				return pageRedirect({ url: '/sign-in' }, ctx);
 			}
 
 			await store.dispatch(setError(error));

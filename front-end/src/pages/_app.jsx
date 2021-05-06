@@ -1,6 +1,5 @@
 import React from 'react';
 import '../styles/globals.css';
-import App from 'next/app';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import theme from 'theme';
 import { SnackbarProvider } from 'components/Snackbar';
@@ -8,10 +7,10 @@ import { getMe } from 'store/me/actions';
 import { autoSignIn, signInWithRefreshToken } from 'store/auth/actions';
 import cookies from 'next-cookies';
 import appWithI18n from 'next-translate/appWithI18n';
+import url from 'url';
+import App from 'next/app';
 import { wrapper } from '../store/makeStore';
 import i18n from '../../i18n';
-
-const cookieDelArray = ['refreshToken=; Max-Age=0', 'accessToken=; Max-Age=0'];
 
 const SmNext = (props) => {
 	const { Component, pageProps } = props;
@@ -33,78 +32,55 @@ const SmNext = (props) => {
 	);
 };
 
-SmNext.getInitialProps = async (appContext) => {
-	const { Component, router, ctx } = appContext;
+const logoutCookies = ['refreshToken=; Max-Age=0', 'accessToken=; Max-Age=0'];
 
-	const { store, res } = ctx;
+SmNext.getInitialProps = async (appContext) => {
+	const { router, ctx } = appContext;
+
+	const { store, req, res, query } = ctx;
 
 	const { accessToken, refreshToken } = cookies(ctx);
 
-	const handleRedirect = () =>
-		res.writeHead(302, { Location: '/sign-in' }).end();
+	const redirect = (redirectUrl = '/sign-in') =>
+		res.writeHead(302, { Location: redirectUrl }).end();
 
-	switch (true) {
-		case !!accessToken && !!refreshToken:
+	if (req) {
+		if (refreshToken && !accessToken) {
 			try {
-				await Promise.all([
-					store.dispatch(
-						getMe(typeof window === 'undefined' ? accessToken : null),
-					),
-				]);
-				await store.dispatch(autoSignIn());
+				// TODO: ide kell majd a cookiebol language beallitast irni
+				await store.dispatch(signInWithRefreshToken(refreshToken, res));
+
+				const redirectUrl = {
+					pathname: router.pathname,
+					query,
+				};
+
+				return redirect(url.format(redirectUrl));
 			} catch (error) {
-				try {
-					const isRefreshSuccessful = await store.dispatch(
-						signInWithRefreshToken(refreshToken, res),
-					);
-
-					if (isRefreshSuccessful) {
-						await store.dispatch(getMe());
-					} else if (router.pathname !== '/sign-in') {
-						return handleRedirect();
-					}
-				} catch (err) {
-					if (router.pathname !== '/sign-in') {
-						return handleRedirect();
-					}
-				}
+				return redirect('/sign-in');
 			}
-			break;
-		case !!accessToken && !refreshToken:
-			res.setHeader('Set-Cookie', cookieDelArray);
-			break;
-		case !accessToken && !!refreshToken:
-			try {
-				const isRefreshSuccessful = await store.dispatch(
-					signInWithRefreshToken(refreshToken, res),
-				);
-
-				if (isRefreshSuccessful) {
-					await store.dispatch(getMe());
-					await store.dispatch(autoSignIn());
-				} else if (router.pathname !== '/sign-in') {
-					return handleRedirect();
-				}
-			} catch (err) {
-				if (router.pathname !== '/sign-in') {
-					return handleRedirect();
-				}
-			}
-			break;
-		default:
-			break;
+		} else if (!refreshToken && accessToken) {
+			res.setHeader('Set-Cookie', logoutCookies);
+			return redirect('/sign-in');
+		}
 	}
 
-	let pageProps = {};
-	if (Component.getInitialProps) {
-		pageProps = await Component.getInitialProps(ctx);
+	if (accessToken) {
+		await store.dispatch(autoSignIn());
+
+		if (req) {
+			try {
+				await Promise.all([store.dispatch(getMe(accessToken))]);
+			} catch (error) {
+				res.setHeader('Set-Cookie', logoutCookies);
+				return redirect('/sign-in');
+			}
+		}
 	}
 
 	const appProps = await App.getInitialProps(appContext);
-	return {
-		...appProps,
-		pageProps,
-	};
+
+	return { ...appProps };
 };
 
 export default wrapper.withRedux(

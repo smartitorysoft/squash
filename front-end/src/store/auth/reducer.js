@@ -8,7 +8,7 @@ const INITIAL_STATE = {
 export const auth = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case HYDRATE:
-			return action.payload.auth;
+			return { ...state, ...action.payload.auth };
 		case SIGN_IN:
 			return { ...state, isSignedIn: action.payload };
 		case SIGN_OUT:

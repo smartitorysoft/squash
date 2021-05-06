@@ -6,7 +6,7 @@ const INITIAL_STATE = {};
 export const me = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case HYDRATE:
-			return action.payload.me;
+			return { ...state, ...action.payload.me };
 		case GET_ME:
 			return action.payload;
 		default:

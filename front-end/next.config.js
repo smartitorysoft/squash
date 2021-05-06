@@ -2,7 +2,6 @@ const env = require('./env');
 const i18n = require('./i18n');
 
 module.exports = {
-	serverRuntimeConfig: env.serverRuntimeConfig,
 	publicRuntimeConfig: env.publicRuntimeConfig,
 	useFileSystemPublicRoutes: true,
 	pageExtensions: ['jsx'],
@@ -27,6 +26,14 @@ module.exports = {
 				source: '/home',
 				destination: '/',
 				permanent: true,
+			},
+		];
+	},
+	async rewrites() {
+		return [
+			{
+				source: '/api/:path*',
+				destination: 'http://nest:3300/v1/api/:path*',
 			},
 		];
 	},
