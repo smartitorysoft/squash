@@ -27,7 +27,7 @@ const makeStore = () => {
 				baseURL: `http://${BACKEND_API.API}/`,
 				headers: {
 					...headers,
-					origin: 'http://next',
+					'X-Api-Key': `${BACKEND_API.KEY}`,
 				},
 				withCredentials: true,
 			});

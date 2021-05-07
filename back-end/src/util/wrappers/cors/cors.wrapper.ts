@@ -22,7 +22,9 @@ const corsDisabledEndpoints = [
 
 const corsOptions = {
 	origin: function (origin, callback, req) {
-		if (whitelist.includes(origin) || process.env.MODE === 'DEV') {
+		if (req.headers['x-api-key'] === process.env.API_KEY) {
+			callback(null, true);
+		} else if (whitelist.includes(origin) || process.env.MODE === 'DEV') {
 			callback(null, true);
 		} else {
 			callback(new Error('Not allowed by CORS'));

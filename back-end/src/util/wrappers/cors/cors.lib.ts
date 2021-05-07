@@ -229,19 +229,23 @@ function middlewareWrapper(o, checkAllowed) {
 				}
 
 				if (originCallback) {
-					originCallback(req.headers.origin, function (err2, origin) {
-						if (err2 || !origin) {
-							if (checkAllowed(req.url)) {
+					originCallback(
+						req.headers.origin,
+						function (err2, origin) {
+							if (err2 || !origin) {
+								if (checkAllowed(req.url)) {
+									corsOptions.origin = origin;
+									cors(corsOptions, req, res, next);
+								} else {
+									next(err2);
+								}
+							} else {
 								corsOptions.origin = origin;
 								cors(corsOptions, req, res, next);
-							} else {
-								next(err2);
 							}
-						} else {
-							corsOptions.origin = origin;
-							cors(corsOptions, req, res, next);
-						}
-					});
+						},
+						req,
+					);
 				} else {
 					next();
 				}
