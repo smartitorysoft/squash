@@ -84,6 +84,9 @@ const TimeSheet = () => {
 										<TableCell>Nyitás</TableCell>
 										<TableCell>Zárás</TableCell>
 										<TableCell />
+										<TableCell />
+										<TableCell />
+
 									</TableHead>
 									<FieldArray
 										name='ruleList'
@@ -203,6 +206,7 @@ const TimeSheet = () => {
 							>
 								Új szabály
 							</Button>
+							
 							<Button
 								color='primary'
 								size='large'
@@ -211,19 +215,20 @@ const TimeSheet = () => {
 							>
 								Mentés
 							</Button>
+							<Button
+							color='primary'
+							size='large'
+							variant='contained'
+							onClick={() => router.back()}
+							>
+								Vissza
+							</Button>
 						</Form>
 					);
 				}}
 
 			</Formik>
-			<Button
-				color='primary'
-				size='large'
-				variant='contained'
-				onClick={() => router.back()}
-			>
-				Vissza
-			</Button>
+			
 		</Box>
 	);
 };
