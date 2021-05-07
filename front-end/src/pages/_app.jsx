@@ -57,9 +57,11 @@ SmNext.getInitialProps = async (appContext) => {
 
 				return redirect(url.format(redirectUrl));
 			} catch (error) {
+				console.log('rtError', error);
 				return redirect('/sign-in');
 			}
 		} else if (!refreshToken && accessToken) {
+			console.log('rtredir');
 			res.setHeader('Set-Cookie', logoutCookies);
 			return redirect('/sign-in');
 		}
@@ -72,6 +74,8 @@ SmNext.getInitialProps = async (appContext) => {
 			try {
 				await Promise.all([store.dispatch(getMe(accessToken))]);
 			} catch (error) {
+				console.log('atError', error);
+
 				res.setHeader('Set-Cookie', logoutCookies);
 				return redirect('/sign-in');
 			}
