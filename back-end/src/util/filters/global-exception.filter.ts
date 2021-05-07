@@ -17,9 +17,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 		const status =
 			exception instanceof HttpException
 				? exception.getStatus()
-				: HttpStatus.INTERNAL_SERVER_ERROR;
+				: HttpStatus.OK;
+		console.log(exception);
 
 		response.status(status).json({
+			success: false,
 			...GlobalExceptionFilter.parseError(exception, status),
 			timestamp: new Date().toISOString(),
 			path: request.url,

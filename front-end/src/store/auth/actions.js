@@ -5,7 +5,7 @@ export const signIn = (data) => (dispatch, getState, { jsonApi }) =>
 		.then((res) => {
 			dispatch({
 				type: SIGN_IN,
-				payload: res.data.success,
+				payload: res.success,
 			});
 			return Promise.resolve();
 		});
@@ -24,18 +24,17 @@ export const autoSignIn = () => ({
 	payload: true,
 });
 
-export const signInWithRefreshToken = (refreshToken, res) => async (
+export const signInWithRefreshToken = (refreshToken) => async (
 	dispatch,
 	getState,
 	{ jsonApi },
 ) =>
 	jsonApi()
 		.put('auth/refresh-token', { refreshToken })
-		.then((response) => {
-			res.setHeader('Set-Cookie', response.headers['set-cookie']);
+		.then((res) => {
 			dispatch({
 				type: SIGN_IN,
-				payload: response.data.success,
+				payload: res.success,
 			});
 			return Promise.resolve();
 		});

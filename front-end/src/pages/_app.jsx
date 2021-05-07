@@ -48,7 +48,7 @@ SmNext.getInitialProps = async (appContext) => {
 		if (refreshToken && !accessToken) {
 			try {
 				// TODO: ide kell majd a cookiebol language beallitast irni
-				await store.dispatch(signInWithRefreshToken(refreshToken, res));
+				await store.dispatch(signInWithRefreshToken(refreshToken));
 
 				const redirectUrl = {
 					pathname: router.pathname,
@@ -57,11 +57,9 @@ SmNext.getInitialProps = async (appContext) => {
 
 				return redirect(url.format(redirectUrl));
 			} catch (error) {
-				console.log('rtError', error);
 				return redirect('/sign-in');
 			}
 		} else if (!refreshToken && accessToken) {
-			console.log('rtredir');
 			res.setHeader('Set-Cookie', logoutCookies);
 			return redirect('/sign-in');
 		}
@@ -74,8 +72,6 @@ SmNext.getInitialProps = async (appContext) => {
 			try {
 				await Promise.all([store.dispatch(getMe(accessToken))]);
 			} catch (error) {
-				console.log('atError', error);
-
 				res.setHeader('Set-Cookie', logoutCookies);
 				return redirect('/sign-in');
 			}

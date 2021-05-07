@@ -5,6 +5,7 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createWrapper } from 'next-redux-wrapper';
 import reducers from './reducers';
+import { interceptors } from './interceptors';
 
 const { BACKEND_API } = getConfig().publicRuntimeConfig;
 const isServer = typeof window === 'undefined';
@@ -31,7 +32,8 @@ const makeStore = () => {
 				},
 				withCredentials: true,
 			});
-			return instance;
+
+			return interceptors(instance);
 		};
 
 		const middleware = [thunk.withExtraArgument({ jsonApi })];
@@ -48,7 +50,7 @@ const makeStore = () => {
 			headers,
 			withCredentials: true,
 		});
-		return instance;
+		return interceptors(instance);
 	};
 
 	const middleware = [thunk.withExtraArgument({ jsonApi })];

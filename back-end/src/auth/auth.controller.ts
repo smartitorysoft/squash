@@ -67,7 +67,7 @@ export class AuthController {
 			response.json({
 				success: false,
 			});
-			return response.send();
+			return response.status(401).send();
 		}
 	}
 
