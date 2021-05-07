@@ -1,18 +1,22 @@
+/* eslint-disable no-useless-catch */
 import React from 'react';
 
 import pageRedirect from 'lib/pageRedirect';
 import Page from 'views/SignIn';
+import { loadLocaleFromCtx } from 'lib/loadLocaleFromCtx';
 
 const SignIn = (props) => <Page {...props} />;
 
 SignIn.getInitialProps = async (ctx) => {
 	try {
-		await pageRedirect({ auth: false, url: '/dashboard' }, ctx);
+		await pageRedirect({ auth: false, url: '/' }, ctx);
 	} catch (error) {
 		throw error;
 	}
+
 	return {
-		namespacesRequired: ['error', 'global', 'sign-in'],
+		defaultNamespace: 'sign-in',
+		...(await loadLocaleFromCtx(ctx)),
 	};
 };
 

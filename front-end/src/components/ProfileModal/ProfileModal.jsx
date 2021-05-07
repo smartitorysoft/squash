@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { TextInput } from '../TextInput/TextInput';
 import { BasicButton } from '../BasicButton/BasicButton';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
 	modal: {
 		width: '75%',
 		height: '50%',
@@ -47,7 +47,6 @@ export const ProfileModal = ({ open, onClose }) => {
 							firstName: formRef.current.values.firstName,
 							lastName: formRef.current.values.lastName,
 							phone: `+40${formRef.current.values.phone}`,
-
 						},
 					},
 				}),
@@ -80,44 +79,38 @@ export const ProfileModal = ({ open, onClose }) => {
 				>
 					{({
 						handleChange,
-						handleBlur,
 						// handleSubmit,
 						values,
-					// errors,
-					// setFieldValue,
-					// touched,
-					// setTouched,
+						// errors,
+						// setFieldValue,
+						// touched,
+						// setTouched,
 					}) => (
 						<div className={classes.modal}>
 							<TextInput
 								value={values.firstName}
-								label='Vezetéknév'
+								label="Vezetéknév"
 								onChange={handleChange('firstName')}
 							/>
 							<TextInput
 								value={values.lastName}
-								label='Keresztnév'
+								label="Keresztnév"
 								onChange={handleChange('lastName')}
 							/>
 							<TextInput
 								value={values.email}
-								label='Email cím'
+								label="Email cím"
 								onChange={handleChange('email')}
 							/>
 							<TextInput
 								value={values.phone}
-								label='Telefonszám'
+								label="Telefonszám"
 								onChange={handleChange('phone')}
-
 							/>
-
 						</div>
 					)}
 				</Formik>
-				<BasicButton
-					label='Változtat'
-					onClick={onSubmit}
-				/>
+				<BasicButton label="Változtat" onClick={onSubmit} />
 			</Modal>
 		</div>
 	);

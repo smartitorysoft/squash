@@ -1,5 +1,5 @@
 export const GIVE_CREDIT = 'GIVE_CREDIT';
-export const giveCredit = (data) => (dispatch, getState, { jsonApi }) => {
+export const giveCredit = (data) => (dispatch, getState, { jsonApi }) =>
 	jsonApi()
 		.post(`payments/${data.id}`, { value: data.value })
 		.then((res) => {
@@ -7,6 +7,4 @@ export const giveCredit = (data) => (dispatch, getState, { jsonApi }) => {
 				type: GIVE_CREDIT,
 				payload: res.data,
 			});
-		})
-		.catch((e) => console.log('giveCredit error', e));
-};
+		});

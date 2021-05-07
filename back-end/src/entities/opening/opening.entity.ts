@@ -7,7 +7,7 @@ import { BaseEntity } from '../base/base.entity';
 @Check(`"closingHour" > 0 AND "closingHour" <= 24`)
 @Check(`"openingHour" < "closingHour"`)
 @Check(
-	`("openingHour" is null and "closingHour" is null) or ("openingHour" is not null and "closingHour" is not null)`
+	`("openingHour" is null and "closingHour" is null) or ("openingHour" is not null and "closingHour" is not null)`,
 )
 @Index(['id'])
 export class Opening extends BaseEntity {

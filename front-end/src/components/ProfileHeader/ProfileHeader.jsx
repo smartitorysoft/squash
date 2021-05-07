@@ -11,15 +11,15 @@ export const ProfileHeader = () => {
 
 	return (
 		<div>
-			<AppBar position='static'>
+			<AppBar position="static">
 				<Tabs
-					variant='fullWidth'
+					variant="fullWidth"
 					value={value}
 					onChange={handleChange}
-					aria-label='simple tabs example'
+					aria-label="simple tabs example"
 				>
-					<Tab label='Foglalásaim' />
-					<Tab label='Tranzakciók' />
+					<Tab label="Foglalásaim" />
+					<Tab label="Tranzakciók" />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>

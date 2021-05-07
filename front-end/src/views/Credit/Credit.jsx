@@ -16,16 +16,15 @@ import Row from 'components/Row/Row';
 
 import { getUsers } from 'store/user/actions';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
 	table: {
 		width: '80%',
 		backgroundColor: 'grey',
 	},
 }));
 
-const credit = (props) => {
-	const [value, setValue] = useState('');
-	const [open, setOpen] = React.useState(false);
+const Credit = () => {
+	const [, setValue] = useState('');
 
 	const classes = useStyles();
 
@@ -40,7 +39,7 @@ const credit = (props) => {
 	return (
 		<Box>
 			<TextInput
-				label='Keresés'
+				label="Keresés"
 				onChange={(text) => {
 					setValue(text.target.value);
 				}}
@@ -50,13 +49,14 @@ const credit = (props) => {
 					<TableHead>
 						<TableRow>
 							<TableCell />
-							<TableCell align='left'>Név</TableCell>
-							<TableCell align='left'>Email</TableCell>
-							<TableCell align='right'>Kredit</TableCell>
+							<TableCell align="left">Név</TableCell>
+							<TableCell align="left">Email</TableCell>
+							<TableCell align="right">Kredit</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{users.items && users.items.map((user) => <Row row={user} />)}
+						{users.items &&
+							users.items.map((user) => <Row key={user.id} row={user} />)}
 					</TableBody>
 				</Table>
 			</TableContainer>
@@ -64,6 +64,6 @@ const credit = (props) => {
 	);
 };
 
-credit.propTypes = {};
+Credit.propTypes = {};
 
-export default credit;
+export default Credit;

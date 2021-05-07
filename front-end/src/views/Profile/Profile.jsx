@@ -1,8 +1,8 @@
 import { ProfileHeader } from 'components/ProfileHeader/ProfileHeader';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { IconButton, makeStyles, Box } from '@material-ui/core';
-import ProfileModal from 'components/ProfileModal/ProfileModal';
+import ProfileModal from 'components/ProfileModal';
 import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const Profile = (props) => {
+const Profile = () => {
 	const [open, setOpen] = useState(false);
 
 	const classes = useStyles();

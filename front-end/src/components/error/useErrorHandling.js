@@ -4,14 +4,15 @@ import { get } from 'lodash';
 
 import { setError } from 'store/error/actions';
 import { useSnackbar } from 'components/Snackbar';
-import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
 
-const useErrorHandling = ({ t }) => {
+const useErrorHandling = () => {
+	const { t } = useTranslation('error');
 	const dispatch = useDispatch();
 	const { snackbarError } = useSnackbar();
-	const router = useRouter();
 
-	const inputError = (error) => snackbarError(t(`${error[0].input}_${error[0].error}`));
+	const inputError = (error) =>
+		snackbarError(t(`${error[0].input}_${error[0].error}`));
 
 	const errorChecker = ({ errors, touched, submitCount }, field) => {
 		let error = false;
@@ -27,14 +28,11 @@ const useErrorHandling = ({ t }) => {
 		return error ? t(error) : false;
 	};
 
-	const errorHandling = async (error) => {
+	const errorHandling = async (input) => {
+		const error = input.response.data.error || input;
 		switch (error.code) {
 			case '200su01':
 			case '200su11':
-
-			// -- Jwt token expired  --//
-			case '200aa06':
-				return router.push('/sign-out');
 
 			// -- Input error --//
 			case '200ab01':
@@ -54,7 +52,7 @@ const useErrorHandling = ({ t }) => {
 			case 'INTERNAL_SERVER_ERROR':
 			case 'UNAUTHORIZED':
 			case 'NETWORK_ERROR':
-				return  dispatch(setError(error.code));
+				return dispatch(setError(error.code));
 
 			default:
 				return snackbarError(t(error.code));

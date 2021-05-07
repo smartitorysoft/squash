@@ -7,13 +7,13 @@ import {
 	Put,
 	Param,
 	Delete,
-	ParseUUIDPipe
+	ParseUUIDPipe,
 } from '@nestjs/common';
 import { RolesService } from 'src/admin/roles/roles.service';
 import { PermissionService } from 'src/admin/permission/permission.service';
 import { RolesDto } from './dto/roles.dto';
 import { RoleDto } from './dto/role.dto';
-import JwtAuthenticationGuard from 'src/auth/guards/jwt-authentication.guard';
+import JwtAuthGuard from 'src/auth/guards/jwt-auth.guard';
 import { CreationResponseDto } from 'src/dto/creation.response.dto';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { PermissionsDto } from './dto/permissions.dto';
@@ -26,11 +26,11 @@ import { ApiResponse } from '@nestjs/swagger';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
 
 @Controller('admin')
-@UseGuards(JwtAuthenticationGuard, PermissionGuard)
+@UseGuards(JwtAuthGuard, PermissionGuard)
 export class AdminController {
 	constructor(
 		private readonly rolesService: RolesService,
-		private readonly permissionService: PermissionService
+		private readonly permissionService: PermissionService,
 	) {}
 
 	@Get('roles')
@@ -55,11 +55,11 @@ export class AdminController {
 	@Operation('create')
 	@ApiResponse({ status: 200, type: CreationResponseDto })
 	public async createRole(
-		@Body() data: CreateRoleDto
+		@Body() data: CreateRoleDto,
 	): Promise<CreationResponseDto> {
 		const created = await this.rolesService.createRole(
 			data.name,
-			data.description
+			data.description,
 		);
 
 		return new CreationResponseDto(created);
@@ -88,10 +88,10 @@ export class AdminController {
 	@ApiResponse({ status: 200, type: ModificationResponseDto })
 	public async update(
 		@Body() msg: UpdatePermissionDto,
-		@Param('id', new ParseUUIDPipe()) id: string
+		@Param('id', new ParseUUIDPipe()) id: string,
 	): Promise<ModificationResponseDto> {
 		return new ModificationResponseDto(
-			await this.permissionService.update(id, msg)
+			await this.permissionService.update(id, msg),
 		);
 	}
 
@@ -100,7 +100,7 @@ export class AdminController {
 	@Operation('delete')
 	@ApiResponse({ status: 200, type: ModificationResponseDto })
 	public async delete(
-		@Param('id', new ParseUUIDPipe()) id: string
+		@Param('id', new ParseUUIDPipe()) id: string,
 	): Promise<ModificationResponseDto> {
 		return new ModificationResponseDto(await this.permissionService.delete(id));
 	}

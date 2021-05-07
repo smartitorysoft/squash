@@ -10,7 +10,7 @@ import { configService } from 'src/config/config.service';
 export class PermissionService {
 	constructor(
 		@InjectRepository(Permission)
-		private readonly repository: Repository<Permission>
+		private readonly repository: Repository<Permission>,
 	) {}
 
 	public async checkAgainstTargetList(role: Role): Promise<string[]> {
@@ -29,17 +29,17 @@ export class PermissionService {
 
 	public async getByRole(role: Role): Promise<Permission[]> {
 		return await this.repository.find({
-			role: role
+			role: role,
 		});
 	}
 
 	public async getByTargetAndRole(
 		target: string,
-		role: Role
+		role: Role,
 	): Promise<Permission> {
 		return await this.repository.findOneOrFail({
 			target: target,
-			role: role
+			role: role,
 		});
 	}
 
@@ -51,7 +51,7 @@ export class PermissionService {
 			create: isRoot,
 			read: isRoot,
 			update: isRoot,
-			delete: isRoot
+			delete: isRoot,
 		});
 
 		await this.repository.save(newPermission);

@@ -6,7 +6,7 @@ describe('Admin Controller', () => {
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			controllers: [AdminController]
+			controllers: [AdminController],
 		}).compile();
 
 		controller = module.get<AdminController>(AdminController);

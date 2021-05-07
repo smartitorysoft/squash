@@ -33,13 +33,13 @@ async function bootstrap() {
 			url:
 				'https://smartitory.com/wp-content/uploads/2020/03/Smartitory_logo_transparent_small.png',
 			backgroundColor: '#F0F0F0',
-			altText: 'Smartitory logo'
+			altText: 'Smartitory logo',
 		},
 		sortPropsAlphabetically: true,
 		hideDownloadButton: false,
 		hideHostname: true,
 		expandResponses: 'all',
-		requiredPropsFirst: true
+		requiredPropsFirst: true,
 	};
 
 	await RedocModule.setup('/docs', app, document, redocOptions);

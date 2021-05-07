@@ -6,6 +6,8 @@ import Page from 'views/Credit';
 const Credit = (props) => <Page {...props} />;
 
 Credit.getInitialProps = async (ctx) => {
+	// ide fog kelleni a try-catch
+	// eslint-disable-next-line no-useless-catch
 	try {
 		await pageRedirect({ auth: true, url: '/sign-in' }, ctx);
 	} catch (error) {

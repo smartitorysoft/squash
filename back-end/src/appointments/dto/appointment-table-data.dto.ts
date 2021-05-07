@@ -11,7 +11,7 @@ export class AppointmentTableDataDto {
 
 	constructor(
 		date: Date,
-		reserved: AppointmentDataDto[] | AppointmentDataAdminDto[]
+		reserved: AppointmentDataDto[] | AppointmentDataAdminDto[],
 	) {
 		this.date = date;
 		this.reserved = reserved;

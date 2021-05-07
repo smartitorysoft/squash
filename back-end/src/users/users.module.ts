@@ -12,10 +12,10 @@ import { MailModule } from 'src/util/mail/mail.module';
 		TypeOrmModule.forFeature([User]),
 		AdminModule,
 		ProfileModule,
-		MailModule
+		MailModule,
 	],
 	providers: [UsersService],
 	controllers: [UsersController],
-	exports: [UsersService]
+	exports: [UsersService],
 })
 export class UsersModule {}

@@ -1,85 +1,83 @@
-import React, { useState, createContext } from "react";
-import PropTypes from "prop-types";
-import { Snackbar } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
+import React, { useState, createContext } from 'react';
+import PropTypes from 'prop-types';
+import { Snackbar } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 export const SnackbarContext = createContext();
 
-const SnackbarProvider = props => {
-  const { duration, children } = props;
+const SnackbarProvider = (props) => {
+	const { duration, children } = props;
 
-  const [alert, setAlert] = useState({
-    open: false,
-    type: null,
-    message: null
-  });
+	const [alert, setAlert] = useState({
+		open: false,
+		type: null,
+		message: null,
+	});
 
-  const snackbarSuccess = (message, duration) => {
-    handleClose();
+	const handleClose = (event, reason) => {
+		if (reason === 'clickaway') {
+			return;
+		}
 
-    setAlert({
-      open: true,
-      type: "success",
-      message,
-      duration
-    });
-  };
+		setAlert((data) => ({
+			...data,
+			open: false,
+		}));
+	};
 
-  const snackbarError = (message, duration) => {
-    handleClose();
-    setAlert({
-      open: true,
-      type: "error",
-      message,
-      duration: duration || 4000
-    });
-  };
+	const snackbarSuccess = (message, iDuration) => {
+		handleClose();
 
-  const value = { snackbarSuccess, snackbarError };
+		setAlert({
+			open: true,
+			type: 'success',
+			message,
+			duration: iDuration || duration,
+		});
+	};
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
+	const snackbarError = (message, iDuration) => {
+		handleClose();
+		setAlert({
+			open: true,
+			type: 'error',
+			message,
+			duration: iDuration || duration,
+		});
+	};
 
-    setAlert(alert => {
-      return {
-        ...alert,
-        open: false
-      };
-    });
-  };
+	const value = { snackbarSuccess, snackbarError };
 
-  return (
-    <SnackbarContext.Provider value={value}>
-      {children}
-      <Snackbar
-        open={alert.open}
-        autoHideDuration={alert.duration || duration}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      >
-        <Alert
-          onClose={handleClose}
-          severity={alert.type || "info"}
-          elevation={6}
-          variant="filled"
-        >
-          {alert.message || ""}
-        </Alert>
-      </Snackbar>
-    </SnackbarContext.Provider>
-  );
+	return (
+		<SnackbarContext.Provider value={value}>
+			{children}
+			<Snackbar
+				open={alert.open}
+				autoHideDuration={alert.duration || duration}
+				onClose={handleClose}
+				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+			>
+				<Alert
+					onClose={handleClose}
+					severity={alert.type || 'info'}
+					elevation={6}
+					variant="filled"
+				>
+					{alert.message || ''}
+				</Alert>
+			</Snackbar>
+		</SnackbarContext.Provider>
+	);
 };
 
-SnackbarProvider.displayName = "SnackbarProvider";
+SnackbarProvider.displayName = 'SnackbarProvider';
 
 SnackbarProvider.propTypes = {
-  duration: PropTypes.number
+	duration: PropTypes.number,
 };
 
 SnackbarProvider.defaultProps = {
-  duration: 5000
+	duration: 5000,
 };
 
 export default SnackbarProvider;

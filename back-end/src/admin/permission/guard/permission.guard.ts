@@ -2,7 +2,7 @@ import {
 	Injectable,
 	CanActivate,
 	ExecutionContext,
-	Inject
+	Inject,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PermissionService } from '../permission.service';
@@ -12,14 +12,14 @@ export class PermissionGuard implements CanActivate {
 	constructor(
 		private reflector: Reflector,
 		@Inject(PermissionService)
-		private readonly permissionService: PermissionService
+		private readonly permissionService: PermissionService,
 	) {}
 
 	async canActivate(context: ExecutionContext): Promise<boolean> {
 		const target = this.reflector.get<string[]>('target', context.getHandler());
 		const operation = this.reflector.get<string[]>(
 			'operation',
-			context.getHandler()
+			context.getHandler(),
 		);
 		if (!target || !operation) {
 			return true;
@@ -30,14 +30,14 @@ export class PermissionGuard implements CanActivate {
 		return await this.matchPermission(
 			target[0],
 			operation[0],
-			request.user.role
+			request.user.role,
 		);
 	}
 
 	private async matchPermission(target, operation, role) {
 		const permission = await this.permissionService.getByTargetAndRole(
 			target,
-			role
+			role,
 		);
 
 		return permission[operation];
