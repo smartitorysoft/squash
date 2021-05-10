@@ -3,7 +3,6 @@ import { SIGN_IN, SIGN_OUT } from './actions';
 
 const INITIAL_STATE = {
 	isSignedIn: false,
-	token: null,
 };
 
 export const auth = (state = INITIAL_STATE, action) => {

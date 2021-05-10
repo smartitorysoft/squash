@@ -40,6 +40,7 @@ const TimeSheet = () => {
 	const deleteRuleList = [];
 
 	const onSubmit = async (values) => {
+		await dispatch(getRules())
 		const createList = values.ruleList.filter((rule) => !rule.id);
 		await dispatch(createRule(createList));
 		await dispatch(deleteRule(deleteRuleList));

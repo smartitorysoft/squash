@@ -2,6 +2,8 @@ import React from 'react';
 
 import pageRedirect from 'lib/pageRedirect';
 import Page from 'views/TimeSheet';
+import { loadLocaleFromCtx } from 'lib/loadLocaleFromCtx';
+
 
 const TimeSheetPage = (props) => <Page {...props} />;
 
@@ -12,7 +14,8 @@ TimeSheetPage.getInitialProps = async (ctx) => {
 		throw error;
 	}
 	return {
-		namespacesRequired: ['error', 'global', 'timesheet'],
+		defaultNamespace: 'timesheet',
+		...(await loadLocaleFromCtx(ctx))
 	};
 };
 
