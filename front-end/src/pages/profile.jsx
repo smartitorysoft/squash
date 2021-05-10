@@ -2,6 +2,7 @@ import React from 'react';
 
 import pageRedirect from 'lib/pageRedirect';
 import Page from 'views/Profile';
+import { loadLocaleFromCtx } from 'lib/loadLocaleFromCtx';
 
 const Profile = (props) => <Page {...props} />;
 
@@ -14,7 +15,8 @@ Profile.getInitialProps = async (ctx) => {
 		throw error;
 	}
 	return {
-		namespacesRequired: ['error', 'global', 'profile'],
+		defaultNamespace: 'profile',
+		...(await loadLocaleFromCtx(ctx)),
 	};
 };
 

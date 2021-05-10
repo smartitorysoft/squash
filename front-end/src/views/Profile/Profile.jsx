@@ -4,8 +4,12 @@ import React, { useState } from 'react';
 import { IconButton, makeStyles, Box } from '@material-ui/core';
 import ProfileModal from 'components/ProfileModal';
 import EditIcon from '@material-ui/icons/Edit';
+import Dashboard from 'components/Layout/Navigation/Dashboard';
+import {useSelector} from 'react-redux'
+
 
 const useStyles = makeStyles((theme) => ({
+	
 	container: {
 		display: 'flex',
 		marginLeft: 200,
@@ -24,23 +28,28 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const Profile = () => {
+const Profile = (props) => {
 	const [open, setOpen] = useState(false);
 
 	const classes = useStyles();
 
+	const user = useSelector((state) => state.me);
+
+	const {defaultNamespace} = props
+		
+
 	return (
-		<>
+		<Dashboard>
 			<Box className={classes.home}>
 				<Box className={classes.header}>
 					<Box className={classes.div}>
-						<p> Vezetéknév Keresztnév</p>
-						<p>Telefonszám</p>
-						<p>Email</p>
+						<p> Név: {user.profile.lastName } {user.profile.firstName}</p>
+						<p>Telefonszám: {user.profile.phone}</p>
+						<p>Email: {user.email}</p>
 					</Box>
 
 					<Box className={classes.div}>
-						<p>Kreditek száma</p>
+						<p>Kreditek száma: {user.credit}</p>
 						<p>Következő foglalás</p>
 						<p>Kártyaszám</p>
 					</Box>
@@ -49,14 +58,14 @@ const Profile = () => {
 						<IconButton onClick={() => setOpen(true)}>
 							<EditIcon />
 						</IconButton>
-						<ProfileModal open={open} onClose={() => setOpen(false)} />
+						<ProfileModal defaultNamespace={defaultNamespace} user={user} open={open} onClose={() => setOpen(false)} />
 					</Box>
 				</Box>
 				<Box className={classes.size}>
 					<ProfileHeader />
 				</Box>
 			</Box>
-		</>
+		</Dashboard>
 	);
 };
 
