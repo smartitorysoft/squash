@@ -84,21 +84,7 @@ const SignUp = (props) => {
 				errorHandling(error);
 			setSubmitting(false);
 			}
-		}
-		// if (formRef && formRef.current.isValid) {
-		// 	dispatch(
-		// 		register({
-		// 			email: formRef.current.values.email,
-		// 			password: formRef.current.values.password,
-		// 			role: 'root',
-		// 			profile: {
-		// 				firstName: formRef.current.values.firstName,
-		// 				lastName: formRef.current.values.lastName,
-		// 				phone: formRef.current.values.phone,
-		// 			},
-		// 		}),
-		// 	);
-		// }
+	}
 
 
 	return (
