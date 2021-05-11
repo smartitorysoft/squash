@@ -5,6 +5,7 @@ import { credit } from './credit/reducer';
 import { user } from './user/reducer';
 import { appointments } from './appointments/reducer';
 import { error } from './error/reducer';
+import { openings } from './openings/reducer';
 
 export default combineReducers({
 	auth,
@@ -13,4 +14,5 @@ export default combineReducers({
 	user,
 	appointments,
 	error,
+	openings,
 });
