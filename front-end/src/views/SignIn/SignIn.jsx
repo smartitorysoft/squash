@@ -88,7 +88,7 @@ const SignIn = (props) => {
 						<Form noValidate>
 							<Card>
 								<CardContent className={classes.cardContent}>
-									<div className={classes.fiels}>
+									<div className={classes.fields}>
 										<TextField
 											fullWidth
 											label={t('username')}
@@ -118,7 +118,7 @@ const SignIn = (props) => {
 										color="primary"
 										disabled={isSubmitting}
 										onClick={() => {
-											router.push('/sign-in');
+											router.push('/sign-up');
 										}}
 									>
 										{t('sign-up')}

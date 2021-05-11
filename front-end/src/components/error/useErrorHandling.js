@@ -29,7 +29,7 @@ const useErrorHandling = () => {
 	};
 
 	const errorHandling = async (input) => {
-		const error = input.response.data.error || input;
+		const error = (input.response && input.response.data.error) || input;
 		switch (error.code) {
 			case '200su01':
 			case '200su11':
