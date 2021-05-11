@@ -1,6 +1,8 @@
 {
-	"username": "E-mail cím",
+	"email": "E-mail cím",
 	"password": "Jelszó",
-	"sign-in": "Belépés",
-	"sign-up": "Regisztráció"
+	"save": "Mentés",
+	"firstName": "Keresztnév",
+	"lastName":"Vezetéknév",
+	"phone":"Telefonszám"
 }
