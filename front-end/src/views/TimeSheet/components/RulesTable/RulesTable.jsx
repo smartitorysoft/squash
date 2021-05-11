@@ -25,7 +25,6 @@ const RulesTable = ({ rules, newRule, saving }) => {
 				order: 4,
 				rule: new Date(),
 			});
-			console.log(newRulesList);
 		}
 	};
 

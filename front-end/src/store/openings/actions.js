@@ -16,7 +16,6 @@ export const getRules = (date) => (dispatch, getState, { jsonApi }) =>
 	jsonApi()
 		.get('openings/rules')
 		.then((res) => {
-			console.log(res);
 			dispatch({
 				type: GET_OPENING_RULES,
 				payload: res.data,
@@ -34,11 +33,10 @@ export const NEW_RULE = 'NEW_RULE';
 export const createRule = (data) => (dispatch, getState, { jsonApi }) =>
 	 jsonApi()
 		.put('openings/rules', { create: data })
-		.then((res) => { console.log('Rules created'); return res; })
+		.then((res) => res) 
 
 export const UPDATE_RULE = 'UPDATE_RULE';
 export const updateRule = (data) => (dispatch, getState, { jsonApi }) => {
-	console.log(data);
 	return jsonApi()
 		.put('openings/rules', { update: data })
 		.then((res) => res);

@@ -18,7 +18,6 @@ import DefaultOpenings from './components/DefaultOpenings/DefaultOpenings';
 import Dashboard from 'components/Layout/Navigation/Dashboard';
 
 const TimeSheet = () => {
-	console.log("Ahol minden pillanat hibátlan");
 	const [newRule, setNewRule] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const [name, setName] = useState('');
@@ -30,14 +29,11 @@ const TimeSheet = () => {
 	const router = useRouter();
 
 	const openings = useSelector((state) => state.openings.openings);
-	const rules = useSelector((state) => state.openings.rules);
-
-	console.log(rules);
+	const rules = useSelector((state) => state.openings.rules)
 
 	const deleteRuleList = [];
 
 	const onSubmit = async (values) => {
-		await dispatch(getRules())
 		const createList = values.ruleList.filter((rule) => !rule.id);
 		await dispatch(createRule(createList));
 		await dispatch(deleteRule(deleteRuleList));
@@ -54,7 +50,6 @@ const TimeSheet = () => {
 				closingHour: rule.closingHour,
 			});
 		});
-		console.log('after', updateRuleList);
 		await dispatch(updateRule(updateRuleList));
 	};
 
@@ -100,7 +95,6 @@ const TimeSheet = () => {
 												<TableBody>
 													{
 														ruleList && ruleList.map((rule, index) =>
-														// console.log(rule);
 														 (
 																<TableRow key={rule.order}>
 																<TableCell>
@@ -173,7 +167,6 @@ const TimeSheet = () => {
 																</TableCell>
 																<TableCell>
 																	<IconButton onClick={() => {
-																	// console.log(rules.length > 0);
 																		push({
 																			name,
 																			openingHour: parseInt(opening),

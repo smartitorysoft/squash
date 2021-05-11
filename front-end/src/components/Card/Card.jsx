@@ -57,8 +57,6 @@ const useStyles = makeStyles(() => ({
 export const Card = ({ date, reservedAppointments, day, hour }) => {
 	const [open, setOpen] = useState(false);
 
-	// console.log("card", reservedAppointments);
-
 	const classes = useStyles();
 
 	const reserved = [];
@@ -72,7 +70,6 @@ export const Card = ({ date, reservedAppointments, day, hour }) => {
 				reserved.push(e.reservation.court);
 			}
 		});
-		// console.log(reserved);
 	}, [reservedAppointments]);
 
 	date.setHours(hour);

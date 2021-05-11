@@ -10,7 +10,7 @@ const INITIAL_STATE = {
 export const openings = (state = INITIAL_STATE, action) => {
 	switch (action.type) {	
 		case HYDRATE:
-			return action.payload.auth;
+			return action.payload.openings;
 		case GET_OPENINGS:
 			return { ...state, openings: action.payload };
 		case GET_OPENING_RULES:
