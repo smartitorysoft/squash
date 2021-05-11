@@ -1,8 +1,10 @@
-export class ValidationErrorDto {
-	property: string;
-	value?: any | undefined;
-	violated: Record<string, string>;
-	children?: ValidationErrorDto[] | undefined;
+import errorCodes from '../error.codes.json';
+
+export class ErrorDto {
+		code: errorCodes['406vd00'].code,
+		description: errorCodes['406vd00'].name,
+		inputs: parseValidationErrors(exception.validationErrors),
+
 
 	constructor(
 		property: string,

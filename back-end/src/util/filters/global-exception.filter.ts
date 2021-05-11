@@ -5,6 +5,7 @@ import {
 	HttpException,
 	HttpStatus,
 } from '@nestjs/common';
+import { parseError } from '../helpers/parse.general';
 
 @Catch(HttpException)
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -21,11 +22,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
 		response.status(status).json({
 			success: false,
-			...GlobalExceptionFilter.parseError(exception, status),
+			...parseError(exception),
 			timestamp: new Date().toISOString(),
 			path: request.url,
 		});
 	}
-
-	private static;
 }
