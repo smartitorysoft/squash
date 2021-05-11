@@ -72,7 +72,7 @@ SmNext.getInitialProps = async (appContext) => {
 
 		if (req) {
 			try {
-				await Promise.all([store.dispatch(getMe(accessToken))]);
+				await Promise.all([store.dispatch(getMe())]);
 			} catch (error) {
 				console.log('atError', error);
 

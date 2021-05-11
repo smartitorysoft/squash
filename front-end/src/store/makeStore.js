@@ -4,8 +4,9 @@ import axios from 'axios';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createWrapper } from 'next-redux-wrapper';
-import reducers from './reducers';
 import cookies from 'next-cookies';
+import { parseCookieObject } from 'lib/utility';
+import reducers from './reducers';
 
 const { BACKEND_API } = getConfig().publicRuntimeConfig;
 const isServer = typeof window === 'undefined';
@@ -21,24 +22,19 @@ const headers = {
 	'Content-Type': 'application/json',
 };
 
-const makeStore = (ctx) => {
+const makeStore = (appContext) => {
 	if (isServer) {
-		// console.log('param',param);
+		const { ctx } = appContext;
 		const jsonApi = () => {
-			const cookieList = cookies(ctx)
-			console.log(cookieList);
 			const instance = axios.create({
 				baseURL: `http://${BACKEND_API.API}/`,
 				headers: {
 					...headers,
 					'X-Api-Key': `${BACKEND_API.KEY}`,
-					'Cookies': cookieList ? `accesToken=${cookieList.accesToken}` : ''
+					Cookie: parseCookieObject(cookies(ctx)),
 				},
 				withCredentials: true,
 			});
-			instance.interceptors.request.use((request)=>{
-				// console.log(request.url,request.headers);
-				return request;})
 			return instance;
 		};
 

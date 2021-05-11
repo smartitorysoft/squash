@@ -65,7 +65,7 @@ const navigationConfig = ({ t }) => {
 			icon: MonetizationOnIcon,
 		},
 		{
-			title: t('components.nav-bar.timesheet'),
+			title: t('nav-bar.timesheet'),
 			href: '/timesheet',
 			icon: AccessTimeIcon,
 		},
