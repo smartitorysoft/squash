@@ -15,6 +15,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { useRouter } from 'next/router';
 import DefaultOpenings from './components/DefaultOpenings/DefaultOpenings';
+import Dashboard from 'components/Layout/Navigation/Dashboard';
 
 const TimeSheet = () => {
 	console.log("Ahol minden pillanat hibátlan");
@@ -27,11 +28,6 @@ const TimeSheet = () => {
 
 	const dispatch = useDispatch();
 	const router = useRouter();
-
-	useEffect(() => {
-		dispatch(getOpenings(moment(new Date()).format('YYYY-MM-DD')));
-		dispatch(getRules());
-	}, []);
 
 	const openings = useSelector((state) => state.openings.openings);
 	const rules = useSelector((state) => state.openings.rules);
@@ -63,6 +59,7 @@ const TimeSheet = () => {
 	};
 
 	return (
+		<Dashboard>
 		<Box>
 			<DefaultOpenings openingsList={openings} />
 			<Formik
@@ -232,6 +229,7 @@ const TimeSheet = () => {
 			</Formik>
 			
 		</Box>
+		</Dashboard>
 	);
 };
 

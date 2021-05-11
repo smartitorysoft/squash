@@ -15,6 +15,7 @@ import TextInput from 'components/TextInput';
 import Row from 'components/Row/Row';
 
 import { getUsers } from 'store/user/actions';
+import Dashboard from 'components/Layout/Navigation/Dashboard';
 
 const useStyles = makeStyles(() => ({
 	table: {
@@ -37,6 +38,7 @@ const Credit = () => {
 	const users = useSelector((state) => state.user.users);
 
 	return (
+		<Dashboard>
 		<Box>
 			<TextInput
 				label="Keresés"
@@ -61,6 +63,7 @@ const Credit = () => {
 				</Table>
 			</TableContainer>
 		</Box>
+		</Dashboard>
 	);
 };
 
