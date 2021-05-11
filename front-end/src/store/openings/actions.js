@@ -11,16 +11,18 @@ export const getOpenings = (date) => (dispatch, getState, { jsonApi }) => {
 };
 
 export const GET_OPENING_RULES = 'GET_OPENING_RULES';
-export const getRules = (date) => (dispatch, getState, { jsonApi }) => 
+export const getRules = (date) => (dispatch, getState, { jsonApi }) => {
+	console.log("Élnék az álomvilágban");
 	jsonApi()
 		.get('openings/rules')
 		.then((res) => {
+			console.log(res);
 			dispatch({
 				type: GET_OPENING_RULES,
 				payload: res.data,
 			});
-		})
-
+		});
+	}
 
 export const DELETE_RULE = 'DELETE_RULE';
 export const deleteRule = (data) => (dispatch, getState, { jsonApi }) => jsonApi()

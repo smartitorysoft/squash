@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 import DefaultOpenings from './components/DefaultOpenings/DefaultOpenings';
 
 const TimeSheet = () => {
+	console.log("Ahol minden pillanat hibátlan");
 	const [newRule, setNewRule] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const [name, setName] = useState('');
@@ -35,7 +36,7 @@ const TimeSheet = () => {
 	const openings = useSelector((state) => state.openings.openings);
 	const rules = useSelector((state) => state.openings.rules);
 
-	// console.log(rules);
+	console.log(rules);
 
 	const deleteRuleList = [];
 
@@ -68,7 +69,7 @@ const TimeSheet = () => {
 				enableReinitialize
 				onSubmit={onSubmit}
 				initialValues={{
-					ruleList: [...rules],
+					ruleList: rules ? [...rules] : [],
 				}}
 			>
 				{(formikProps) => {
