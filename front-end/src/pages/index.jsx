@@ -7,8 +7,6 @@ import { loadLocaleFromCtx } from 'lib/loadLocaleFromCtx';
 const Index = (props) => <Page {...props} />;
 
 Index.getInitialProps = async (ctx) => {
-	// ide fog kelleni a try-catch
-	// eslint-disable-next-line no-useless-catch
 	try {
 		await pageRedirect({ auth: false, url: '/dashboard' }, ctx);
 	} catch (error) {

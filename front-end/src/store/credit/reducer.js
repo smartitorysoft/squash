@@ -8,7 +8,7 @@ const INITIAL_STATE = {
 export const credit = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case HYDRATE:
-			return { ...state, ...action.payload.credit };
+			return action.payload.credit
 		case GIVE_CREDIT:
 			return action.payload;
 		default:

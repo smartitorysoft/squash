@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import TextInput from 'components/TextInput';
 import Row from 'components/Row/Row';
 
-import { getUsers } from 'store/user/actions';
 import Dashboard from 'components/Layout/Navigation/Dashboard';
 
 const useStyles = makeStyles(() => ({
@@ -25,15 +24,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Credit = () => {
-	const [, setValue] = useState('');
+	const [value, setValue] = useState('');
 
 	const classes = useStyles();
 
 	const dispatch = useDispatch();
-
-	useEffect(() => {
-		dispatch(getUsers());
-	}, []);
 
 	const users = useSelector((state) => state.user.users);
 
