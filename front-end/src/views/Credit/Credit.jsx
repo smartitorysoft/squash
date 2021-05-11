@@ -16,7 +16,7 @@ import Row from 'components/Row/Row';
 
 import Dashboard from 'components/Layout/Navigation/Dashboard';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
 	table: {
 		width: '80%',
 		backgroundColor: 'grey',

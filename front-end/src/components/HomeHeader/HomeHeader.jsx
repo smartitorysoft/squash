@@ -39,6 +39,9 @@ export const HomeHeader = () => {
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
+	const router = useRouter();
+
+	// dispatch(getUserAppointments());
 
 	const classes = useStyles();
 

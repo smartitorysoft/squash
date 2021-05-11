@@ -1,3 +1,5 @@
+import { ContactSupportOutlined } from '@material-ui/icons';
+
 export const GET_APPOINTMENTS = 'GET_APPOINTMENTS';
 export const getAppointments = (date) => (dispatch, getState, { jsonApi }) =>
 	jsonApi()
@@ -22,3 +24,10 @@ export const makeAppointment = (data) => (dispatch, getState, { jsonApi }) =>
 			].join('-');
 			dispatch(getAppointments(formattedDate));
 		});
+
+export const deleteAppointment = (data) => (dispatch, getState, { jsonApi }) => {
+	jsonApi()
+		.delete(`appointments/${data}`)
+		.then((res) => console.log('Appointment deleted'))
+		.catch((e) => console.log('Error appointment delete'));
+};
