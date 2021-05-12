@@ -12,6 +12,7 @@ const navigationConfig = ({ t }) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const role = useSelector((state) => state.me.role);
 
+	// FIXME: nem jellennek meg az admin fülek
 	const adminNavigation = [
 		{
 			title: t('nav-bar.dashboard'),
@@ -35,10 +36,12 @@ const navigationConfig = ({ t }) => {
 				{
 					title: t('nav-bar.court-types'),
 					href: '/items',
+					icon: null,
 				},
 				{
 					title: t('nav-bar.edit-courts'),
 					href: '/products',
+					icon: null,
 				},
 			],
 		},
@@ -48,7 +51,7 @@ const navigationConfig = ({ t }) => {
 			icon: AccessTimeIcon,
 		},
 		{
-			title: 'components.nav-bar.appointments',
+			title: t('nav-bar.appointments'),
 			href: '/user-appointments',
 			icon: AssignmentIcon,
 		},
@@ -74,6 +77,11 @@ const navigationConfig = ({ t }) => {
 			title: t('nav-bar.timesheet'),
 			href: '/timesheet',
 			icon: AccessTimeIcon,
+		},
+		{
+			title: t('nav-bar.appointments'),
+			href: '/user-appointments',
+			icon: AssignmentIcon,
 		},
 	];
 

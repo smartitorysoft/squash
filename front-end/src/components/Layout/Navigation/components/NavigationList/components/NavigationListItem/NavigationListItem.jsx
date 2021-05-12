@@ -186,7 +186,7 @@ NavigationListItem.propTypes = {
 	className: PropTypes.string,
 	depth: PropTypes.number,
 	href: PropTypes.string,
-	icon: PropTypes.node,
+	icon: PropTypes.oneOfType([PropTypes.node, PropTypes.any]),
 	label: PropTypes.string,
 	open: PropTypes.bool,
 	title: PropTypes.string.isRequired,

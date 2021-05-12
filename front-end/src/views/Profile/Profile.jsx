@@ -5,11 +5,9 @@ import { IconButton, makeStyles, Box } from '@material-ui/core';
 import ProfileModal from 'components/ProfileModal';
 import EditIcon from '@material-ui/icons/Edit';
 import Dashboard from 'components/Layout/Navigation/Dashboard';
-import {useSelector} from 'react-redux'
-
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
-	
 	container: {
 		display: 'flex',
 		marginLeft: 200,
@@ -35,15 +33,17 @@ const Profile = (props) => {
 
 	const user = useSelector((state) => state.me);
 
-	const {defaultNamespace} = props
-		
+	const { defaultNamespace } = props;
 
 	return (
 		<Dashboard>
 			<Box className={classes.home}>
 				<Box className={classes.header}>
 					<Box className={classes.div}>
-						<p> Név: {user.profile.lastName } {user.profile.firstName}</p>
+						<p>
+							{' '}
+							Név: {user.profile.lastName} {user.profile.firstName}
+						</p>
 						<p>Telefonszám: {user.profile.phone}</p>
 						<p>Email: {user.email}</p>
 					</Box>
@@ -58,7 +58,12 @@ const Profile = (props) => {
 						<IconButton onClick={() => setOpen(true)}>
 							<EditIcon />
 						</IconButton>
-						<ProfileModal defaultNamespace={defaultNamespace} user={user} open={open} onClose={() => setOpen(false)} />
+						<ProfileModal
+							defaultNamespace={defaultNamespace}
+							user={user}
+							open={open}
+							onClose={() => setOpen(false)}
+						/>
 					</Box>
 				</Box>
 				<Box className={classes.size}>

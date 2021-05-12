@@ -10,54 +10,53 @@ import {
 	makeStyles,
 	Box,
 } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import TextInput from 'components/TextInput';
 import Row from 'components/Row/Row';
 
 import Dashboard from 'components/Layout/Navigation/Dashboard';
 
+import useTranslation from 'next-translate/useTranslation';
+import { useErrorHandling } from 'components/error';
+
 const useStyles = makeStyles((theme) => ({
 	table: {
-		width: '80%',
-		backgroundColor: 'grey',
+		width: '100%',
 	},
 }));
 
-const Credit = () => {
-	const [value, setValue] = useState('');
+const Credit = (props) => {
+	const { defaultNamespace } = props;
+
+	// TODO: user keresése
 
 	const classes = useStyles();
 
-	const dispatch = useDispatch();
+	const { errorHandling, errorChecker } = useErrorHandling();
+	const { t } = useTranslation(defaultNamespace);
 
 	const users = useSelector((state) => state.user.users);
 
 	return (
 		<Dashboard>
-		<Box>
-			<TextInput
-				label="Keresés"
-				onChange={(text) => {
-					setValue(text.target.value);
-				}}
-			/>
-			<TableContainer classes={classes.table} component={Paper}>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell />
-							<TableCell align="left">Név</TableCell>
-							<TableCell align="left">Email</TableCell>
-							<TableCell align="right">Kredit</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{users.items &&
-							users.items.map((user) => <Row key={user.id} row={user} />)}
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</Box>
+			<Box>
+				<TableContainer className={classes.table} component={Paper}>
+					<Table>
+						<TableHead>
+							<TableRow>
+								<TableCell />
+								<TableCell align="left">{t('name')}</TableCell>
+								<TableCell align="left">{t('email')}</TableCell>
+								<TableCell align="right">{t('credit')}</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{users.items &&
+								users.items.map((user) => <Row key={user.id} row={user} />)}
+						</TableBody>
+					</Table>
+				</TableContainer>
+			</Box>
 		</Dashboard>
 	);
 };

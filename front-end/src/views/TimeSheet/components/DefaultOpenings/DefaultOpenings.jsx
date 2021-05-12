@@ -1,49 +1,40 @@
+import React from 'react';
+
 const {
-	Table, TableContainer, TableCell, TableBody, TableHead,
+	Table,
+	TableContainer,
+	TableCell,
+	TableBody,
+	TableHead,
+	TableRow,
 } = require('@material-ui/core');
 
 const DefaultOpenings = ({ openingsList }) => (
 	<TableContainer>
 		<Table>
 			<TableHead>
-				<TableCell>
-					Hétfő
-				</TableCell>
-				<TableCell>
-					Kedd
-				</TableCell>
-				<TableCell>
-					Szerda
-				</TableCell>
-				<TableCell>
-					Csütörtök
-				</TableCell>
-				<TableCell>
-					Péntek
-				</TableCell>
-				<TableCell>
-					Szombat
-				</TableCell>
-				<TableCell>
-					Vasárnap
-				</TableCell>
+				<TableRow>
+					<TableCell component="th">Hétfő</TableCell>
+					<TableCell component="th">Kedd</TableCell>
+					<TableCell component="th">Szerda</TableCell>
+					<TableCell component="th">Csütörtök</TableCell>
+					<TableCell component="th">Péntek</TableCell>
+					<TableCell component="th">Szombat</TableCell>
+					<TableCell component="th">Vasárnap</TableCell>
+				</TableRow>
 			</TableHead>
 			<TableBody>
-
-				{openingsList && openingsList.map((opening) => (
-					<TableCell>
-						{opening.openingHour}
-						{' '}
-						-
-						{' '}
-						{opening.closingHour}
-					</TableCell>
-				))}
-
+				<TableRow>
+					{openingsList &&
+						openingsList.map((opening, index) => (
+							<TableCell key={index}>
+								{opening.openingHour} - {opening.closingHour}
+							</TableCell>
+						))}
+				</TableRow>
 			</TableBody>
 		</Table>
 	</TableContainer>
-
 );
 
 export default DefaultOpenings;

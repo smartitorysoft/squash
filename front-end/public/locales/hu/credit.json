@@ -1,6 +1,5 @@
 {
-	"username": "E-mail cím",
-	"password": "Jelszó",
-	"sign-in": "Belépés",
-	"sign-up": "Regisztráció"
+	"email": "E-mail cím",
+	"name": "Név",
+	"credit":"Kredit"
 }
