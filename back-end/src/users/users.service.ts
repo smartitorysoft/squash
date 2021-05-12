@@ -145,7 +145,7 @@ export class UsersService {
 
 		const hashedPassword = await bcrypt.hash(registrationData.password, 10);
 
-		const role = await this.rolesService.getRole(registrationData.role);
+		const role = await this.rolesService.getRole('user');
 
 		const newProfile = await this.profileService.create(
 			registrationData.profile,
