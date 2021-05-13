@@ -22,3 +22,29 @@ export const makeAppointment = (data) => (dispatch, getState, { jsonApi }) =>
 			].join('-');
 			dispatch(getAppointments(formattedDate));
 		});
+
+export const GET_ALL_APPOINTMENTS = 'GET_ALL_APPOINTMENTS';
+export const getAllAppointments = () => (dispatch, getState, { jsonApi }) => {
+	console.log('All Appointments');
+	jsonApi()
+		.get('appointments/admin')
+		.then((res) => {
+			console.log('res', res.data);
+			dispatch({
+				type: GET_ALL_APPOINTMENTS,
+				payload: res.data,
+			});
+			return Promise.resolve();
+		});
+};
+export const createAppointmentToUser = (data) => (
+	dispatch,
+	getState,
+	{ jsonApi },
+) =>
+	jsonApi()
+		.post(`appointmenst/${data.id}`, data.appointment)
+		.then(() => {
+			console.log('Appointment created to ', data.id);
+			Promise.resolve();
+		});
