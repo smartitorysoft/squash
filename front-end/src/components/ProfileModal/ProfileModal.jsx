@@ -14,11 +14,8 @@ import * as Yup from 'yup';
 import { setProfile } from 'store/user/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useErrorHandling } from 'components/error';
-<<<<<<< HEAD
 import { useRouter } from 'next/router';
-=======
 import useTranslation from 'next-translate/useTranslation';
->>>>>>> develop
 import { validation } from './validation';
 
 const useStyles = makeStyles((theme) => ({
@@ -73,7 +70,8 @@ export const ProfileModal = (props) => {
 					},
 				}),
 			)
-				.then(() => router.push('/profile'))
+				.then(onClose)
+				.then(() => router.reload())
 				.then(() => window.scrollTo(0, 0));
 		} catch (error) {
 			errorHandling(error);
@@ -152,6 +150,14 @@ export const ProfileModal = (props) => {
 												/>
 											</CardContent>
 											<CardActions className={classes.button}>
+												<Button
+													type="button"
+													color="secondary"
+													variant="contained"
+													onClick={onClose}
+												>
+													{t('cancel')}
+												</Button>
 												<Button
 													color="primary"
 													disabled={isSubmitting}
