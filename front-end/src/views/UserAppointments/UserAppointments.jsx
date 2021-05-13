@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UserAppointments = (props) => {
-	const appointments = useSelector((state) => state.appointments.appointments);
+	const appointments = useSelector((state) => state.appointments.list);
 
 	const { defaultNamespace } = props;
 
@@ -45,17 +45,18 @@ const UserAppointments = (props) => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{appointments.list.map((listItem) =>
-								listItem.reserved.map((reservation) => {
+							{appointments.map((listItem) =>
+								listItem.reserved.map((reservation) => (
 									// console.log('res', reservation);
-									const row = {
-										date: listItem.date,
-										begin: reservation.begins,
-										court: reservation.court,
-										id: reservation.id,
-									};
-									return <Row row={row} />;
-								}),
+									<Row
+										row={{
+											date: listItem.date,
+											begin: reservation.begins,
+											court: reservation.court,
+											id: reservation.id,
+										}}
+									/>
+								)),
 							)}
 						</TableBody>
 					</Table>

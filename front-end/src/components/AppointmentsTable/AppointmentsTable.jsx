@@ -10,28 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { useSelector } from 'react-redux';
-
-function TablePaginationActions(props) {
-	const classes = useStyles1();
-	const theme = useTheme();
-	const { count, page, rowsPerPage, onChangePage } = props;
-
-	const handleFirstPageButtonClick = (event) => {
-		onChangePage(event, 0);
-	};
-
-	const handleBackButtonClick = (event) => {
-		onChangePage(event, page - 1);
-	};
-
-	const handleNextButtonClick = (event) => {
-		onChangePage(event, page + 1);
-	};
-
-	const handleLastPageButtonClick = (event) => {
-		onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-	};
-}
+import { AppointmentsTablePaginationActions } from './AppointmentsTablePaginationActions/AppointmentsTablePaginationActions';
 
 const useStyles2 = makeStyles({
 	table: {
@@ -52,7 +31,6 @@ export const AppointmentsTable = () => {
 				reserved: 'reserved',
 			}),
 		);
-		console.log(rows);
 	}, [userAppointments]);
 
 	const emptyRows =
@@ -113,7 +91,7 @@ export const AppointmentsTable = () => {
 								}}
 								onChangePage={handleChangePage}
 								onChangeRowsPerPage={handleChangeRowsPerPage}
-								ActionsComponent={TablePaginationActions}
+								ActionsComponent={AppointmentsTablePaginationActions}
 							/>
 						</TableRow>
 					</TableFooter>

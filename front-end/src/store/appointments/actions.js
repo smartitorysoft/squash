@@ -26,16 +26,11 @@ export const makeAppointment = (data) => (dispatch, getState, { jsonApi }) =>
 			dispatch(getAppointments(formattedDate));
 		});
 
-export const deleteAppointment = (data) => (
-	dispatch,
-	getState,
-	{ jsonApi },
-) => {
+export const deleteAppointment = (data) => (dispatch, getState, { jsonApi }) =>
 	jsonApi()
 		.delete(`appointments/${data}`)
 		.then((res) => console.log('Appointment deleted'))
 		.catch((e) => console.log('Error appointment delete'));
-};
 
 export const GET_USER_APPPOINTMENTS = 'GET_USER_APPOINTMENTS';
 export const getUserAppointments = () => (dispatch, getState, { jsonApi }) =>

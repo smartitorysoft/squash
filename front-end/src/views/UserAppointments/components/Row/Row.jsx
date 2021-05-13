@@ -16,7 +16,7 @@ const Row = ({ row }) => {
 	const hour = moment(new Date(row.begin)).add(-3, 'hours').format('HH:mm');
 	const dispatch = useDispatch();
 
-	const deleteAppoin = async (id) => {
+	const _deleteAppointment = async (id) => {
 		await dispatch(deleteAppointment(id));
 		await dispatch(getUserAppointments());
 	};
@@ -29,7 +29,7 @@ const Row = ({ row }) => {
 				<TableCell align="right">{row.court === 'ONE' ? '1' : '2'}</TableCell>
 				{today < date && (
 					<TableCell align="right">
-						<IconButton size="small" onClick={() => deleteAppoin(row.id)}>
+						<IconButton size="small" onClick={() => _deleteAppointment(row.id)}>
 							<DeleteIcon />
 						</IconButton>
 					</TableCell>
