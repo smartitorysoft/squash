@@ -4,5 +4,6 @@
 	"save": "Mentés",
 	"firstName": "Keresztnév",
 	"lastName":"Vezetéknév",
-	"phone":"Telefonszám"
+	"phone":"Telefonszám",
+	"cancel":"Mégse"
 }

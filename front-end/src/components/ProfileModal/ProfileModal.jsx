@@ -13,10 +13,12 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { setProfile } from 'store/user/actions';
 import { useDispatch, useSelector } from 'react-redux';
-
-import useTranslation from 'next-translate/useTranslation';
 import { useErrorHandling } from 'components/error';
+<<<<<<< HEAD
 import { useRouter } from 'next/router';
+=======
+import useTranslation from 'next-translate/useTranslation';
+>>>>>>> develop
 import { validation } from './validation';
 
 const useStyles = makeStyles((theme) => ({
