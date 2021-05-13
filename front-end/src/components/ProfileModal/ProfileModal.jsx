@@ -71,7 +71,7 @@ export const ProfileModal = (props) => {
 					},
 				}),
 			)
-				.then(() => router.push('/dashboard'))
+				.then(() => router.push('/profile'))
 				.then(() => window.scrollTo(0, 0));
 		} catch (error) {
 			errorHandling(error);
