@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import useTranslation from 'next-translate/useTranslation';
 import { useErrorHandling } from 'components/error';
+import { useRouter } from 'next/router';
 import { validation } from './validation';
 
 const useStyles = makeStyles((theme) => ({
@@ -54,8 +55,9 @@ export const ProfileModal = (props) => {
 
 	const dispatch = useDispatch();
 
+	const router = useRouter();
+
 	const onSubmit = async (values, { setSubmitting }) => {
-		console.log(values);
 		try {
 			await dispatch(
 				setProfile({

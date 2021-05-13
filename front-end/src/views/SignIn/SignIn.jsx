@@ -58,7 +58,6 @@ const SignIn = (props) => {
 	const onSubmit = async (values, { setSubmitting }) => {
 		try {
 			await dispatch(signIn(values))
-				// .then(() => dispatch(getMe()))
 				.then(() => router.push('/dashboard'))
 				.then(() => window.scrollTo(0, 0));
 		} catch (error) {
