@@ -11,8 +11,8 @@ const GridComponent = () => {
 
 	const reservedAppointments = [];
 	useEffect(() => {
-		appointments.list &&
-			appointments.list.map((appointment) => {
+		appointments &&
+			appointments.map((appointment) => {
 				appointment.reserved.map((app) => {
 					const rd = new Date(app.begins);
 					reservedAppointments.push({
