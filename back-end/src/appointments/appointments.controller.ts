@@ -50,12 +50,10 @@ export class AppointmentsController {
 		@Query('days') days = 1,
 		@Query('status') filters: string = null,
 	): Promise<AppointmentTableDataResponseDto> {
-		days = Math.max(days, 1);
-		from = new Date(from);
 		return new AppointmentTableDataResponseDto(
 			await this.appointmentsService.findAll(
-				from,
-				days,
+				new Date(from),
+				Math.max(Number(days), 1),
 				false,
 				AppointmentsController.validateFilters(filters),
 			),

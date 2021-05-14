@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Court } from '../enum/court.enum';
+import CourtDto from 'src/courts/dto/court.dto';
 import { Appointment } from '../../entities';
 
 export class AppointmentDataDto {
@@ -10,13 +10,13 @@ export class AppointmentDataDto {
 	begins: Date;
 
 	@ApiProperty({ required: true })
-	court: Court;
+	court: CourtDto;
 
 	constructor(data: Appointment) {
 		if (data) {
 			this.id = data.id;
 			this.begins = data.begins;
-			this.court = data.court;
+			this.court = new CourtDto(data.court);
 		}
 	}
 }
