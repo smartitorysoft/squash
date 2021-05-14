@@ -9,6 +9,21 @@ export const getAppointments = (date) => (dispatch, getState, { jsonApi }) =>
 			});
 		});
 
+export const GET_USER_APPOINTMENTS = 'GET_USER_APPOINTMENTS';
+export const getUserAppointments = (date) => (
+	dispatch,
+	getState,
+	{ jsonApi },
+) =>
+	jsonApi()
+		.get('appointments/mine')
+		.then((res) => {
+			dispatch({
+				type: GET_USER_APPOINTMENTS,
+				payload: res.data,
+			});
+		});
+
 export const MAKE_APPOINTMENT = 'MAKE_APPOINTMENT';
 export const makeAppointment = (data) => (dispatch, getState, { jsonApi }) =>
 	jsonApi()
@@ -24,8 +39,7 @@ export const makeAppointment = (data) => (dispatch, getState, { jsonApi }) =>
 		});
 
 export const GET_ALL_APPOINTMENTS = 'GET_ALL_APPOINTMENTS';
-export const getAllAppointments = () => (dispatch, getState, { jsonApi }) => {
-	console.log('All Appointments');
+export const getAllAppointments = () => (dispatch, getState, { jsonApi }) =>
 	jsonApi()
 		.get('appointments/admin')
 		.then((res) => {
@@ -36,7 +50,6 @@ export const getAllAppointments = () => (dispatch, getState, { jsonApi }) => {
 			});
 			return Promise.resolve();
 		});
-};
 
 export const createAppointmentAdmin = (data) => (
 	dispatch,

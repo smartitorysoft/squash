@@ -1,5 +1,5 @@
 import { HYDRATE } from 'next-redux-wrapper';
-import { GET_APPOINTMENTS, GET_USER_APPPOINTMENTS } from './actions';
+import { GET_APPOINTMENTS, GET_USER_APPOINTMENTS } from './actions';
 
 const INITIAL_STATE = {
 	list: [
@@ -48,7 +48,7 @@ export const appointments = (state = INITIAL_STATE, action) => {
 			return { ...state, ...action.payload.appointments };
 		case GET_APPOINTMENTS:
 			return { ...state, list: action.payload.list };
-		case GET_USER_APPPOINTMENTS:
+		case GET_USER_APPOINTMENTS:
 			return { ...state, user: action.payload };
 		default:
 			return state;
