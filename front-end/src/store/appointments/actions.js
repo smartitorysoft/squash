@@ -1,5 +1,3 @@
-import { ContactSupportOutlined } from '@material-ui/icons';
-
 export const GET_APPOINTMENTS = 'GET_APPOINTMENTS';
 export const getAppointments = (date) => (dispatch, getState, { jsonApi }) =>
 	jsonApi()
@@ -9,7 +7,6 @@ export const getAppointments = (date) => (dispatch, getState, { jsonApi }) =>
 				type: GET_APPOINTMENTS,
 				payload: res.data,
 			});
-			return Promise.resolve();
 		});
 
 export const MAKE_APPOINTMENT = 'MAKE_APPOINTMENT';
@@ -26,22 +23,43 @@ export const makeAppointment = (data) => (dispatch, getState, { jsonApi }) =>
 			dispatch(getAppointments(formattedDate));
 		});
 
-export const deleteAppointment = (data) => (dispatch, getState, { jsonApi }) =>
+export const GET_ALL_APPOINTMENTS = 'GET_ALL_APPOINTMENTS';
+export const getAllAppointments = () => (dispatch, getState, { jsonApi }) => {
+	console.log('All Appointments');
 	jsonApi()
-		.delete(`appointments/${data}`)
-		.then((res) => console.log('Appointment deleted'))
-		.catch((e) => console.log('Error appointment delete'));
-
-export const GET_USER_APPPOINTMENTS = 'GET_USER_APPOINTMENTS';
-export const getUserAppointments = () => (dispatch, getState, { jsonApi }) =>
-	jsonApi()
-		.get('appointments/mine')
+		.get('appointments/admin')
 		.then((res) => {
-			console.log('user appointments', res);
+			console.log('res', res.data);
 			dispatch({
-				type: GET_USER_APPPOINTMENTS,
+				type: GET_ALL_APPOINTMENTS,
 				payload: res.data,
 			});
 			return Promise.resolve();
-		})
-		.catch((e) => console.log('user appointments error', e));
+		});
+};
+
+export const createAppointmentAdmin = (data) => (
+	dispatch,
+	getState,
+	{ jsonApi },
+) =>
+	jsonApi()
+		.post(`appointmenst/${data.id}`, data.appointment)
+		.then(() => {
+			console.log('Appointment created to ', data.id);
+			Promise.resolve();
+		});
+
+export const deleteAppointment = (data) => (dispatch, getState, { jsonApi }) =>
+	jsonApi()
+		.delete(`appointments/${data}`)
+		.then((res) => console.log('Appointment deleted', res));
+
+export const deleteAppointmentAdmin = (data) => (
+	dispatch,
+	getState,
+	{ jsonApi },
+) =>
+	jsonApi()
+		.delete(`appointments/${data}/admin`)
+		.then((res) => console.log('Appointment deleted', res));
