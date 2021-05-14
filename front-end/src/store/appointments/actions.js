@@ -37,7 +37,8 @@ export const getAllAppointments = () => (dispatch, getState, { jsonApi }) => {
 			return Promise.resolve();
 		});
 };
-export const createAppointmentToUser = (data) => (
+
+export const createAppointmentAdmin = (data) => (
 	dispatch,
 	getState,
 	{ jsonApi },
@@ -48,3 +49,17 @@ export const createAppointmentToUser = (data) => (
 			console.log('Appointment created to ', data.id);
 			Promise.resolve();
 		});
+
+export const deleteAppointment = (data) => (dispatch, getState, { jsonApi }) =>
+	jsonApi()
+		.delete(`appointments/${data}`)
+		.then((res) => console.log('Appointment deleted', res));
+
+export const deleteAppointmentAdmin = (data) => (
+	dispatch,
+	getState,
+	{ jsonApi },
+) =>
+	jsonApi()
+		.delete(`appointments/${data}/admin`)
+		.then((res) => console.log('Appointment deleted', res));
