@@ -1,5 +1,12 @@
 import {
-	TableContainer, Table, TableHead, TableCell, TableRow, TableBody, TextField, IconButton,
+	TableContainer,
+	Table,
+	TableHead,
+	TableCell,
+	TableRow,
+	TableBody,
+	TextField,
+	IconButton,
 } from '@material-ui/core';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -17,7 +24,13 @@ const RulesTable = ({ rules, newRule, saving }) => {
 	const newRulesList = [];
 
 	const createRule = () => {
-		if (opening > -1 && opening < 25 && closing > -1 && closing < 25 && opening < closing) {
+		if (
+			opening > -1 &&
+			opening < 25 &&
+			closing > -1 &&
+			closing < 25 &&
+			opening < closing
+		) {
 			newRulesList.push({
 				name,
 				openingHour: opening,
@@ -41,53 +54,50 @@ const RulesTable = ({ rules, newRule, saving }) => {
 					<TableCell />
 				</TableHead>
 				<TableBody>
-					{
-						rules && rules.map((rule) => (
+					{rules &&
+						rules.map((rule) => (
 							<TableRow key={rule.isDefault}>
+								<TableCell>{rule.name}</TableCell>
+								<TableCell>{rule.isDefault ? 'Igen' : 'Nem'}</TableCell>
+								<TableCell>{rule.openingHour}</TableCell>
+								<TableCell>{rule.closingHour}</TableCell>
 								<TableCell>
-									{rule.name}
-								</TableCell>
-								<TableCell>
-									{rule.isDefault ? 'Igen' : 'Nem'}
-								</TableCell>
-								<TableCell>
-									{rule.openingHour}
-								</TableCell>
-								<TableCell>
-									{rule.closingHour}
-								</TableCell>
-								<TableCell>
-									{rule.isDefault
-									&& (
+									{rule.isDefault && (
 										<IconButton onClick={() => deleteRule()}>
 											<DeleteIcon />
 										</IconButton>
 									)}
 								</TableCell>
 							</TableRow>
-						))
-					}
-					{
-						newRule && (
-							<TableRow>
-								<TableCell>
-									<TextField label='Szabály' onChange={(text) => setName(text.target.value)} />
-								</TableCell>
-								<TableCell />
-								<TableCell>
-									<TextField label='Nyitás' onChange={(text) => setOpening(text.target.value)} />
-								</TableCell>
-								<TableCell>
-									<TextField label='Zárás' onChange={(text) => setClosing(text.target.value)} />
-								</TableCell>
-								<TableCell>
-									<IconButton onClick={createRule}>
-										<CheckIcon />
-									</IconButton>
-								</TableCell>
-							</TableRow>
-						)
-					}
+						))}
+					{newRule && (
+						<TableRow>
+							<TableCell>
+								<TextField
+									label="Szabály"
+									onChange={(text) => setName(text.target.value)}
+								/>
+							</TableCell>
+							<TableCell />
+							<TableCell>
+								<TextField
+									label="Nyitás"
+									onChange={(text) => setOpening(text.target.value)}
+								/>
+							</TableCell>
+							<TableCell>
+								<TextField
+									label="Zárás"
+									onChange={(text) => setClosing(text.target.value)}
+								/>
+							</TableCell>
+							<TableCell>
+								<IconButton onClick={createRule}>
+									<CheckIcon />
+								</IconButton>
+							</TableCell>
+						</TableRow>
+					)}
 				</TableBody>
 			</Table>
 		</TableContainer>
