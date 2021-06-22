@@ -24,19 +24,16 @@ export const makeAppointment = (data) => (dispatch, getState, { jsonApi }) =>
 		});
 
 export const GET_ALL_APPOINTMENTS = 'GET_ALL_APPOINTMENTS';
-export const getAllAppointments = () => (dispatch, getState, { jsonApi }) => {
-	console.log('All Appointments');
+export const getAllAppointments = (date) => (dispatch, getState, { jsonApi }) =>
 	jsonApi()
-		.get('appointments/admin')
+		.get(`appointments/admin?from=${date}&days=60`)
 		.then((res) => {
-			console.log('res', res.data);
 			dispatch({
 				type: GET_ALL_APPOINTMENTS,
 				payload: res.data,
 			});
 			return Promise.resolve();
 		});
-};
 
 export const createAppointmentAdmin = (data) => (
 	dispatch,
@@ -44,7 +41,7 @@ export const createAppointmentAdmin = (data) => (
 	{ jsonApi },
 ) =>
 	jsonApi()
-		.post(`appointmenst/${data.id}`, data.appointment)
+		.post(`appointments/${data.id}`, data.appointment)
 		.then(() => {
 			console.log('Appointment created to ', data.id);
 			Promise.resolve();
@@ -63,3 +60,18 @@ export const deleteAppointmentAdmin = (data) => (
 	jsonApi()
 		.delete(`appointments/${data}/admin`)
 		.then((res) => console.log('Appointment deleted', res));
+
+export const MAKE_ADMIN_APPOINTMENT = 'MAKE_ADMIN_APPOINTMENT';
+export const makeAdminAppointment = (data) => (
+	dispatch,
+	getState,
+	{ jsonApi },
+) => {
+	console.log(data);
+	return jsonApi()
+		.post(`appointments/${data.userId}`, data.payload)
+		.then(() => {
+			console.log('Admin appointment created to:', data);
+			Promise.resolve();
+		});
+};

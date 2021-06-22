@@ -21,7 +21,6 @@ SignIn.getInitialProps = async (ctx) => {
 				getAllAppointments(moment(new Date()).format('YYYY-MM-DD')),
 			),
 			store.dispatch(getUsers()),
-			store.dispatch(getAppointments(moment(new Date()).format('YYYY-MM-DD'))),
 		]);
 	} catch (error) {
 		throw error;
