@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Credit = () => {
-	const [, setValue] = useState('');
+	const [value, setValue] = useState('');
 
 	const classes = useStyles();
 
