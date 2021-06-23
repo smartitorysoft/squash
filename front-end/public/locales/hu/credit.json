@@ -1,6 +1,8 @@
 {
-	"username": "E-mail cím",
-	"password": "Jelszó",
-	"sign-in": "Belépés",
-	"sign-up": "Regisztráció"
+	"name":"Név",
+	"email":"Email cím",
+	"credit":"Kreditek",
+	"search":"Keresés",
+	"creditNumber":"Kreditek száma",
+	"approve":"Jóváhagy"
 }

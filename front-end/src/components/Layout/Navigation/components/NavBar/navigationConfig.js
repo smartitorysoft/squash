@@ -7,7 +7,6 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import PersonIcon from '@material-ui/icons/Person';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import AssignmentIcon from '@material-ui/icons/Assignment';
 
 const navigationConfig = ({ t }) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
@@ -30,7 +29,7 @@ const navigationConfig = ({ t }) => {
 			icon: MonetizationOnIcon,
 		},
 		{
-			title: 'components.nav-bar.appointments',
+			title: t('nav-bar.user-appointments'),
 			href: '/user-appointments',
 			icon: AssignmentIcon,
 		},

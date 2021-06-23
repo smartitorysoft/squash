@@ -2,17 +2,16 @@ import React from 'react';
 
 import pageRedirect from 'lib/pageRedirect';
 import Page from 'views/UserAppointments';
+import { loadLocaleFromCtx } from 'lib/loadLocaleFromCtx';
 
 const UserAppointments = (props) => <Page {...props} />;
 
 UserAppointments.getInitialProps = async (ctx) => {
-	try {
-		await pageRedirect({ auth: true, url: '/sign-in' }, ctx);
-	} catch (error) {
-		throw error;
-	}
+	await pageRedirect({ auth: true, url: '/sign-in' }, ctx);
+
 	return {
-		namespacesRequired: ['error', 'global', 'user-appointments'],
+		defaultNamespace: 'user-appointments',
+		...(await loadLocaleFromCtx(ctx)),
 	};
 };
 
