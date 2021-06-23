@@ -1,7 +1,7 @@
 {
     "name":"Név",
     "date":"Dátum",
-    "hour":"Óra",
+    "hour":"Időpont",
     "court":"Pálya",
     "credit":"Kreditek"
 }

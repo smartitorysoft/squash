@@ -4,27 +4,19 @@ import pageRedirect from 'lib/pageRedirect';
 import Page from 'views/AdminAppointments';
 import { loadLocaleFromCtx } from 'lib/loadLocaleFromCtx';
 import { getUsers } from 'store/user/actions';
-import {
-	getAllAppointments,
-	getAppointments,
-} from 'store/appointments/actions';
-import * as moment from 'moment';
+import { getAllAppointments } from 'store/appointments/actions';
+import moment from 'moment';
 
-const SignIn = (props) => <Page {...props} />;
+const AdminAppointments = (props) => <Page {...props} />;
 
-SignIn.getInitialProps = async (ctx) => {
+AdminAppointments.getInitialProps = async (ctx) => {
 	const { store } = ctx;
-	try {
-		await pageRedirect({ auth: true, url: '/sign-in' }, ctx);
-		await Promise.all([
-			store.dispatch(
-				getAllAppointments(moment(new Date()).format('YYYY-MM-DD')),
-			),
-			store.dispatch(getUsers()),
-		]);
-	} catch (error) {
-		throw error;
-	}
+
+	await pageRedirect({ auth: true, url: '/sign-in' }, ctx);
+	await Promise.all([
+		store.dispatch(getAllAppointments(moment(new Date()).format('YYYY-MM-DD'))),
+		store.dispatch(getUsers()),
+	]);
 
 	return {
 		defaultNamespace: 'admin-appointments',
@@ -32,4 +24,4 @@ SignIn.getInitialProps = async (ctx) => {
 	};
 };
 
-export default SignIn;
+export default AdminAppointments;

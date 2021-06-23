@@ -27,7 +27,12 @@ const useStyles = makeStyles(() => ({
 	collapsed: {
 		display: 'flex',
 		flexDirection: 'row',
-		justifyContent: 'space-between',
+		justifyContent: 'space-around',
+		alignItems: 'center',
+		paddingBottom: 5,
+	},
+	button: {
+		height: 30,
 	},
 }));
 
@@ -94,7 +99,13 @@ export default function UserRow({ row }) {
 								label="Pálya"
 								onChange={(text) => setCourt(text.target.value)}
 							/>
-							<Button variant="contained" color="primary" onClick={onSubmit}>
+							<Button
+								variant="contained"
+								color="primary"
+								size="small"
+								className={classes.button}
+								onClick={onSubmit}
+							>
 								Jóváhagy
 							</Button>
 						</Box>

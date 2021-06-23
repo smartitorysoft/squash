@@ -32,7 +32,6 @@ const useStyles = makeStyles(() => ({
 	},
 	container: {
 		width: '75%',
-		height: '75%',
 		backgroundColor: 'white',
 		marginLeft: 'calc(100% / 8)',
 		marginTop: 'calc(100% / 16)',
@@ -45,6 +44,8 @@ const useStyles = makeStyles(() => ({
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
+		padding: 15,
+		paddingLeft: 30,
 	},
 	root: {
 		padding: 10,
@@ -67,9 +68,38 @@ const AdminAppointments = (props) => {
 
 	const [open, setOpen] = useState(false);
 	const [users, setUsers] = useState(userList.items);
+
+	const arr = [
+		{ value: { innerValue: 'a' } },
+		{ value: { innerValue: 'c' } },
+		{ value: { innerValue: 'e' } },
+		{ value: { innerValue: 'b' } },
+		{ value: { innerValue: 'd' } },
+		{ value: { innerValue: 'g' } },
+		{ value: { innerValue: 'f' } },
+	];
+
+	// users.sort((a, b) =>
+	// 	a.profile.firstName > b.profile.firstName
+	// 		? 1
+	// 		: b.profile.firstName > a.profile.firstName
+	// 		? -1
+	// 		: 0,
+	// );
+
+	users.sort((a, b) => {
+		if (a.profile.firstName > b.profile.firstName) {
+			return 1;
+		}
+		return b.profile.firstName > a.profile.firstName ? -1 : 0;
+	});
+
+	console.log(users);
+
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+	users.sort((a, b) => a.firstName - b.firstName);
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
 	};
