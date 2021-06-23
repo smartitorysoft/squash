@@ -2,9 +2,17 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-	Drawer, Divider, Paper, Avatar, Typography, Hidden, Link, NoSsr,
+	Drawer,
+	Divider,
+	Paper,
+	Avatar,
+	Typography,
+	Hidden,
+	NoSsr,
 } from '@material-ui/core';
 
+import useTranslation from 'next-translate/useTranslation';
+import { useSelector } from 'react-redux';
 import Navigation from '../NavigationList';
 
 import navigationConfig from './navigationConfig';
@@ -19,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 	navBar: {
 		position: 'relative',
-		top: 64,
 		height: 'calc(100% - 64px)',
 		width: DRAWER_WIDTH,
 	},
@@ -51,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 		// overflow: "auto",
 	},
 	profile: {
-		paddingTop: theme.spacing(3),
+		paddingTop: theme.spacing(2),
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
@@ -90,7 +97,9 @@ const NavBar = (props) => {
 	const { openMobile, onMobileClose } = props;
 
 	const classes = useStyles();
-	const { base: navigation, other: otherNavigation } = navigationConfig();
+	const { t } = useTranslation('components');
+	const { base: navigation, other: otherNavigation } = navigationConfig({ t });
+	const profile = useSelector((state) => state.me.profile);
 
 	useEffect(() => {
 		if (openMobile && onMobileClose) {
@@ -102,25 +111,39 @@ const NavBar = (props) => {
 		<div className={classes.content}>
 			<div className={classes.profile}>
 				<Avatar
-					alt='t.format.name'
+					alt={t(
+						'global:format.name',
+						{
+							firstName: profile?.firstName || '',
+							lastName: profile?.lastName || '',
+						},
+						{ fallback: 'global:placeholders.name' },
+					)}
 					className={classes.avatar}
-					src='/images/placeholders/profile-picture.png'
+					src="/images/placeholders/profile-picture.png"
 				/>
 				<div className={classes.details}>
 					<Typography className={classes.nameText}>
-						format.name
+						{t(
+							'global:format.name',
+							{
+								firstName: profile?.firstName || '',
+								lastName: profile?.lastName || '',
+							},
+							{ fallback: 'global:placeholders.name' },
+						)}
 					</Typography>
 				</div>
 			</div>
 			<Divider className={classes.divider} />
 			<nav className={classes.navigation}>
-				<Navigation component='div' navigation={navigation} />
+				<Navigation component="div" navigation={navigation} />
 			</nav>
 			<nav className={classes.navigationOther}>
 				<Typography className={classes.otherText}>
 					components.nav-bar.other
 				</Typography>
-				<Navigation component='div' navigation={otherNavigation} />
+				<Navigation component="div" navigation={otherNavigation} />
 			</nav>
 		</div>
 	);
@@ -128,7 +151,12 @@ const NavBar = (props) => {
 	return (
 		<NoSsr>
 			<Hidden lgUp>
-				<Drawer anchor='left' onClose={onMobileClose} open={openMobile} variant='temporary'>
+				<Drawer
+					anchor="left"
+					onClose={onMobileClose}
+					open={openMobile}
+					variant="temporary"
+				>
 					<div className={classes.navBar}>{navbarContent}</div>
 				</Drawer>
 			</Hidden>

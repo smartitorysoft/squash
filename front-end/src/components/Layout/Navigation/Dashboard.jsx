@@ -55,7 +55,7 @@ const Dashboard = (props) => {
 					onMobileClose={handleNavBarMobileClose}
 					openMobile={openNavBarMobile}
 				/>
-				<main className={[classes.content, className].join(' ')} id='container'>
+				<main className={[classes.content, className].join(' ')} id="container">
 					{children}
 				</main>
 			</div>

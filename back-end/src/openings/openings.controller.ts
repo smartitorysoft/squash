@@ -4,7 +4,7 @@ import { OpeningsService } from './openings.service';
 import { UpdateOpeningRuleDataDto } from './dto/update-opening-rule-data.dto';
 import { OpeningRuleDataDto } from './dto/opening-rule-data.dto';
 import { ModificationResponseDto } from '../dto/modification.response.dto';
-import JwtAuthenticationGuard from '../auth/guards/jwt-authentication.guard';
+import JwtAuthGuard from '../auth/guards/jwt-auth.guard';
 import { PermissionGuard } from '../admin/permission/guard/permission.guard';
 import { Target } from '../admin/permission/decorators/target.decorator';
 import { Operation } from '../admin/permission/decorators/permission.decorator';
@@ -21,7 +21,7 @@ export class OpeningsController {
 	@ApiResponse({ status: 200, type: OpeningDataListDto })
 	async index(
 		@Query('date') date = AppointmentsService.getDayByDate(new Date()),
-		@Query('days') days = 1
+		@Query('days') days = 1,
 	): Promise<OpeningDataListDto> {
 		const firstDate = new Date(date);
 		if (Number.isNaN(firstDate.getTime())) {
@@ -29,12 +29,12 @@ export class OpeningsController {
 		}
 		date = AppointmentsService.getDayByDate(firstDate);
 		return new OpeningDataListDto({
-			list: await this.openingsService.getOpeningByDay(date, days)
+			list: await this.openingsService.getOpeningByDay(date, days),
 		});
 	}
 
 	@Get('/rules')
-	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
+	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Target('admin')
 	@Operation('read')
 	@ApiResponse({ status: 200, isArray: true, type: OpeningRuleDataDto })
@@ -43,11 +43,11 @@ export class OpeningsController {
 	}
 
 	@Put('/rules')
-	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
+	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Target('admin')
 	@Operation('update')
 	async updateRules(
-		@Body() dto: UpdateOpeningRuleDataDto
+		@Body() dto: UpdateOpeningRuleDataDto,
 	): Promise<ModificationResponseDto> {
 		await this.openingsService.update(dto);
 		return new ModificationResponseDto();

@@ -10,9 +10,21 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
 import { makeAppointment } from '../../store/appointments/actions';
 
-export const ReserveModal = ({
-	open, onClose, reserved, date,
-}) => {
+const useStyles = makeStyles(() => ({
+	container: {
+		width: '75%',
+		height: '50%',
+		backgroundColor: 'white',
+		marginLeft: 'calc(100% / 8)',
+		marginTop: 'calc(100% / 8)',
+		borderRadius: 5,
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+}));
+
+const ReserveModal = ({ open, onClose, reserved, date }) => {
 	const dispatch = useDispatch();
 
 	const [checked, setChecked] = useState({
@@ -23,20 +35,6 @@ export const ReserveModal = ({
 	const handleChange = (event) => {
 		setChecked({ ...checked, [event.target.name]: event.target.checked });
 	};
-
-	const useStyles = makeStyles((theme) => ({
-		container: {
-			width: '75%',
-			height: '50%',
-			backgroundColor: 'white',
-			marginLeft: 'calc(100% / 8)',
-			marginTop: 'calc(100% / 8)',
-			borderRadius: 5,
-			flexDirection: 'column',
-			justifyContent: 'center',
-			alignItems: 'center',
-		},
-	}));
 
 	const classes = useStyles();
 
@@ -54,46 +52,46 @@ export const ReserveModal = ({
 						<FormGroup row>
 							<FormControlLabel
 								disabled={reserved && reserved.includes('ONE')}
-								control={(
+								control={
 									<Checkbox
 										checked={checked.checkedA}
 										onChange={handleChange}
-										name='checkedA'
+										name="checkedA"
 									/>
-								)}
-								label='1-es pálya'
+								}
+								label="1-es pálya"
 							/>
 							<FormControlLabel
 								disabled={reserved && reserved.includes('TWO')}
-								control={(
+								control={
 									<Checkbox
 										checked={checked.checkedB}
 										onChange={handleChange}
-										name='checkedB'
+										name="checkedB"
 									/>
-								)}
-								label='2-es pálya'
+								}
+								label="2-es pálya"
 							/>
 						</FormGroup>
 					</div>
 					<Button
-						variant='contained'
-						color='primary'
+						variant="contained"
+						color="primary"
 						onClick={() => {
-							checked.checkedA
-                && dispatch(
-                	makeAppointment({
-                		begins: date,
-                		court: 'ONE',
-                	}),
-                );
-							checked.checkedB
-                && dispatch(
-                	makeAppointment({
-                		begins: date,
-                		court: 'TWO',
-                	}),
-                );
+							checked.checkedA &&
+								dispatch(
+									makeAppointment({
+										begins: date,
+										court: 'ONE',
+									}),
+								);
+							checked.checkedB &&
+								dispatch(
+									makeAppointment({
+										begins: date,
+										court: 'TWO',
+									}),
+								);
 							onClose();
 						}}
 					>
@@ -104,3 +102,5 @@ export const ReserveModal = ({
 		</div>
 	);
 };
+
+export default ReserveModal;

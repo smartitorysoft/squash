@@ -9,10 +9,10 @@ import {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	Query,
 	Req,
-	UseGuards
+	UseGuards,
 } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
-import JwtAuthenticationGuard from '../auth/guards/jwt-authentication.guard';
+import JwtAuthGuard from '../auth/guards/jwt-auth.guard';
 import { PermissionGuard } from '../admin/permission/guard/permission.guard';
 import { Target } from '../admin/permission/decorators/target.decorator';
 import { Operation } from '../admin/permission/decorators/permission.decorator';
@@ -29,46 +29,46 @@ export class PaymentsController {
 	constructor(private paymentsService: PaymentsService) {}
 
 	@Get()
-	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
+	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Target('payments')
 	@Operation('read')
 	async index(
 		@Query('page') page = 1,
-		@Query('limit') limit = 15
+		@Query('limit') limit = 15,
 	): Promise<Pagination<PaymentDataDto>> {
 		limit = Math.min(limit, 20);
 		return this.paymentsService.findAll({
 			page,
 			limit,
-			route: configService.getApiUrl('payments')
+			route: configService.getApiUrl('payments'),
 		});
 	}
 
 	@Get('me')
-	@UseGuards(JwtAuthenticationGuard)
+	@UseGuards(JwtAuthGuard)
 	async getMe(
 		@Query('page') page = 1,
 		@Query('limit') limit = 15,
-		@Req() req: RequestWithUser
+		@Req() req: RequestWithUser,
 	): Promise<Pagination<PaymentDataDto>> {
 		limit = Math.min(limit, 20);
 		return this.paymentsService.findByUser(
 			{
 				page,
 				limit,
-				route: configService.getApiUrl('payments/me')
+				route: configService.getApiUrl('payments/me'),
 			},
-			req.user
+			req.user,
 		);
 	}
 
 	@Post(':id')
-	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
+	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Target('payments')
 	@Operation('create')
 	async create(
 		@Body() dto: CreatePaymentDto,
-		@Param('id', new ParseUUIDPipe()) id: string
+		@Param('id', new ParseUUIDPipe()) id: string,
 	): Promise<CreatePaymentResponseDto> {
 		const response = new CreatePaymentResponseDto();
 		response.id = await this.paymentsService.addCredit(id, dto.value);
@@ -76,11 +76,11 @@ export class PaymentsController {
 	}
 
 	@Delete(':id')
-	@UseGuards(JwtAuthenticationGuard, PermissionGuard)
+	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Target('payments')
 	@Operation('delete')
 	async delete(
-		@Param('id', new ParseUUIDPipe()) id: string
+		@Param('id', new ParseUUIDPipe()) id: string,
 	): Promise<DeletePaymentResponseDto> {
 		return new DeletePaymentResponseDto(await this.paymentsService.delete(id));
 	}

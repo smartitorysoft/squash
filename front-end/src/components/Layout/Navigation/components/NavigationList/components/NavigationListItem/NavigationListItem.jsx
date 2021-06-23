@@ -1,10 +1,15 @@
-import React, { useState	 } from 'react';
+/* eslint-disable react/require-default-props */
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-	ListItem, Button, Collapse, colors, Typography,
+	ListItem,
+	Button,
+	Collapse,
+	colors,
+	Typography,
 } from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
@@ -96,7 +101,7 @@ const NavigationListItem = (props) => {
 	const [open, setOpen] = useState(openProp);
 
 	const handleToggle = () => {
-		setOpen((open) => !open);
+		setOpen((v) => !v);
 	};
 
 	let paddingLeft = 8;
@@ -116,19 +121,19 @@ const NavigationListItem = (props) => {
 				className={clsx(classes.item, className)}
 				disableGutters
 			>
-				<Button
-					className={classes.button}
-					onClick={handleToggle}
-					style={style}
-				>
+				<Button className={classes.button} onClick={handleToggle} style={style}>
 					{Icon && <Icon className={classes.icon} />}
-					<Typography className={classes.title}>
-						{title}
-					</Typography>
+					<Typography className={classes.title}>{title}</Typography>
 					{open ? (
-						<KeyboardArrowDownIcon className={classes.expandIcon} color='inherit' />
+						<KeyboardArrowDownIcon
+							className={classes.expandIcon}
+							color="inherit"
+						/>
 					) : (
-						<KeyboardArrowRightIcon className={classes.expandIcon} color='inherit' />
+						<KeyboardArrowRightIcon
+							className={classes.expandIcon}
+							color="inherit"
+						/>
 					)}
 				</Button>
 				<Collapse in={open}>{children}</Collapse>
@@ -146,15 +151,17 @@ const NavigationListItem = (props) => {
 			<Button
 				className={clsx(
 					classes.buttonLeaf,
-						`depth-${depth}`,
-						isActive && classes.active,
+					`depth-${depth}`,
+					isActive && classes.active,
 				)}
 				style={style}
 				href={href}
 			>
-				{Icon
-					? <Icon className={classes.icon} />
-					:						<div className={classes.icon} />}
+				{Icon ? (
+					<Icon className={classes.icon} />
+				) : (
+					<div className={classes.icon} />
+				)}
 				<div className={depth === 0 ? classes.title : classes.subTitle}>
 					{title}
 				</div>
@@ -163,7 +170,12 @@ const NavigationListItem = (props) => {
 						<Label />
 					</span>
 				)}
-				{depth === 0 && <KeyboardArrowRightIcon className={classes.expandIcon} color='inherit' />}
+				{depth === 0 && (
+					<KeyboardArrowRightIcon
+						className={classes.expandIcon}
+						color="inherit"
+					/>
+				)}
 			</Button>
 		</ListItem>
 	);
@@ -172,10 +184,10 @@ const NavigationListItem = (props) => {
 NavigationListItem.propTypes = {
 	children: PropTypes.node,
 	className: PropTypes.string,
-	depth: PropTypes.number.isRequired,
+	depth: PropTypes.number,
 	href: PropTypes.string,
-	icon: PropTypes.any,
-	label: PropTypes.any,
+	icon: PropTypes.node,
+	label: PropTypes.string,
 	open: PropTypes.bool,
 	title: PropTypes.string.isRequired,
 };

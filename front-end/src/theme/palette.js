@@ -8,15 +8,11 @@ export default {
 	white,
 	primary: {
 		contrastText: white,
-		dark: '#A72827',
-		main: '#EF3A39',
-		light: '#F26160',
+		main: colors.blue[500],
 	},
 	secondary: {
 		contrastText: white,
-		dark: colors.blue[900],
-		main: colors.blue.A400,
-		light: colors.blue.A400,
+		main: colors.orange[600],
 	},
 	error: {
 		contrastText: white,

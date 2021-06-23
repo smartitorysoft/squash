@@ -15,6 +15,7 @@ import TextInput from 'components/TextInput';
 import Row from 'components/Row/Row';
 
 import { getUsers } from 'store/user/actions';
+import Dashboard from 'components/Layout/Navigation/Dashboard';
 
 const useStyles = makeStyles((theme) => ({
 	table: {
@@ -23,9 +24,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const credit = (props) => {
-	const [value, setValue] = useState('');
-	const [open, setOpen] = React.useState(false);
+const Credit = () => {
+	const [, setValue] = useState('');
 
 	const classes = useStyles();
 
@@ -38,32 +38,35 @@ const credit = (props) => {
 	const users = useSelector((state) => state.user.users);
 
 	return (
-		<Box>
-			<TextInput
-				label='Keresés'
-				onChange={(text) => {
-					setValue(text.target.value);
-				}}
-			/>
-			<TableContainer classes={classes.table} component={Paper}>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell />
-							<TableCell align='left'>Név</TableCell>
-							<TableCell align='left'>Email</TableCell>
-							<TableCell align='right'>Kredit</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{users.items && users.items.map((user) => <Row row={user} />)}
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</Box>
+		<Dashboard>
+			<Box>
+				<TextInput
+					label="Keresés"
+					onChange={(text) => {
+						setValue(text.target.value);
+					}}
+				/>
+				<TableContainer classes={classes.table} component={Paper}>
+					<Table>
+						<TableHead>
+							<TableRow>
+								<TableCell />
+								<TableCell align="left">Név</TableCell>
+								<TableCell align="left">Email</TableCell>
+								<TableCell align="right">Kredit</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{users.items &&
+								users.items.map((user) => <Row key={user.id} row={user} />)}
+						</TableBody>
+					</Table>
+				</TableContainer>
+			</Box>
+		</Dashboard>
 	);
 };
 
-credit.propTypes = {};
+Credit.propTypes = {};
 
-export default credit;
+export default Credit;

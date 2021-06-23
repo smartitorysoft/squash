@@ -1,11 +1,10 @@
-import { HomeHeader } from 'components/HomeHeader/HomeHeader';
 import React from 'react';
 import Dashboard from 'components/Layout/Navigation/Dashboard';
+import GridComponent from 'components/Grid/GridComponent';
 
-const DashboardPage = (props) => (
-	<Dashboard>
-		{/* <HomeHeader /> */}
-	</Dashboard>
-);
+const DashboardPage = () => 
+  <Dashboard>
+    <GridComponent/>
+  </Dashboard>;
 
 export default DashboardPage;

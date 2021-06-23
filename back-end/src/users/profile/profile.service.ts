@@ -8,14 +8,14 @@ import ProfileDto from '../dto/profile.dto';
 export class ProfileService {
 	constructor(
 		@InjectRepository(Profile)
-		private readonly profileRepository: Repository<Profile>
+		private readonly profileRepository: Repository<Profile>,
 	) {}
 
 	public async create(profileData: ProfileDto): Promise<Profile> {
 		const data = profileData ? profileData : new ProfileDto(null);
 
 		const newProfile = await this.profileRepository.create({
-			...data
+			...data,
 		});
 
 		await this.profileRepository.save(newProfile);

@@ -52,18 +52,22 @@ class ConfigService {
 			migrations: ['dist/migration/*.js'],
 
 			cli: {
-				migrationsDir: 'src/migration'
+				migrationsDir: 'src/migration',
 			},
 			migrationsRun: JSON.parse(this.getValue('RUN_MIGRATIONS')),
 
-			ssl: false
+			ssl: false,
 		};
 	}
 
 	public getJwtConfig() {
 		return {
 			jwtSecret: this.getValue('JWT_SECRET'),
-			jwtExpirationTime: this.getValue('JWT_EXPIRATION_TIME')
+			jwtMaxAge: this.getValue('JWT_MAX_AGE'),
+			refreshSecret: this.getValue('REFRESH_SECRET'),
+			refreshMaxAge: this.getValue('REFRESH_MAX_AGE'),
+			issuer: this.getValue('TOKEN_ISSUER'),
+			audience: this.getValue('TOKEN_AUDIENCE'),
 		};
 	}
 
@@ -74,14 +78,14 @@ class ConfigService {
 	public getBaseUserCredentials() {
 		return {
 			email: this.getValue('BASE_USERNAME'),
-			password: this.getValue('BASE_PASSWORD')
+			password: this.getValue('BASE_PASSWORD'),
 		};
 	}
 
 	getDefaultOpeningHours(name: string) {
 		return {
 			openingHour: this.getValue(`${name.toUpperCase()}_OPENING`),
-			closingHour: this.getValue(`${name.toUpperCase()}_CLOSING`)
+			closingHour: this.getValue(`${name.toUpperCase()}_CLOSING`),
 		};
 	}
 
@@ -89,7 +93,7 @@ class ConfigService {
 		return {
 			domain: this.getValue('SMTP_DOMAIN'),
 			user: this.getValue('SMTP_USER'),
-			password: this.getValue('SMTP_PASSWORD')
+			password: this.getValue('SMTP_PASSWORD'),
 		};
 	}
 
@@ -106,7 +110,11 @@ const configService = new ConfigService(process.env).ensureValues([
 	'POSTGRES_DATABASE',
 	'RUN_MIGRATIONS',
 	'JWT_SECRET',
-	'JWT_EXPIRATION_TIME',
+	'JWT_MAX_AGE',
+	'REFRESH_SECRET',
+	'REFRESH_MAX_AGE',
+	'TOKEN_ISSUER',
+	'TOKEN_AUDIENCE',
 	'BASE_USERNAME',
 	'BASE_PASSWORD',
 	'SMTP_DOMAIN',
@@ -117,7 +125,7 @@ const configService = new ConfigService(process.env).ensureValues([
 	'WEEKDAY_OPENING',
 	'WEEKDAY_CLOSING',
 	'WEEKEND_OPENING',
-	'WEEKEND_CLOSING'
+	'WEEKEND_CLOSING',
 ]);
 
 export { configService, ConfigService };

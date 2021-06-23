@@ -3,31 +3,35 @@
 import cors from './cors.lib';
 
 const whitelist = [
-	'http://nest:3000',
 	'http://localhost:3000',
+	'http://localhost',
+	'http://next',
+	'https://next',
 	'http://159.89.101.123',
 	'https://159.89.101.123',
 	'http://squash.smartitory.com',
-	'https://squash.smartitory.com'
+	'https://squash.smartitory.com',
 ];
 
 const corsDisabledEndpoints = [
 	/\/v1\/api\/files\/img\/(.*)/g,
 	/\/v1\/api\/files\/docs\/(.*)/g,
 	/\/docs/g,
-	/\/docs\/(.*)/g
+	/\/docs\/(.*)/g,
 ];
 
 const corsOptions = {
 	origin: function (origin, callback, req) {
-		if (whitelist.includes(origin) || process.env.MODE === 'DEV') {
+		if (req.headers['x-api-key'] === process.env.API_KEY) {
+			callback(null, true);
+		} else if (whitelist.includes(origin) || process.env.MODE === 'DEV') {
 			callback(null, true);
 		} else {
 			callback(new Error('Not allowed by CORS'));
 		}
 	},
 	credentials: true,
-	preflightContinue: false
+	preflightContinue: false,
 };
 
 const checkIfNoOriginAllowed = (url: string) => {

@@ -8,7 +8,7 @@ export class MailService {
 	public sendPasswordReset(
 		address: string,
 		userName: string,
-		resetToken: string
+		resetToken: string,
 	): void {
 		this.mailerService
 			.sendMail({
@@ -17,8 +17,8 @@ export class MailService {
 				template: 'reset-password',
 				context: {
 					token: resetToken,
-					name: userName
-				}
+					name: userName,
+				},
 			})
 			.then(console.log)
 			.catch(console.error);

@@ -1,21 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import {
-	AppBar, Tabs, Tab, IconButton,
-	makeStyles, Box,
-} from '@material-ui/core';
-import { ProfileHeader } from 'components/ProfileHeader/ProfileHeader';
+import React, { useState } from 'react';
+import { AppBar, Tabs, Tab, IconButton, makeStyles } from '@material-ui/core';
 import TabPanel from 'components/TabPanel/TabPanel';
-import ProfileModal from 'components/ProfileModal/ProfileModal';
 import EditIcon from '@material-ui/icons/Edit';
 import { useSelector, useDispatch } from 'react-redux';
-import { GridComponent } from 'components/Grid/GridComponent';
+import GridComponent from 'components/Grid';
 
 import { useRouter } from 'next/router';
 import { BasicButton } from 'components/BasicButton/BasicButton';
 // import { getUserAppointments } from "store/appointments/actions";
 // import { AppointmentsTable } from "../AppointmentsTable/AppointmentsTable";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
 	container: {
 		marginLeft: 'calc(100% / 8)',
 	},
@@ -37,9 +32,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const HomeHeader = () => {
-	const dispatch = useDispatch();
 	const [value, setValue] = useState(0);
-	const [open, setOpen] = useState(false);
 
 	// dispatch(getUserAppointments());
 
@@ -52,19 +45,17 @@ export const HomeHeader = () => {
 
 	const classes = useStyles();
 
-	const user = useSelector((state) => state.me.info);
-
 	return (
 		<div className={classes.home}>
-			<AppBar style={{ alignItems: 'flex-end' }} position='sticky'>
+			<AppBar style={{ alignItems: 'flex-end' }} position="sticky">
 				<Tabs
 					value={value}
 					onChange={handleChange}
-					aria-label='simple tabs example'
+					aria-label="simple tabs example"
 				>
-					<Tab label='Home' />
-					<Tab label='Foglalás' />
-					<Tab label='Profil' />
+					<Tab label="Home" />
+					<Tab label="Foglalás" />
+					<Tab label="Profil" />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
@@ -79,7 +70,7 @@ export const HomeHeader = () => {
 				{/* <AppointmentsTable /> */}
 			</TabPanel>
 			<TabPanel value={value} index={2}>
-				<BasicButton label='Profile' onClick={() => router.push('/profile')} />
+				<BasicButton label="Profile" onClick={() => router.push('/profile')} />
 				{/* <div className={classes.header}>
           <div className={classes.div}>
             <p> Vezetéknév Keresztnév</p>

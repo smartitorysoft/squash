@@ -4,30 +4,34 @@ import axios from 'axios';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createWrapper } from 'next-redux-wrapper';
+import cookies from 'next-cookies';
+import { parseCookieObject } from 'lib/utility';
 import reducers from './reducers';
 
-const { backendApi } = getConfig().publicRuntimeConfig;
-
-const composeEnhancers =  process.env.NODE_ENV === 'development'
-	? composeWithDevTools || compose
-	: null || compose;
-
+const { BACKEND_API } = getConfig().publicRuntimeConfig;
 const isServer = typeof window === 'undefined';
-const NEXT_REDUX_STORE = 'NEXT_REDUX_STORE';
+
+const composeEnhancers =
+	process.env.NODE_ENV === 'development'
+		? composeWithDevTools || compose
+		: null || compose;
 
 const headers = {
 	'X-Disable-Proto': 'enable',
 	'X-Authorization-Cookie': 'true',
+	'Content-Type': 'application/json',
 };
 
-const makeStore = () => {
+const makeStore = (appContext) => {
 	if (isServer) {
+		const { ctx } = appContext;
 		const jsonApi = () => {
 			const instance = axios.create({
-				baseURL: backendApi,
+				baseURL: `http://${BACKEND_API.API}/`,
 				headers: {
 					...headers,
-					'Content-Type': 'application/json',
+					'X-Api-Key': `${BACKEND_API.KEY}`,
+					Cookie: parseCookieObject(cookies(ctx)),
 				},
 				withCredentials: true,
 			});
@@ -36,38 +40,27 @@ const makeStore = () => {
 
 		const middleware = [thunk.withExtraArgument({ jsonApi })];
 
-		const store = createStore(
+		return createStore(
 			reducers,
 			composeEnhancers(applyMiddleware(...middleware)),
 		);
-
-		return store;
 	}
 
-	if (!window[NEXT_REDUX_STORE]) {
-		const jsonApi = () => {
-			const instance = axios.create({
-				baseURL: backendApi,
-				headers: {
-					...headers,
-					'Content-Type': 'application/json',
-				},
-				withCredentials: true,
-			});
-			return instance;
-		};
+	const jsonApi = () => {
+		const instance = axios.create({
+			baseURL: '/api',
+			headers,
+			withCredentials: true,
+		});
+		return instance;
+	};
 
-		const middleware = [thunk.withExtraArgument({ jsonApi })];
+	const middleware = [thunk.withExtraArgument({ jsonApi })];
 
-		const store = createStore(
-			reducers,
-			composeEnhancers(applyMiddleware(...middleware)),
-		);
-
-		window[NEXT_REDUX_STORE] = store;
-	}
-
-	return window[NEXT_REDUX_STORE];
+	return createStore(
+		reducers,
+		composeEnhancers(applyMiddleware(...middleware)),
+	);
 };
 
 export const wrapper = createWrapper(makeStore, { debug: false });

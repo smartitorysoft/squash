@@ -6,24 +6,25 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import PersonIcon from '@material-ui/icons/Person';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
-const navigationConfig = (t) => {
+const navigationConfig = ({ t }) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const role = useSelector((state) => state.me.role);
 
 	const adminNavigation = [
 		{
-			title: 'components.nav-bar.dashboard',
+			title: t('nav-bar.dashboard'),
 			href: '/dashboard',
 			icon: BarChartIcon,
 		},
 		{
-			title: 'components.nav-bar.profile',
+			title: t('nav-bar.profile'),
 			href: '/profile',
 			icon: PersonIcon,
 		},
 		{
-			title: 'components.nav-bar.credit',
+			title: t('nav-bar.credit'),
 			href: '/credit',
 			icon: MonetizationOnIcon,
 		},
@@ -46,18 +47,58 @@ const navigationConfig = (t) => {
 		// 		},
 		// 	],
 		// },
+		{
+			title: t('nav-bar.courts'),
+			icon: BarChartIcon,
+			pages: [
+				{
+					title: t('nav-bar.court-types'),
+					href: '/items',
+				},
+				{
+					title: t('nav-bar.edit-courts'),
+					href: '/products',
+				},
+			],
+		},
+		{
+			title: t('nav-bar.timesheet'),
+			href: '/timesheet',
+			icon: AccessTimeIcon,
+		},
 	];
 
-	const userNavigation = adminNavigation;
+	const userNavigation = [
+		{
+			title: t('nav-bar.dashboard'),
+			href: '/dashboard',
+			icon: BarChartIcon,
+		},
+		{
+			title: t('nav-bar.profile'),
+			href: '/profile',
+			icon: PersonIcon,
+		},
+		{
+			title: t('nav-bar.credit'),
+			href: '/credit',
+			icon: MonetizationOnIcon,
+		},
+		{
+			title: t('nav-bar.timesheet'),
+			href: '/timesheet',
+			icon: AccessTimeIcon,
+		},
+	];
 
 	const otherNavigation = [
 		{
-			title: 'components.nav-bar.feedback',
+			title: 'nav-bar.feedback',
 			href: '/feedback',
 			icon: HelpOutlineIcon,
 		},
 		{
-			title: 'components.nav-bar.customer-service',
+			title: 'nav-bar.customer-service',
 			href: '/support',
 			icon: HelpOutlineIcon,
 		},

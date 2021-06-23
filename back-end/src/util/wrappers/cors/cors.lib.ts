@@ -6,7 +6,7 @@ const defaults = {
 	origin: '*',
 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 	preflightContinue: false,
-	optionsSuccessStatus: 204
+	optionsSuccessStatus: 204,
 };
 
 function isString(s) {
@@ -40,22 +40,22 @@ function configureOrigin(options, req) {
 		headers.push([
 			{
 				key: 'Access-Control-Allow-Origin',
-				value: '*'
-			}
+				value: '*',
+			},
 		]);
 	} else if (isString(options.origin)) {
 		// fixed origin
 		headers.push([
 			{
 				key: 'Access-Control-Allow-Origin',
-				value: options.origin
-			}
+				value: options.origin,
+			},
 		]);
 		headers.push([
 			{
 				key: 'Vary',
-				value: 'Origin'
-			}
+				value: 'Origin',
+			},
 		]);
 	} else {
 		isAllowed = isOriginAllowed(requestOrigin, options.origin);
@@ -63,14 +63,14 @@ function configureOrigin(options, req) {
 		headers.push([
 			{
 				key: 'Access-Control-Allow-Origin',
-				value: isAllowed ? requestOrigin : false
-			}
+				value: isAllowed ? requestOrigin : false,
+			},
 		]);
 		headers.push([
 			{
 				key: 'Vary',
-				value: 'Origin'
-			}
+				value: 'Origin',
+			},
 		]);
 	}
 
@@ -84,7 +84,7 @@ function configureMethods(options) {
 	}
 	return {
 		key: 'Access-Control-Allow-Methods',
-		value: methods
+		value: methods,
 	};
 }
 
@@ -92,7 +92,7 @@ function configureCredentials(options) {
 	if (options.credentials === true) {
 		return {
 			key: 'Access-Control-Allow-Credentials',
-			value: 'true'
+			value: 'true',
 		};
 	}
 	return null;
@@ -107,8 +107,8 @@ function configureAllowedHeaders(options, req) {
 		headers.push([
 			{
 				key: 'Vary',
-				value: 'Access-Control-Request-Headers'
-			}
+				value: 'Access-Control-Request-Headers',
+			},
 		]);
 	} else if (allowedHeaders.join) {
 		allowedHeaders = allowedHeaders.join(','); // .headers is an array, so turn it into a string
@@ -117,8 +117,8 @@ function configureAllowedHeaders(options, req) {
 		headers.push([
 			{
 				key: 'Access-Control-Allow-Headers',
-				value: allowedHeaders
-			}
+				value: allowedHeaders,
+			},
 		]);
 	}
 
@@ -135,7 +135,7 @@ function configureExposedHeaders(options) {
 	if (headers && headers.length) {
 		return {
 			key: 'Access-Control-Expose-Headers',
-			value: headers
+			value: headers,
 		};
 	}
 	return null;
@@ -148,7 +148,7 @@ function configureMaxAge(options) {
 	if (maxAge && maxAge.length) {
 		return {
 			key: 'Access-Control-Max-Age',
-			value: maxAge
+			value: maxAge,
 		};
 	}
 	return null;
@@ -229,19 +229,23 @@ function middlewareWrapper(o, checkAllowed) {
 				}
 
 				if (originCallback) {
-					originCallback(req.headers.origin, function (err2, origin) {
-						if (err2 || !origin) {
-							if (checkAllowed(req.url)) {
+					originCallback(
+						req.headers.origin,
+						function (err2, origin) {
+							if (err2 || !origin) {
+								if (checkAllowed(req.url)) {
+									corsOptions.origin = origin;
+									cors(corsOptions, req, res, next);
+								} else {
+									next(err2);
+								}
+							} else {
 								corsOptions.origin = origin;
 								cors(corsOptions, req, res, next);
-							} else {
-								next(err2);
 							}
-						} else {
-							corsOptions.origin = origin;
-							cors(corsOptions, req, res, next);
-						}
-					});
+						},
+						req,
+					);
 				} else {
 					next();
 				}

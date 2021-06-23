@@ -4,7 +4,7 @@ import {
 	ManyToOne,
 	OneToOne,
 	JoinColumn,
-	Index
+	Index,
 } from 'typeorm';
 import { BaseEntity, Role } from 'src/entities';
 import { Profile } from './profile.entity';
@@ -26,7 +26,7 @@ export class User extends BaseEntity {
 		length: 256,
 		nullable: true,
 		default: null,
-		unique: true
+		unique: true,
 	})
 	cardId: string;
 

@@ -11,18 +11,18 @@ export class ValidationFilter implements ExceptionFilter {
 			return response.status(406).json({
 				statusCode: 406,
 				code: errorCodes['406vd00'].code,
-				description: errorCodes['406vd00'].name
+				description: errorCodes['406vd00'].name,
 			});
 		}
 
 		return response.status(406).json({
 			code: errorCodes['406vd00'].code,
 			description: errorCodes['406vd00'].name,
-			errors: this.parseErrors(exception.validationErrors)
+			errors: this.parseErrors(exception.validationErrors),
 		});
 	}
 
-	parseErrors = (errors) => {
+	parseErrors = (errors: any[] | undefined | null): any => {
 		if (!Array.isArray(errors) || !errors.length) return undefined;
 
 		const response = errors.map((error) => {
@@ -32,7 +32,7 @@ export class ValidationFilter implements ExceptionFilter {
 				violated: error.constraints,
 				children: Array.isArray(error.children)
 					? this.parseErrors(error.children)
-					: undefined
+					: undefined,
 			};
 		});
 

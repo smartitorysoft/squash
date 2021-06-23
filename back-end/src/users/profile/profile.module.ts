@@ -6,6 +6,6 @@ import { Profile } from 'src/entities';
 @Module({
 	imports: [TypeOrmModule.forFeature([Profile])],
 	providers: [ProfileService],
-	exports: [ProfileService]
+	exports: [ProfileService],
 })
 export class ProfileModule {}

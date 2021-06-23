@@ -12,10 +12,6 @@ export class CreateUserDto {
 	password: string;
 
 	@ApiProperty({ required: false })
-	@IsString()
-	role: string;
-
-	@ApiProperty({ required: false })
 	@ValidateNested()
 	@Type(() => ProfileDto)
 	@IsOptional()
@@ -26,15 +22,13 @@ export class CreateUserDto {
 			| {
 					email: string;
 					password: string;
-					role: string;
 					profile: ProfileDto | any;
 			  }
-			| any
+			| any,
 	) {
 		if (data) {
 			this.email = data.email;
 			this.password = data.password;
-			this.role = data.role;
 			this.profile = new ProfileDto(null);
 		}
 	}

@@ -12,13 +12,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		super({
 			jwtFromRequest: ExtractJwt.fromExtractors([
 				(request: Request) => {
-					return request?.cookies?.Authentication;
-				}
+					return request?.cookies?.accessToken;
+				},
 			]),
-			secretOrKey: configService.getJwtConfig().jwtSecret
+			secretOrKey: configService.getJwtConfig().jwtSecret,
+			ignoreExpiration: true,
+			issuer: configService.getJwtConfig().issuer,
+			audience: configService.getJwtConfig().audience,
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	async validate(payload: TokenPayload) {
 		return this.userService.getById(payload.userId);
 	}

@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -14,9 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const reduceChildRoutes = (props) => {
-	const {
-		router, items, page, depth,
-	} = props;
+	const { router, items, page, depth } = props;
 
 	if (page.pages) {
 		let open = false;
@@ -25,6 +24,7 @@ const reduceChildRoutes = (props) => {
 			open = true;
 		}
 
+		// eslint-disable-next-line array-callback-return
 		page.pages.map((item) => {
 			if (router.pathname === item.href) {
 				open = true;
@@ -40,11 +40,7 @@ const reduceChildRoutes = (props) => {
 				open={Boolean(open)}
 				title={page.title}
 			>
-				<NavigationList
-					depth={depth + 1}
-					pages={page.pages}
-					router={router}
-				/>
+				<NavigationList depth={depth + 1} pages={page.pages} router={router} />
 			</NavigationListItem>,
 		);
 	} else {
@@ -78,24 +74,18 @@ const NavigationList = (props) => {
 
 NavigationList.propTypes = {
 	depth: PropTypes.number,
-	pages: PropTypes.array,
+	pages: PropTypes.arrayOf(PropTypes.object),
 };
 
 const Navigation = (props) => {
-	const {
-		title,
-		navigation,
-		className,
-		component: Component,
-		...rest
-	} = props;
+	const { title, navigation, className, component: Component, ...rest } = props;
 
 	const classes = useStyles();
 	const router = useRouter();
 
 	return (
 		<Component {...rest} className={clsx(classes.root, className)}>
-			{title && <Typography variant='overline'>{title}</Typography>}
+			{title && <Typography variant="overline">{title}</Typography>}
 			<NavigationList depth={0} pages={navigation} router={router} />
 		</Component>
 	);
@@ -103,8 +93,8 @@ const Navigation = (props) => {
 
 Navigation.propTypes = {
 	className: PropTypes.string,
-	component: PropTypes.any,
-	navigation: PropTypes.array.isRequired,
+	component: PropTypes.node,
+	navigation: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 Navigation.defaultProps = {
