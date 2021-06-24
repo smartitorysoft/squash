@@ -1,6 +1,22 @@
-import { AppBar, Tabs, Tab } from '@material-ui/core';
+import {
+	AppBar,
+	Tabs,
+	Tab,
+	ThemeProvider,
+	createMuiTheme,
+} from '@material-ui/core';
 import React from 'react';
+
 import TabPanel from '../TabPanel/TabPanel';
+
+const theme = createMuiTheme({
+	palette: {
+		primary: {
+			main: '#00C853',
+			contrastText: '#fff',
+		},
+	},
+});
 
 export const ProfileHeader = () => {
 	const [value, setValue] = React.useState(0);
@@ -11,17 +27,20 @@ export const ProfileHeader = () => {
 
 	return (
 		<div>
-			<AppBar position="static">
-				<Tabs
-					variant="fullWidth"
-					value={value}
-					onChange={handleChange}
-					aria-label="simple tabs example"
-				>
-					<Tab label="Foglalásaim" />
-					<Tab label="Tranzakciók" />
-				</Tabs>
-			</AppBar>
+			<ThemeProvider theme={theme}>
+				<AppBar position="static">
+					<Tabs
+						variant="fullWidth"
+						value={value}
+						onChange={handleChange}
+						aria-label="simple tabs example"
+						color="primary"
+					>
+						<Tab label="Foglalásaim" />
+						<Tab label="Tranzakciók" />
+					</Tabs>
+				</AppBar>
+			</ThemeProvider>
 			<TabPanel value={value} index={0}>
 				Foglalásaim
 			</TabPanel>

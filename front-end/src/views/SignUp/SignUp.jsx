@@ -10,10 +10,14 @@ import {
 	CardActions,
 	Card,
 	CardContent,
+	Typography,
+	ThemeProvider,
 } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import { useErrorHandling } from 'components/error';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
 import { validation } from './validation';
 
 const useStyles = makeStyles((theme) => ({
@@ -29,7 +33,18 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
-		padding: theme.spacing(6, 2),
+		// padding: theme.spacing(6, 2),
+		backgroundImage: 'url("/images/background_image.png")',
+		backgroundSize: 'cover',
+		backgroundPosition: 'center',
+		backgroundRepeat: 'no-repeat',
+	},
+
+	image: {
+		width: '100%',
+		height: '100%',
+		padding: theme.spacing(16, 25, 0, 100),
+		backgroundColor: 'rgba(7, 103, 30, 0.85);',
 	},
 
 	cardContent: {
@@ -47,10 +62,23 @@ const useStyles = makeStyles((theme) => ({
 	},
 	buttons: {
 		display: 'flex',
-		flexDirection: 'row',
+		flexDirection: 'column',
 		justifyContent: 'space-between',
 	},
+	buttonStyle: {
+		background: '#00C853',
+		borderRadius: 4,
+	},
 }));
+
+const theme = createMuiTheme({
+	palette: {
+		primary: {
+			main: green[500],
+			contrastText: '#fff',
+		},
+	},
+});
 
 const SignUp = (props) => {
 	const { defaultNamespace } = props;
@@ -84,121 +112,144 @@ const SignUp = (props) => {
 
 	return (
 		<Box className={classes.root}>
-			<Formik
-				onSubmit={onSubmit}
-				validationSchema={validation}
-				validateOnChange
-				validateOnBlur
-				validateOnMount
-				initialValues={{
-					firstName: '',
-					lastName: '',
-					email: '',
-					phone: '',
-					password: '',
-					passwordCheck: '',
-				}}
-			>
-				{(formikProps) => {
-					const {
-						isSubmitting,
-						values,
-						handleChange,
-						handleBlur,
-					} = formikProps;
-					return (
-						<Form noValidate>
-							<Card>
-								<CardContent className={classes.cardContent}>
-									<Box className={classes.fields}>
-										<TextField
+			<Box className={classes.image}>
+				<Formik
+					onSubmit={onSubmit}
+					validationSchema={validation}
+					validateOnChange
+					validateOnBlur
+					validateOnMount
+					initialValues={{
+						firstName: '',
+						lastName: '',
+						email: '',
+						phone: '',
+						password: '',
+						passwordCheck: '',
+					}}
+				>
+					{(formikProps) => {
+						const {
+							isSubmitting,
+							values,
+							handleChange,
+							handleBlur,
+						} = formikProps;
+						return (
+							<Form noValidate>
+								<Card>
+									<CardContent className={classes.cardContent}>
+										<Box className={classes.fields}>
+											<Typography className={classes.label}>
+												{t('sign-up')}
+											</Typography>
+											<TextField
+												fullWidth
+												name="firstName"
+												onChange={handleChange}
+												onBlur={handleBlur}
+												error={!!errorChecker(formikProps, 'firstName')}
+												helperText={
+													errorChecker(formikProps, 'firstName') || ' '
+												}
+												value={values.firstName}
+												label={t('firstName')}
+												variant="outlined"
+											/>
+											<TextField
+												fullWidth
+												name="lastName"
+												onChange={handleChange}
+												onBlur={handleBlur}
+												error={!!errorChecker(formikProps, 'lastName')}
+												helperText={
+													errorChecker(formikProps, 'lastName') || ' '
+												}
+												value={values.lastName}
+												label={t('lastName')}
+												variant="outlined"
+											/>
+											<TextField
+												fullWidth
+												name="email"
+												onChange={handleChange}
+												onBlur={handleBlur}
+												error={!!errorChecker(formikProps, 'email')}
+												helperText={errorChecker(formikProps, 'email') || ' '}
+												value={values.email}
+												label={t('username')}
+												variant="outlined"
+											/>
+											<TextField
+												fullWidth
+												name="phone"
+												onChange={handleChange}
+												onBlur={handleBlur}
+												error={!!errorChecker(formikProps, 'phone')}
+												helperText={errorChecker(formikProps, 'phone') || ' '}
+												value={values.phone}
+												label={t('phone')}
+												variant="outlined"
+											/>
+											<TextField
+												fullWidth
+												name="password"
+												onChange={handleChange}
+												onBlur={handleBlur}
+												error={!!errorChecker(formikProps, 'password')}
+												helperText={
+													errorChecker(formikProps, 'password') || ' '
+												}
+												value={values.password}
+												label={t('password')}
+												type="password"
+												variant="outlined"
+											/>
+											<TextField
+												fullWidth
+												name="passwordCheck"
+												onChange={handleChange}
+												onBlur={handleBlur}
+												error={!!errorChecker(formikProps, 'passwordCheck')}
+												helperText={
+													errorChecker(formikProps, 'passwordCheck') || ' '
+												}
+												value={values.passwordCheck}
+												label={t('passwordCheck')}
+												type="password"
+												variant="outlined"
+											/>
+										</Box>
+									</CardContent>
+									<CardActions className={classes.buttons}>
+										<ThemeProvider theme={theme}>
+											<Button
+												fullWidth
+												className={classes.buttonStyle}
+												color="primary"
+												disabled={isSubmitting}
+												type="submit"
+												variant="contained"
+											>
+												{t('sign-up')}
+											</Button>
+										</ThemeProvider>
+										<Button
 											fullWidth
-											name="firstName"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											error={!!errorChecker(formikProps, 'firstName')}
-											helperText={errorChecker(formikProps, 'firstName') || ' '}
-											value={values.firstName}
-											label={t('firstName')}
-										/>
-										<TextField
-											fullWidth
-											name="lastName"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											error={!!errorChecker(formikProps, 'lastName')}
-											helperText={errorChecker(formikProps, 'lastName') || ' '}
-											value={values.lastName}
-											label={t('lastName')}
-										/>
-										<TextField
-											fullWidth
-											name="email"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											error={!!errorChecker(formikProps, 'email')}
-											helperText={errorChecker(formikProps, 'email') || ' '}
-											value={values.email}
-											label={t('username')}
-										/>
-										<TextField
-											fullWidth
-											name="phone"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											error={!!errorChecker(formikProps, 'phone')}
-											helperText={errorChecker(formikProps, 'phone') || ' '}
-											value={values.phone}
-											label={t('phone')}
-										/>
-										<TextField
-											fullWidth
-											name="password"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											error={!!errorChecker(formikProps, 'password')}
-											helperText={errorChecker(formikProps, 'password') || ' '}
-											value={values.password}
-											label={t('password')}
-											type="password"
-										/>
-										<TextField
-											fullWidth
-											name="passwordCheck"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											error={!!errorChecker(formikProps, 'passwordCheck')}
-											helperText={
-												errorChecker(formikProps, 'passwordCheck') || ' '
-											}
-											value={values.passwordCheck}
-											label={t('passwordCheck')}
-											type="password"
-										/>
-									</Box>
-								</CardContent>
-								<CardActions className={classes.buttons}>
-									<Button
-										color="primary"
-										disabled={isSubmitting}
-										onClick={() => router.back()}
-									>
-										{t('back')}
-									</Button>
-									<Button
-										color="primary"
-										disabled={isSubmitting}
-										type="submit"
-										variant="contained"
-									>
-										{t('sign-up')}
-									</Button>
-								</CardActions>
-							</Card>
-						</Form>
-					);
-				}}
-			</Formik>
+											color="#00C853"
+											disabled={isSubmitting}
+											variant="contained"
+											onClick={() => router.back()}
+										>
+											{t('back')}
+										</Button>
+									</CardActions>
+								</Card>
+							</Form>
+						);
+					}}
+				</Formik>
+			</Box>
 		</Box>
 	);
 };

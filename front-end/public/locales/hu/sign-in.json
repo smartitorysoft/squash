@@ -1,6 +1,7 @@
 {
 	"username": "Email cím",
 	"password": "Jelszó",
-	"sign-in": "Belépés",
-	"sign-up": "Regisztráció"
+	"sign-in": "Bejelentkezés",
+	"sign-up": "Regisztráljon itt",
+	"new-user": "Új felhasználó?"
 }
