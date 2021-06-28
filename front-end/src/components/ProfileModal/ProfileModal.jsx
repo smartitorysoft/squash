@@ -8,6 +8,7 @@ import {
 	makeStyles,
 	Modal,
 	TextField,
+	Typography,
 } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 		height: '50%',
 		backgroundColor: 'rgb(255, 255, 255)',
 		marginLeft: 'calc(100% / 8)',
-		marginTop: 'calc(100% / 8)',
+		marginTop: 'calc(100% / 16)',
 		borderRadius: 5,
 		display: 'flex',
 		flexDirection: 'column',
@@ -41,6 +42,22 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'center',
+	},
+	container: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: '100%',
+		width: '100%',
+	},
+	box: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: '100%',
+		width: '100%',
 	},
 }));
 
@@ -76,98 +93,97 @@ export const ProfileModal = (props) => {
 	};
 
 	return (
-		<Box>
+		<Box className={classes.container}>
 			{user && (
-				<Modal open={open} onClose={onClose}>
-					<Formik
-						validationSchema={validation}
-						validateOnChange
-						validateOnBlur
-						validateOnMount
-						onSubmit={onSubmit}
-						initialValues={{
-							firstName: user.profile.firstName,
-							lastName: user.profile.lastName,
-							email: user.email,
-							phone: user.profile.phone,
-						}}
-					>
-						{(formikProps) => {
-							const {
-								handleChange,
-								values,
-								isSubmitting,
-								handleBlur,
-							} = formikProps;
-							return (
-								<Form noValidate>
-									<Card>
-										<CardContent className={classes.modal}>
-											<TextField
-												name="firstName"
-												value={values.firstName}
-												label={t('firstName')}
-												onChange={handleChange}
-												onBlur={handleBlur}
-												error={!!errorChecker(formikProps, 'firstName')}
-												helperText={
-													errorChecker(formikProps, 'firstName') || ' '
-												}
-											/>
-											<TextField
-												name="lastName"
-												value={values.lastName}
-												label={t('lastName')}
-												onChange={handleChange}
-												onBlur={handleBlur}
-												error={!!errorChecker(formikProps, 'lastName')}
-												helperText={
-													errorChecker(formikProps, 'lastName') || ' '
-												}
-											/>
-											<TextField
-												value={values.email}
-												label={t('email')}
-												onChange={handleChange}
-												onBlur={handleBlur}
-												error={!!errorChecker(formikProps, 'email')}
-												helperText={errorChecker(formikProps, 'email') || ' '}
-												name="email"
-											/>
-											<TextField
-												name="phone"
-												value={values.phone}
-												label={t('phone')}
-												onChange={handleChange}
-												onBlur={handleBlur}
-												error={!!errorChecker(formikProps, 'phone')}
-												helperText={errorChecker(formikProps, 'phone') || ' '}
-											/>
-										</CardContent>
-										<CardActions className={classes.button}>
-											<Button
-												color="secondary"
-												variant="contained"
-												onClick={onClose}
-											>
-												{t('cancel')}
-											</Button>
-											<Button
-												color="primary"
-												disabled={isSubmitting}
-												type="submit"
-												variant="contained"
-												onClick={onClose}
-											>
-												{t('save')}
-											</Button>
-										</CardActions>
-									</Card>
-								</Form>
-							);
-						}}
-					</Formik>
-				</Modal>
+				// <Modal className={classes.container} open={open} onClose={onClose}>
+				<Formik
+					validationSchema={validation}
+					validateOnChange
+					validateOnBlur
+					validateOnMount
+					onSubmit={onSubmit}
+					initialValues={{
+						firstName: user.profile.firstName,
+						lastName: user.profile.lastName,
+						email: user.email,
+						phone: user.profile.phone,
+					}}
+				>
+					{(formikProps) => {
+						const {
+							handleChange,
+							values,
+							isSubmitting,
+							handleBlur,
+						} = formikProps;
+						return (
+							<Form noValidate>
+								<Box className={classes.box}>
+									<TextField
+										name="firstName"
+										value={values.firstName}
+										label={t('firstName')}
+										onChange={handleChange}
+										onBlur={handleBlur}
+										error={!!errorChecker(formikProps, 'firstName')}
+										helperText={errorChecker(formikProps, 'firstName') || ' '}
+										variant="outlined"
+									/>
+									<TextField
+										name="lastName"
+										value={values.lastName}
+										label={t('lastName')}
+										onChange={handleChange}
+										onBlur={handleBlur}
+										error={!!errorChecker(formikProps, 'lastName')}
+										helperText={errorChecker(formikProps, 'lastName') || ' '}
+										variant="outlined"
+									/>
+									<TextField
+										value={values.email}
+										label={t('email')}
+										onChange={handleChange}
+										onBlur={handleBlur}
+										error={!!errorChecker(formikProps, 'email')}
+										helperText={errorChecker(formikProps, 'email') || ' '}
+										name="email"
+										variant="outlined"
+									/>
+									<TextField
+										name="phone"
+										value={values.phone}
+										label={t('phone')}
+										onChange={handleChange}
+										onBlur={handleBlur}
+										error={!!errorChecker(formikProps, 'phone')}
+										helperText={errorChecker(formikProps, 'phone') || ' '}
+										variant="outlined"
+									/>
+
+									<CardActions className={classes.button}>
+										<Button
+											color="secondary"
+											variant="contained"
+											onClick={onClose}
+										>
+											{t('cancel')}
+										</Button>
+										<Button
+											color="primary"
+											disabled={isSubmitting}
+											type="submit"
+											variant="contained"
+											onClick={onClose}
+										>
+											{t('save')}
+										</Button>
+									</CardActions>
+								</Box>
+							</Form>
+						);
+					}}
+				</Formik>
+				// </Modal>
 			)}
 		</Box>
 	);

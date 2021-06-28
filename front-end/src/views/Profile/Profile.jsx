@@ -12,9 +12,11 @@ import {
 	Typography,
 } from '@material-ui/core';
 import ProfileModal from 'components/ProfileModal';
+
 import Dashboard from 'components/Layout/Navigation/Dashboard';
-import { useSelector } from 'react-redux';
 import useTranslation from 'next-translate/useTranslation';
+import { useErrorHandling } from 'components/error';
+import ProfileDetails from './components/ProfileDetails/ProfileDetails';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -70,14 +72,31 @@ const useStyles = makeStyles((theme) => ({
 		marginTop: 25,
 	},
 
+	padding: {
+		padding: 10,
+	},
+
 	text: {
 		fontSize: 20,
 		color: '#07671E',
 		fontWeights: '700',
+		padding: 5,
 	},
 	innerText: {
 		fontSize: 16,
 		color: '#07671E',
+		padding: 5,
+	},
+	red: {
+		backgroundColor: 'red',
+	},
+	box: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: '100%',
+		width: '100%',
 	},
 }));
 
@@ -100,6 +119,8 @@ const Profile = (props) => {
 	const classes = useStyles();
 	const { defaultNamespace } = props;
 
+	const { errorHandling, errorChecker } = useErrorHandling();
+
 	const { t } = useTranslation(defaultNamespace);
 
 	// const user = useSelector((state) => state.me);
@@ -114,6 +135,28 @@ const Profile = (props) => {
 		credit: '500055',
 	};
 
+	const onSubmit = async (values, { setSubmitting }) => {
+		try {
+			await dispatch(
+				setProfile({
+					id: user.id,
+					details: {
+						profile: {
+							firstName: values.firstName,
+							lastName: values.lastName,
+							phone: values.phone,
+						},
+					},
+				}),
+			)
+				.then(() => router.push('/dashboard'))
+				.then(() => window.scrollTo(0, 0));
+		} catch (error) {
+			errorHandling(error);
+			setSubmitting(false);
+		}
+	};
+
 	return (
 		<Dashboard>
 			<Box className={classes.container}>
@@ -121,11 +164,8 @@ const Profile = (props) => {
 					<ThemeProvider theme={theme}>
 						<Paper className={classes.size}>
 							<Box className={classes.avatarBox}>
-								<Typography
-									color="secondary"
-									className={[classes.centerJustify, classes.text]}
-								>
-									{t('profile').toUpperCase()}
+								<Typography color="secondary" className={classes.text}>
+									{open ? t('edit').toUpperCase() : t('profile').toUpperCase()}
 								</Typography>
 								<Avatar
 									alt="Remy Sharp"
@@ -133,60 +173,23 @@ const Profile = (props) => {
 									className={classes.large}
 								/>
 							</Box>
-							<Box className={[classes.centering, classes.fullSize]}>
-								<Typography className={classes.text}>
-									{t('firstName').toUpperCase()}
-								</Typography>
-								<Typography className={classes.innerText}>
-									{' '}
-									{user.profile.firstName}
-								</Typography>
-								<Typography className={classes.text}>
-									{t('lastName').toUpperCase()}
-								</Typography>
-								<Typography className={classes.innerText}>
-									{user.profile.lastName}
-								</Typography>
-								<Typography className={classes.text}>
-									{t('phone').toUpperCase()}
-								</Typography>
-								<Typography className={classes.innerText}>
-									{user.profile.phone}
-								</Typography>
-								<Typography className={classes.text}>
-									{t('email').toUpperCase()}
-								</Typography>
-								<Typography className={classes.innerText}>
-									{user.email}
-								</Typography>
-								<Typography className={classes.text}>
-									{t('creditNumber').toUpperCase()}
-								</Typography>
-								<Typography className={classes.innerText}>
-									{user.credit}
-								</Typography>
-								<Typography className={classes.text}>
-									{t('nextAppointment').toUpperCase()}
-								</Typography>
-								<Typography className={classes.text}>
-									{t('cardNumber').toUpperCase()}
-								</Typography>
-
-								<Button
-									color="primary"
-									variant="contained"
-									onClick={() => setOpen(true)}
-								>
-									{t('edit')}
-								</Button>
-
+							{open ? (
 								<ProfileModal
 									defaultNamespace={defaultNamespace}
 									user={user}
 									open={open}
 									onClose={() => setOpen(false)}
 								/>
-							</Box>
+							) : (
+								<Box className={classes.box}>
+									<ProfileDetails
+										defaultNamespace={defaultNamespace}
+										open={open}
+										user={user}
+										onClick={() => setOpen(true)}
+									/>
+								</Box>
+							)}
 						</Paper>
 					</ThemeProvider>
 				</Box>
