@@ -5,21 +5,21 @@ const INITIAL_STATE = {
 	appointments: {
 		list: [
 			{
-				date: '2021-04-16T00:00:00.000Z',
+				date: '2021-07-01T00:00:00.000Z',
 				reserved: [
 					{
 						id: 'be2bfbb1-ceab-4bf0-8f5c-bf48eebcf1d1',
-						begins: '2021-04-16T11:00:00.000Z',
+						begins: '2021-07-01T11:00:00.000Z',
 						court: 'TWO',
 					},
 					{
 						id: '470a250b-03ba-4737-88da-b1b6fbc6878b',
-						begins: '2021-04-16T11:00:00.000Z',
+						begins: '2021-07-01T12:00:00.000Z',
 						court: 'ONE',
 					},
 					{
 						id: '4a39ecb0-caa7-4c59-bd2a-f374d37eaf7f',
-						begins: '2021-04-16T12:00:00.000Z',
+						begins: '2021-07-01T13:00:00.000Z',
 						court: 'TWO',
 					},
 				],

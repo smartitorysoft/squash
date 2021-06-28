@@ -7,4 +7,4 @@ const DashboardPage = () =>
     <GridComponent/>
   </Dashboard>;
 
-export default DashboardPage;
+export default DashboardPage; 
