@@ -6,5 +6,9 @@
 	"lastName":"Vezetéknév",
 	"phone":"Telefonszám",
 	"cancel":"Mégse",
-	"edit":"Szerkesztés"
+	"edit":"Szerkesztés",
+	"creditNumber":"Kreditek száma",
+	"nextAppointment":"Következő foglalás",
+	"cardNumber":"Kártyaszám",
+	"profile":"Profil"
 }
