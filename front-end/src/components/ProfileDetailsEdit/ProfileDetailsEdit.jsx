@@ -2,13 +2,9 @@ import React, { useRef } from 'react';
 import {
 	Box,
 	Button,
-	Card,
 	CardActions,
-	CardContent,
 	makeStyles,
-	Modal,
 	TextField,
-	Typography,
 } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -61,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export const ProfileModal = (props) => {
+export const ProfileDetailsEdit = (props) => {
 	const classes = useStyles();
 	const { user, open, onClose, defaultNamespace } = props;
 
@@ -95,7 +91,6 @@ export const ProfileModal = (props) => {
 	return (
 		<Box className={classes.container}>
 			{user && (
-				// <Modal className={classes.container} open={open} onClose={onClose}>
 				<Formik
 					validationSchema={validation}
 					validateOnChange
@@ -183,10 +178,9 @@ export const ProfileModal = (props) => {
 						);
 					}}
 				</Formik>
-				// </Modal>
 			)}
 		</Box>
 	);
 };
 
-export default ProfileModal;
+export default ProfileDetailsEdit;

@@ -68,29 +68,6 @@ export const HomeHeader = () => {
 			</TabPanel>
 			<TabPanel value={value} index={2}>
 				<BasicButton label="Profile" onClick={() => router.push('/profile')} />
-				{/* <div className={classes.header}>
-          <div className={classes.div}>
-            <p> Vezetéknév Keresztnév</p>
-            <p>Telefonszám</p>
-            <p>Email</p>
-          </div>
-          <div className={classes.div}>
-            <p>Kreditek száma</p>
-            <p>Következő foglalás</p>
-            <p>Kártyaszám</p>
-          </div>
-
-          <div className={classes.div}>
-            <IconButton onClick={() => setOpen(true)}>
-              <EditIcon />
-            </IconButton>
-
-            <ProfileModal open={open} onClose={() => setOpen(false)} />
-          </div>
-        </div>
-        <Box className={classes.size}>
-          <ProfileHeader />
-        </Box> */}
 			</TabPanel>
 		</div>
 	);

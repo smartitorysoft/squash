@@ -2,9 +2,13 @@ import React from 'react';
 import Dashboard from 'components/Layout/Navigation/Dashboard';
 import GridComponent from 'components/Grid/GridComponent';
 
-const DashboardPage = () => 
-  <Dashboard>
-    <GridComponent/>
-  </Dashboard>;
+const DashboardPage = (props) => {
+	const { defaultNamespace } = props;
 
-export default DashboardPage; 
+	return (
+		<Dashboard>
+			<GridComponent defaultNamespace={defaultNamespace} />
+		</Dashboard>
+	);
+};
+export default DashboardPage;

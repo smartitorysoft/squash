@@ -11,7 +11,7 @@ import {
 	ThemeProvider,
 	Typography,
 } from '@material-ui/core';
-import ProfileModal from 'components/ProfileModal';
+import ProfileDetailsEdit from 'components/ProfileDetailsEdit';
 
 import Dashboard from 'components/Layout/Navigation/Dashboard';
 import useTranslation from 'next-translate/useTranslation';
@@ -174,7 +174,7 @@ const Profile = (props) => {
 								/>
 							</Box>
 							{open ? (
-								<ProfileModal
+								<ProfileDetailsEdit
 									defaultNamespace={defaultNamespace}
 									user={user}
 									open={open}

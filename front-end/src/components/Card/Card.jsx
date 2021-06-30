@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import AddIcon from '@material-ui/icons/Add';
-import { IconButton, makeStyles } from '@material-ui/core';
+import {
+	ThemeProvider,
+	makeStyles,
+	Link,
+	Typography,
+	Box,
+} from '@material-ui/core';
+import { red, green } from '@material-ui/core/colors';
+import { createMuiTheme } from '@material-ui/core/styles';
+
 import ReserveModal from '../ReserveModal';
 
 const useStyles = makeStyles(() => ({
@@ -10,8 +19,6 @@ const useStyles = makeStyles(() => ({
 		border: 'rgb(125, 120, 120)',
 		borderWidth: 1,
 		borderRadius: 5,
-		width: 100,
-		height: 100,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -54,23 +61,25 @@ const useStyles = makeStyles(() => ({
 	},
 }));
 
-export const Card = ({ date, reservedAppointments, day, hour }) => {
+const theme = createMuiTheme({
+	palette: {
+		primary: {
+			main: green[500],
+			contrastText: '#fff',
+		},
+		secondary: {
+			main: red[500],
+			contrastText: '#000',
+		},
+	},
+});
+
+export const Card = (props) => {
+	const { date, hour, court } = props;
+
 	const [open, setOpen] = useState(false);
 
 	const classes = useStyles();
-
-	const reserved = [];
-	useEffect(() => {
-		reservedAppointments.map((e) => {
-			if (
-				e.day === day &&
-				e.reservation.hour === hour &&
-				!reserved.includes(e.reservation.court)
-			) {
-				reserved.push(e.reservation.court);
-			}
-		});
-	}, [reservedAppointments]);
 
 	date.setHours(hour);
 	date.setMinutes(0);
@@ -78,68 +87,27 @@ export const Card = ({ date, reservedAppointments, day, hour }) => {
 		Date.UTC(
 			date.getFullYear(),
 			date.getMonth(),
-			day,
+			date.getDate(),
 			date.getHours(),
 			date.getMinutes(),
 		),
 	).toISOString();
 
-	if (reserved && reserved.length > 0) {
-		if (reserved.length === 2) {
-			return <div className={classes.full}>Reserved</div>;
-		}
-		return (
-			<div className={classes.container}>
-				<div className={reserved[0] === 'TWO' ? classes.segment : classes.half}>
-					{reserved[0] === 'TWO' ? (
-						<div>
-							<IconButton onClick={() => setOpen(true)}>
-								<AddIcon />
-							</IconButton>
-							<ReserveModal
-								reserved={reserved}
-								open={open}
-								onClose={() => setOpen(false)}
-								date={reserveDate}
-							/>
-						</div>
-					) : (
-						<p>Reserved</p>
-					)}
-				</div>
-				<div className="verticalLine" />
-				<div className={reserved[0] === 'ONE' ? classes.segment : classes.half}>
-					{reserved[0] === 'ONE' ? (
-						<div>
-							<IconButton onClick={() => setOpen(true)}>
-								<AddIcon />
-							</IconButton>
-							<ReserveModal
-								reserved={reserved}
-								open={open}
-								onClose={() => setOpen(false)}
-								date={reserveDate}
-							/>
-						</div>
-					) : (
-						<p>Reserved</p>
-					)}
-				</div>
-			</div>
-		);
-	}
 	return (
-		<div className={classes.container}>
-			<IconButton onClick={() => setOpen(true)}>
-				<AddIcon />
-			</IconButton>
-			<ReserveModal
-				reserved={reserved}
-				open={open}
-				onClose={() => setOpen(false)}
-				date={reserveDate}
-			/>
-		</div>
+		<Box className={classes.container}>
+			<ThemeProvider theme={theme}>
+				<Link onClick={() => setOpen(true)}>
+					{hour < 10 ? '0'.concat(hour, ':00') : ''.concat(hour, ':00')}
+				</Link>
+				<ReserveModal
+					open={open}
+					onClose={() => setOpen(false)}
+					date={reserveDate}
+					hour={hour}
+					court={court}
+				/>
+			</ThemeProvider>
+		</Box>
 	);
 };
 

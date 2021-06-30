@@ -5,36 +5,73 @@ import {
 	FormControlLabel,
 	FormGroup,
 	Modal,
+	Typography,
+	createMuiTheme,
+	ThemeProvider,
+	IconButton,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
+import * as moment from 'moment';
+import { red, green } from '@material-ui/core/colors';
+import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import { makeAppointment } from '../../store/appointments/actions';
 
 const useStyles = makeStyles(() => ({
 	container: {
-		width: '75%',
+		display: 'flex',
+		width: '50%',
 		height: '50%',
 		backgroundColor: 'white',
-		marginLeft: 'calc(100% / 8)',
+		marginLeft: 'calc(100% / 4)',
 		marginTop: 'calc(100% / 8)',
 		borderRadius: 5,
+		flexDirection: 'column',
+		justifyContent: 'space-around',
+		alignItems: 'center',
+	},
+	textHolder: {
+		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
+	text: {
+		fontSize: 40,
+		fontWeight: 'bold',
+	},
+	lowerText: {
+		fontSize: 24,
+	},
+	closeButton: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		width: '100%',
+
+		blackgroundColor: 'red',
+	},
 }));
 
-const ReserveModal = ({ open, onClose, reserved, date }) => {
+const theme = createMuiTheme({
+	palette: {
+		primary: {
+			main: green[500],
+			contrastText: '#fff',
+		},
+		secondary: {
+			main: '#07671E',
+			contrastText: '#fff',
+		},
+		error: {
+			main: '#FB2222',
+			contrastText: '#000',
+		},
+	},
+});
+
+const ReserveModal = ({ open, onClose, court, date, hour }) => {
 	const dispatch = useDispatch();
-
-	const [checked, setChecked] = useState({
-		checkedA: false,
-		checkedB: false,
-	});
-
-	const handleChange = (event) => {
-		setChecked({ ...checked, [event.target.name]: event.target.checked });
-	};
 
 	const classes = useStyles();
 
@@ -42,56 +79,35 @@ const ReserveModal = ({ open, onClose, reserved, date }) => {
 		<div>
 			<Modal open={open} onClose={onClose}>
 				<div className={classes.container}>
-					<div
-						style={{
-							flexDirection: 'row',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}
-					>
-						<FormGroup row>
-							<FormControlLabel
-								disabled={reserved && reserved.includes('ONE')}
-								control={
-									<Checkbox
-										checked={checked.checkedA}
-										onChange={handleChange}
-										name="checkedA"
-									/>
-								}
-								label="1-es pálya"
-							/>
-							<FormControlLabel
-								disabled={reserved && reserved.includes('TWO')}
-								control={
-									<Checkbox
-										checked={checked.checkedB}
-										onChange={handleChange}
-										name="checkedB"
-									/>
-								}
-								label="2-es pálya"
-							/>
-						</FormGroup>
+					<div className={classes.closeButton}>
+						{/* <IconButton onClick={onClose}>
+							<CloseRoundedIcon />
+						</IconButton> */}
+					</div>
+					<div className={classes.textHolder}>
+						<ThemeProvider theme={theme}>
+							<Typography color="secondary" className={classes.text}>
+								{court + 1}-es pálya
+							</Typography>
+							<Typography color="secondary" className={classes.lowerText}>
+								{moment(date).format('YYYY.MM.DD')}
+							</Typography>
+							<Typography color="secondary">
+								{hour < 10 ? '0'.concat(hour, ':00') : ''.concat(hour, ':00')}
+							</Typography>
+						</ThemeProvider>
 					</div>
 					<Button
 						variant="contained"
 						color="primary"
 						onClick={() => {
-							checked.checkedA &&
-								dispatch(
-									makeAppointment({
-										begins: date,
-										court: 'ONE',
-									}),
-								);
-							checked.checkedB &&
-								dispatch(
-									makeAppointment({
-										begins: date,
-										court: 'TWO',
-									}),
-								);
+							dispatch(
+								makeAppointment({
+									begins: date,
+									court: court === 0 ? 'ONE' : 'TWO',
+								}),
+							);
+
 							onClose();
 						}}
 					>
