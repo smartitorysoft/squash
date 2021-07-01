@@ -223,7 +223,7 @@ const GridComponent = (props) => {
 															currentDate,
 															court,
 														) ? (
-															<Box className={classes.full}>
+															<Box>
 																<ThemeProvider theme={theme}>
 																	<Typography
 																		className={classes.reservedText}
