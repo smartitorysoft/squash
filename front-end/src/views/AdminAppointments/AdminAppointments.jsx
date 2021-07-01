@@ -16,6 +16,8 @@ import {
 	Modal,
 	TextField,
 	IconButton,
+	createMuiTheme,
+	ThemeProvider,
 } from '@material-ui/core';
 import useTranslation from 'next-translate/useTranslation';
 
@@ -51,6 +53,19 @@ const useStyles = makeStyles(() => ({
 		padding: 10,
 	},
 }));
+
+const theme = createMuiTheme({
+	palette: {
+		primary: {
+			main: '#00C853',
+			contrastText: '#fff',
+		},
+		secondary: {
+			main: '#07671E',
+			contrastText: '#fff',
+		},
+	},
+});
 
 const AdminAppointments = (props) => {
 	const classes = useStyles();
@@ -131,13 +146,15 @@ const AdminAppointments = (props) => {
 						</TableBody>
 					</Table>
 				</TableContainer>
-				<Button
-					variant="contained"
-					color="primary"
-					onClick={() => setOpen(true)}
-				>
-					Új foglalás
-				</Button>
+				<ThemeProvider theme={theme}>
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={() => setOpen(true)}
+					>
+						Új foglalás
+					</Button>
+				</ThemeProvider>
 				<Modal open={open}>
 					<Box className={classes.container}>
 						<Box className={classes.modalHeader}>

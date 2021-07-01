@@ -12,7 +12,7 @@ const AdminAppointments = (props) => <Page {...props} />;
 AdminAppointments.getInitialProps = async (ctx) => {
 	const { store } = ctx;
 
-	await pageRedirect({ auth: true, url: '/sign-in' }, ctx);
+	await pageRedirect({ auth: false, url: '/sign-in' }, ctx);
 	await Promise.all([
 		store.dispatch(getAllAppointments(moment(new Date()).format('YYYY-MM-DD'))),
 		store.dispatch(getUsers()),
