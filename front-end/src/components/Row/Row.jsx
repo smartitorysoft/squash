@@ -7,6 +7,9 @@ import {
 	Box,
 	makeStyles,
 	Button,
+	createMuiTheme,
+	green,
+	ThemeProvider,
 } from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
@@ -14,7 +17,6 @@ import { useDispatch } from 'react-redux';
 import useTranslation from 'next-translate/useTranslation';
 import { giveCredit } from '../../store/credit/actions';
 import { TextInput } from '../TextInput/TextInput';
-import { BasicButton } from '../BasicButton/BasicButton';
 
 const useStyles = makeStyles(() => ({
 	collapsed: {
@@ -25,6 +27,23 @@ const useStyles = makeStyles(() => ({
 		paddingBottom: 10,
 	},
 }));
+
+const theme = createMuiTheme({
+	palette: {
+		primary: {
+			main: green[500],
+			contrastText: '#fff',
+		},
+		secondary: {
+			main: '#07671E',
+			contrastText: '#fff',
+		},
+		error: {
+			main: '#FB2222',
+			contrastText: '#000',
+		},
+	},
+});
 
 export default function Row(props) {
 	const { row, defaultNamespace } = props;
@@ -63,14 +82,16 @@ export default function Row(props) {
 								label={t('creditNumber')}
 								onChange={(text) => setNumberOfCredits(text.target.value)}
 							/>
-							<Button
-								variant="contained"
-								size="small"
-								color="primary"
-								onClick={onSubmit}
-							>
-								{t('approve')}
-							</Button>
+							<ThemeProvider theme={theme}>
+								<Button
+									variant="contained"
+									size="small"
+									color="primary"
+									onClick={onSubmit}
+								>
+									{t('approve')}
+								</Button>
+							</ThemeProvider>
 						</Box>
 					</Collapse>
 				</TableCell>
