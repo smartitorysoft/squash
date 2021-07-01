@@ -43,8 +43,6 @@ const ProfileDetails = (props) => {
 
 	const { t } = useTranslation(defaultNamespace);
 
-	console.log('user', user, props);
-
 	const classes = useStyles();
 	return (
 		<Box className={classes.container}>

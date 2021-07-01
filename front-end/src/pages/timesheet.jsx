@@ -11,11 +11,11 @@ const TimeSheetPage = (props) => <Page {...props} />;
 TimeSheetPage.getInitialProps = async (ctx) => {
 	const { store } = ctx;
 	try {
-		await pageRedirect({ auth: false, url: '/sign-in' }, ctx);
-		// await Promise.all([
-		// 	store.dispatch(getOpenings(moment(new Date()).format('YYYY-MM-DD'))),
-		// 	store.dispatch(getRules())
-		// ])
+		await pageRedirect({ auth: true, url: '/sign-in' }, ctx);
+		await Promise.all([
+			store.dispatch(getOpenings(moment(new Date()).format('YYYY-MM-DD'))),
+			store.dispatch(getRules()),
+		]);
 	} catch (error) {
 		throw error;
 	}

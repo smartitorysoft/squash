@@ -10,7 +10,7 @@ Index.getInitialProps = async (ctx) => {
 	// ide fog kelleni a try-catch
 	// eslint-disable-next-line no-useless-catch
 	try {
-		await pageRedirect({ auth: false, url: '/dashboard' }, ctx);
+		await pageRedirect({ auth: true, url: '/dashboard' }, ctx);
 	} catch (error) {
 		throw error;
 	}
