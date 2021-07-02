@@ -8,3 +8,19 @@ export const giveCredit = (data) => (dispatch, getState, { jsonApi }) =>
 				payload: res.data,
 			});
 		});
+
+export const CREDIT_HISTORY = 'CREDIT_HISTORY';
+export const getUserCreditHistory = (data) => (
+	dispatch,
+	getState,
+	{ jsonApi },
+) =>
+	jsonApi()
+		.get(`payments/history/${data}`)
+		.then((res) => {
+			dispatch({
+				type: CREDIT_HISTORY,
+				payload: res.data,
+			});
+			Promise.resolve();
+		});
