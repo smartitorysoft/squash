@@ -9,8 +9,12 @@ import {
 	TableBody,
 	TableRow,
 	Paper,
+	Typography,
+	createMuiTheme,
+	ThemeProvider,
 } from '@material-ui/core';
 import Dashboard from 'components/Layout/Navigation/Dashboard';
+import * as moment from 'moment';
 
 import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
@@ -20,15 +24,36 @@ const useStyles = makeStyles((theme) => ({
 	container: {
 		width: '100%',
 		display: 'flex',
+		flexDirection: 'column',
+	},
+	header: {
+		height: 50,
+		display: 'flex',
 		flexDirection: 'row',
+		alignItems: 'center',
+		marginLeft: 15,
 	},
 	table: {
 		width: '100%',
 	},
 }));
 
+const theme = createMuiTheme({
+	palette: {
+		primary: {
+			main: '#00C853',
+			contrastText: '#fff',
+		},
+		secondary: {
+			main: '#07671E',
+			contrastText: '#fff',
+		},
+	},
+});
+
 const CreditHistory = (props) => {
 	const classes = useStyles();
+
 	const { defaultNamespace } = props;
 	const { t } = useTranslation(defaultNamespace);
 
@@ -38,25 +63,57 @@ const CreditHistory = (props) => {
 	return (
 		<Dashboard>
 			<Box className={classes.container}>
-				<TableContainer className={classes.table} component={Paper}>
-					<Table>
-						<TableHead>
-							<TableRow>
-								<TableCell>{t('credit-number')}</TableCell>
-								<TableCell align="right">{t('date')}</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{creditHistory &&
-								creditHistory.map((credit) => (
-									<TableRow key={credit.date}>
-										<TableCell>{credit.quantity}</TableCell>
-										<TableCell align="right">{credit.date}</TableCell>
-									</TableRow>
-								))}
-						</TableBody>
-					</Table>
-				</TableContainer>
+				<ThemeProvider theme={theme}>
+					<Paper>
+						<Box className={classes.header}>
+							<Typography color="secondary">
+								{t('credit-number')}: {user.credit}
+							</Typography>
+						</Box>
+					</Paper>
+					<TableContainer className={classes.table} component={Paper}>
+						<Table>
+							<TableHead>
+								<TableRow>
+									<TableCell style={{ color: '#07671E' }}>
+										{t('credit-number')}
+									</TableCell>
+									<TableCell style={{ color: '#07671E' }}>
+										{t('sign')}
+									</TableCell>
+									<TableCell style={{ color: '#07671E' }}>
+										{t('type')}
+									</TableCell>
+									<TableCell style={{ color: '#07671E' }} align="right">
+										{t('date')}
+									</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{creditHistory &&
+									creditHistory
+										.sort((a, b) => new Date(a.date) - new Date(b.date))
+										.map((credit) => (
+											<TableRow key={credit.date}>
+												<TableCell style={{ color: '#07671E' }}>
+													{credit.quantity}
+												</TableCell>
+												<TableCell style={{ color: '#07671E' }}>
+													{credit.sign === '+' ? '+' : '-'}
+												</TableCell>
+												{/* <TableCell style={{ color: '#07671E' }}>{credit.sign === 'positive' ? '+' : '-'</TableCell> */}
+												<TableCell style={{ color: '#07671E' }}>
+													{t(credit.type)}
+												</TableCell>
+												<TableCell style={{ color: '#07671E' }} align="right">
+													{moment(credit.date).format('YYYY-MM-DD')}{' '}
+												</TableCell>
+											</TableRow>
+										))}
+							</TableBody>
+						</Table>
+					</TableContainer>
+				</ThemeProvider>
 			</Box>
 		</Dashboard>
 	);
