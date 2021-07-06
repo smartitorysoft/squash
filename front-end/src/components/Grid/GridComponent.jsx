@@ -5,7 +5,7 @@ import {
 	Typography,
 	Paper,
 	makeStyles,
-	Link,
+	Button,
 	ThemeProvider,
 	createMuiTheme,
 	IconButton,
@@ -15,6 +15,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { red, green } from '@material-ui/core/colors';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ReactDOM from 'react-dom';
 import Card from '../Card';
 
 const useStyles = makeStyles((theme) => ({
@@ -170,6 +171,7 @@ const GridComponent = (props) => {
 											index * 24 * 60 * 60 * 1000,
 									),
 								)}
+								.
 							</Typography>
 						</ThemeProvider>
 					</Box>
@@ -217,27 +219,30 @@ const GridComponent = (props) => {
 														);
 														const currentHour = itemValue + 8;
 
-														return reserved(
-															reservedAppointments,
-															currentHour,
-															currentDate,
-															court,
-														) ? (
-															<Box>
-																<ThemeProvider theme={theme}>
-																	<Typography
-																		className={classes.reservedText}
-																		color="error"
-																	>
-																		{currentHour < 10
-																			? '0'.concat(currentHour, ':00')
-																			: ''.concat(currentHour, ':00')}
-																	</Typography>
-																</ThemeProvider>
-															</Box>
-														) : (
+														return (
+															// 	reservedAppointments,
+															// 	currentHour,
+															// 	currentDate,
+															// 	court,
+															// ) ? (
+															// 	<Grid key={itemValue} item>
+															// 		<ThemeProvider theme={theme}>
+															// 			<Button disabled>
+															// 				{currentHour < 10
+															// 					? '0'.concat(currentHour, ':00')
+															// 					: ''.concat(currentHour, ':00')}
+															// 			</Button>
+															// 		</ThemeProvider>
+															// 	</Grid>
+															// ) : (
 															<Grid key={itemValue} item>
 																<Card
+																	disabled={reserved(
+																		reservedAppointments,
+																		currentHour,
+																		currentDate,
+																		court,
+																	)}
 																	date={currentDate}
 																	hour={currentHour}
 																	reservedAppointments={reservedAppointments}

@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AddIcon from '@material-ui/icons/Add';
-import {
-	ThemeProvider,
-	makeStyles,
-	Link,
-	Typography,
-	Box,
-} from '@material-ui/core';
+import { ThemeProvider, makeStyles, Button, Box } from '@material-ui/core';
 import { red, green } from '@material-ui/core/colors';
 import { createMuiTheme } from '@material-ui/core/styles';
 
@@ -68,15 +61,14 @@ const theme = createMuiTheme({
 			contrastText: '#fff',
 		},
 		secondary: {
-			main: red[500],
+			main: '#FB2222',
 			contrastText: '#000',
 		},
 	},
 });
 
 export const Card = (props) => {
-	const { date, hour, court } = props;
-
+	const { disabled, date, hour, court } = props;
 	const [open, setOpen] = useState(false);
 
 	const classes = useStyles();
@@ -93,22 +85,31 @@ export const Card = (props) => {
 		),
 	).toISOString();
 
+	const time = hour < 10 ? '0'.concat(hour, ':00') : ''.concat(hour, ':00');
+
 	return (
 		<Box className={classes.container}>
 			<ThemeProvider theme={theme}>
-				<Link onClick={() => setOpen(true)}>
-					{hour < 10 ? '0'.concat(hour, ':00') : ''.concat(hour, ':00')}
-				</Link>
-				<ReserveModal
-					open={open}
-					onClose={() => setOpen(false)}
-					date={reserveDate}
-					hour={hour}
-					court={court}
-				/>
+				<Box>
+					{disabled ? (
+						<Button size="small" color="secondary" disabled>
+							{time}
+						</Button>
+					) : (
+						<Button size="small" color="primary" onClick={() => setOpen(true)}>
+							{time}
+						</Button>
+					)}
+					<ReserveModal
+						open={open}
+						onClose={() => setOpen(false)}
+						date={reserveDate}
+						hour={hour}
+						court={court}
+					/>
+				</Box>
 			</ThemeProvider>
 		</Box>
 	);
 };
-
 export default Card;

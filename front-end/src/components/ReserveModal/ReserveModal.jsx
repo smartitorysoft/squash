@@ -48,8 +48,7 @@ const useStyles = makeStyles(() => ({
 		flexDirection: 'row',
 		justifyContent: 'flex-end',
 		width: '100%',
-
-		blackgroundColor: 'red',
+		marginRight: 20,
 	},
 }));
 
@@ -80,9 +79,9 @@ const ReserveModal = ({ open, onClose, court, date, hour }) => {
 			<Modal open={open} onClose={onClose}>
 				<div className={classes.container}>
 					<div className={classes.closeButton}>
-						{/* <IconButton onClick={onClose}>
+						<IconButton onClick={onClose}>
 							<CloseRoundedIcon />
-						</IconButton> */}
+						</IconButton>
 					</div>
 					<div className={classes.textHolder}>
 						<ThemeProvider theme={theme}>
@@ -97,22 +96,24 @@ const ReserveModal = ({ open, onClose, court, date, hour }) => {
 							</Typography>
 						</ThemeProvider>
 					</div>
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={() => {
-							dispatch(
-								makeAppointment({
-									begins: date,
-									court: court === 0 ? 'ONE' : 'TWO',
-								}),
-							);
+					<div>
+						<Button
+							variant="contained"
+							color="primary"
+							onClick={() => {
+								dispatch(
+									makeAppointment({
+										begins: date,
+										court: court === 0 ? 'ONE' : 'TWO',
+									}),
+								);
 
-							onClose();
-						}}
-					>
-						Foglalás
-					</Button>
+								onClose();
+							}}
+						>
+							Foglalás
+						</Button>
+					</div>
 				</div>
 			</Modal>
 		</div>
