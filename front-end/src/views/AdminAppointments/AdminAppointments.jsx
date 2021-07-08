@@ -91,8 +91,6 @@ const AdminAppointments = (props) => {
 		return b.profile.firstName > a.profile.firstName ? -1 : 0;
 	});
 
-	console.log(users);
-
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
