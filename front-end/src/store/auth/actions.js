@@ -41,6 +41,7 @@ export const signInWithRefreshToken = (refreshToken, res) => async (
 		});
 
 export const REGISTER_USER = 'REGISTER_USER';
-export const register = (data) => (dispatch, getState, { jsonApi }) => {
-	jsonApi().post('users', data);
-};
+export const register = (data) => (dispatch, getState, { jsonApi }) =>
+	jsonApi()
+		.post('users', data)
+		.then(() => Promise.resolve());

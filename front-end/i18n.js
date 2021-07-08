@@ -16,5 +16,6 @@ module.exports = {
 		'/dashboard': ['dashboard'],
 		'/profile': ['profile'],
 		'/credit': ['credit'],
+		'/admin-appointments': ['admin-appointments'],
 	},
 };

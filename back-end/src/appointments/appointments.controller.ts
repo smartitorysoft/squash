@@ -137,7 +137,7 @@ export class AppointmentsController {
 		return new DeleteAppointmentResponseDto();
 	}
 
-	@Delete(':/id/admin')
+	@Delete(':id/admin')
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Target('appointments')
 	@Operation('delete')

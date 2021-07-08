@@ -70,7 +70,6 @@ export class UsersController {
 	@Post()
 	@ApiResponse({ status: 200, type: CreateUserResponseDto })
 	public async create(
-		@Req() request: RequestWithUser,
 		@Body() msg: CreateUserDto,
 	): Promise<CreateUserResponseDto> {
 		return new CreateUserResponseDto(await this.usersService.create(msg));

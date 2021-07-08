@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Credit = () => {
-	const [, setValue] = useState('');
+	const [value, setValue] = useState('');
 
 	const classes = useStyles();
 
@@ -39,30 +39,30 @@ const Credit = () => {
 
 	return (
 		<Dashboard>
-		<Box>
-			<TextInput
-				label="Keresés"
-				onChange={(text) => {
-					setValue(text.target.value);
-				}}
-			/>
-			<TableContainer classes={classes.table} component={Paper}>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell />
-							<TableCell align="left">Név</TableCell>
-							<TableCell align="left">Email</TableCell>
-							<TableCell align="right">Kredit</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{users.items &&
-							users.items.map((user) => <Row key={user.id} row={user} />)}
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</Box>
+			<Box>
+				<TextInput
+					label="Keresés"
+					onChange={(text) => {
+						setValue(text.target.value);
+					}}
+				/>
+				<TableContainer classes={classes.table} component={Paper}>
+					<Table>
+						<TableHead>
+							<TableRow>
+								<TableCell />
+								<TableCell align="left">Név</TableCell>
+								<TableCell align="left">Email</TableCell>
+								<TableCell align="right">Kredit</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{users.items &&
+								users.items.map((user) => <Row key={user.id} row={user} />)}
+						</TableBody>
+					</Table>
+				</TableContainer>
+			</Box>
 		</Dashboard>
 	);
 };
