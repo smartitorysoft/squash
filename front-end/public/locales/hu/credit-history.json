@@ -1,0 +1,10 @@
+{
+    "quantity":"Mennyiség",
+    "date":"Dátum",
+    "sign":"Tranzakció előjele",
+    "type":"Tranzakció típusa",
+    "reservation":"Foglalás",
+    "cancel":"Visszamondás",
+    "upload":"Kredit feltöltés",
+    "credit-number":"Aktuális kredit mennyiség"
+}

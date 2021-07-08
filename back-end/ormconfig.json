@@ -10,7 +10,7 @@
     "src/entities/**/*.entity.ts"
   ],
   "dropSchema": false,
-  "migrationsTableName": "migration",
+  "migrationsTableName": "migrations",
   "migrations": [
     "src/migration/*.ts"
   ],

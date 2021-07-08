@@ -11,6 +11,7 @@ import { PaymentsModule } from './payments/payments.module';
 import { configService } from './config/config.service';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { OpeningsModule } from './openings/openings.module';
+import { CourtsModule } from './courts/courts.module';
 
 @Module({
 	imports: [
@@ -23,6 +24,7 @@ import { OpeningsModule } from './openings/openings.module';
 		PaymentsModule,
 		AppointmentsModule,
 		OpeningsModule,
+		CourtsModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

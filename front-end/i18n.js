@@ -16,5 +16,6 @@ module.exports = {
 		'/dashboard': ['dashboard'],
 		'/profile': ['profile'],
 		'/credit': ['credit'],
+		'/credit-history': ['credit-history'],
 	},
 };

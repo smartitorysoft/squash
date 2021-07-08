@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNotEmpty } from 'class-validator';
-import { Court } from '../enum/court.enum';
+import { IsDateString, IsString } from 'class-validator';
 
 class CreateAppointmentDto {
 	@ApiProperty({ required: true })
@@ -8,8 +7,8 @@ class CreateAppointmentDto {
 	begins: Date;
 
 	@ApiProperty({ required: true })
-	@IsNotEmpty()
-	court: Court;
+	@IsString()
+	courtId: string;
 }
 
 export default CreateAppointmentDto;

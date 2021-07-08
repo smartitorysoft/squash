@@ -14,46 +14,72 @@ export class RolesService {
 	) {}
 
 	async onApplicationBootstrap(): Promise<void> {
-		await this.bootstrap();
-	}
+		// If you need any generated roles, call this method with the role name and description as params
+		await this.checkIfRoleExistsElseCreate('root', 'Smartitory use only!');
+		await this.checkIfRoleExistsElseCreate('user', 'Generic user role');
 
-	private async bootstrap(): Promise<void> {
-		const rootRole = await this.getRole('root');
-		if (rootRole === undefined) {
-			await this.createRole('root', 'Smartitory use only!');
-			console.log(`Generated root role!`);
+		const missingPermissions = await this.validateRolePermissions();
+
+		if (missingPermissions.length > 0) {
+			console.log(
+				`Found ${missingPermissions.length} missing permissions for already existing roles...`,
+			);
+			await this.createRolePermissions(missingPermissions);
 		} else {
-			console.log(`Skipping root role generation...`);
-			console.log(`Checking target list...`);
-			const missingPermissions = await this.validateRolePermissions();
-
-			if (missingPermissions.length > 0) {
-				console.log(`Found ${missingPermissions.length} missing permissions`);
-				await this.createRolePermissions(missingPermissions);
-			} else {
-				console.log(`Found no missing permissions!`);
-			}
+			console.log(`Found no missing permissions!`);
 		}
-
-		return;
 	}
 
-	private async validateRolePermissions(): Promise<
-		{ role: Role; target: string }[]
-	> {
-		const roles = await this.getRoles();
+	private async checkIfRoleExistsElseCreate(
+		roleName: string,
+		description: string,
+	): Promise<void> {
+		const role = await this.getRole(roleName);
+		if (role === undefined) {
+			await this.createRole(roleName, description);
+			console.log(`Generated role: ${roleName}`);
+		} else {
+			console.log(`Skipping role generation for: ${roleName}`);
+		}
+		console.log(`Checking target list for: ${roleName}`);
+		const missingPermissions = await this.validateRolePermissions(role);
 
+		if (missingPermissions.length > 0) {
+			console.log(
+				`Found ${missingPermissions.length} missing permissions for: ${roleName}`,
+			);
+			await this.createRolePermissions(missingPermissions);
+		} else {
+			console.log(`Found no missing permissions for: ${roleName}`);
+		}
+	}
+
+	private async validateRolePermissions(
+		role?: Role,
+	): Promise<{ role: Role; target: string }[]> {
 		const result = [];
-
-		for (const role of roles) {
+		if (role) {
 			const nonExistentPermissions = await this.permService.checkAgainstTargetList(
 				role,
 			);
-
 			if (nonExistentPermissions.length > 0) {
 				nonExistentPermissions.forEach((nep) =>
 					result.push({ role: role, target: nep }),
 				);
+			}
+		} else {
+			const roles = await this.getRoles();
+
+			for (const role of roles) {
+				const nonExistentPermissions = await this.permService.checkAgainstTargetList(
+					role,
+				);
+
+				if (nonExistentPermissions.length > 0) {
+					nonExistentPermissions.forEach((nep) =>
+						result.push({ role: role, target: nep }),
+					);
+				}
 			}
 		}
 		return result;
