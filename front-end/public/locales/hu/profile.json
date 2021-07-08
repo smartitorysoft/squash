@@ -4,5 +4,11 @@
 	"save": "Mentés",
 	"firstName": "Keresztnév",
 	"lastName":"Vezetéknév",
-	"phone":"Telefonszám"
+	"phone":"Telefonszám",
+	"cancel":"Mégse",
+	"edit":"Szerkesztés",
+	"creditNumber":"Kreditek száma",
+	"nextAppointment":"Következő foglalás",
+	"cardNumber":"Kártyaszám",
+	"profile":"Profil"
 }

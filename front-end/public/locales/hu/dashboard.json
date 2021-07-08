@@ -2,5 +2,12 @@
 	"username": "E-mail cím",
 	"password": "Jelszó",
 	"sign-in": "Belépés",
-	"sign-up": "Regisztráció"
+	"sign-up": "Regisztráció",
+	"monday":"Hétfő",
+	"tuesday":"Kedd",
+	"wednesday": "Szerda",
+	"thursday": "Csütörtök",
+	"friday": "Péntek",
+	"saturday": "Szombat",
+	"sunday":"Vasárnap"
 }

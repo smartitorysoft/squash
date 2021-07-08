@@ -1,23 +1,26 @@
 import React, { useRef } from 'react';
-import { Box,Button, Card, CardActions, CardContent, makeStyles, Modal, TextField } from '@material-ui/core';
+import {
+	Box,
+	Button,
+	CardActions,
+	makeStyles,
+	TextField,
+} from '@material-ui/core';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { setProfile } from 'store/user/actions';
 import { useDispatch, useSelector } from 'react-redux';
-
-import useTranslation from 'next-translate/useTranslation';
 import { useErrorHandling } from 'components/error';
+import useTranslation from 'next-translate/useTranslation';
 import { validation } from './validation';
 
-
 const useStyles = makeStyles((theme) => ({
-	
 	modal: {
 		width: '75%',
 		height: '50%',
 		backgroundColor: 'rgb(255, 255, 255)',
 		marginLeft: 'calc(100% / 8)',
-		marginTop: 'calc(100% / 8)',
+		marginTop: 'calc(100% / 16)',
 		borderRadius: 5,
 		display: 'flex',
 		flexDirection: 'column',
@@ -36,19 +39,34 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'center',
 	},
+	container: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: '100%',
+		width: '100%',
+	},
+	box: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: '100%',
+		width: '100%',
+	},
 }));
 
-export const ProfileModal = (props) => {
+export const ProfileDetailsEdit = (props) => {
 	const classes = useStyles();
-	const { user,open, onClose, defaultNamespace } = props
+	const { user, open, onClose, defaultNamespace } = props;
 
 	const { errorHandling, errorChecker } = useErrorHandling();
 	const { t } = useTranslation(defaultNamespace);
 
 	const dispatch = useDispatch();
 
-	const onSubmit = async (values,{setSubmitting}) => {
-		console.log(values);
+	const onSubmit = async (values, { setSubmitting }) => {
 		try {
 			await dispatch(
 				setProfile({
@@ -71,8 +89,8 @@ export const ProfileModal = (props) => {
 	};
 
 	return (
-		<Box >
-			{user && <Modal open={open} onClose={onClose}>
+		<Box className={classes.container}>
+			{user && (
 				<Formik
 					validationSchema={validation}
 					validateOnChange
@@ -86,72 +104,83 @@ export const ProfileModal = (props) => {
 						phone: user.profile.phone,
 					}}
 				>
-					{( formikProps) => {
-						const {handleChange,
+					{(formikProps) => {
+						const {
+							handleChange,
 							values,
 							isSubmitting,
-							handleBlur} = formikProps;
+							handleBlur,
+						} = formikProps;
 						return (
 							<Form noValidate>
-								<Card>
-									<CardContent className={classes.modal}>
+								<Box className={classes.box}>
 									<TextField
-										name='firstName'
+										name="firstName"
 										value={values.firstName}
 										label={t('firstName')}
 										onChange={handleChange}
 										onBlur={handleBlur}
-										error={!!errorChecker(formikProps,'firstName')}
+										error={!!errorChecker(formikProps, 'firstName')}
 										helperText={errorChecker(formikProps, 'firstName') || ' '}
-									
+										variant="outlined"
 									/>
 									<TextField
-										name='lastName'
+										name="lastName"
 										value={values.lastName}
 										label={t('lastName')}
 										onChange={handleChange}
 										onBlur={handleBlur}
-										error={!!errorChecker(formikProps,'lastName')}
+										error={!!errorChecker(formikProps, 'lastName')}
 										helperText={errorChecker(formikProps, 'lastName') || ' '}
+										variant="outlined"
 									/>
 									<TextField
 										value={values.email}
 										label={t('email')}
 										onChange={handleChange}
 										onBlur={handleBlur}
-										error={!!errorChecker(formikProps,'email')}
-										helperText={errorChecker(formikProps, 'email') || ' '}			
-										name='email'
+										error={!!errorChecker(formikProps, 'email')}
+										helperText={errorChecker(formikProps, 'email') || ' '}
+										name="email"
+										variant="outlined"
 									/>
 									<TextField
-										name='phone'
+										name="phone"
 										value={values.phone}
 										label={t('phone')}
 										onChange={handleChange}
 										onBlur={handleBlur}
-										error={!!errorChecker(formikProps,'phone')}
+										error={!!errorChecker(formikProps, 'phone')}
 										helperText={errorChecker(formikProps, 'phone') || ' '}
-										
+										variant="outlined"
 									/>
-									</CardContent>
-									<CardActions className={classes.button} >
-										<Button 
+
+									<CardActions className={classes.button}>
+										<Button
+											color="secondary"
+											variant="contained"
+											onClick={onClose}
+										>
+											{t('cancel')}
+										</Button>
+										<Button
 											color="primary"
 											disabled={isSubmitting}
 											type="submit"
-											variant="contained">
+											variant="contained"
+											onClick={onClose}
+										>
 											{t('save')}
 										</Button>
 									</CardActions>
-								</Card>
+								</Box>
 							</Form>
-							)
-						}
-					}
+						);
+					}}
 				</Formik>
-			</Modal>}
+			)}
 		</Box>
 	);
 };
 
-export default ProfileModal;
+export default ProfileDetailsEdit;

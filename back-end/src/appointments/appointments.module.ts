@@ -7,6 +7,7 @@ import { PaymentsModule } from '../payments/payments.module';
 import { UsersModule } from '../users/users.module';
 import { AdminModule } from '../admin/admin.module';
 import { OpeningsModule } from '../openings/openings.module';
+import { CourtsModule } from 'src/courts/courts.module';
 
 @Module({
 	imports: [
@@ -15,6 +16,7 @@ import { OpeningsModule } from '../openings/openings.module';
 		UsersModule,
 		AdminModule,
 		OpeningsModule,
+		CourtsModule,
 	],
 	controllers: [AppointmentsController],
 	providers: [AppointmentsService],

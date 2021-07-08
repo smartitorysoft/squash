@@ -1,7 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Appointment, Payment, User } from '../entities';
-import { QueryRunner, Repository } from 'typeorm';
+import { Between, In, QueryRunner, Repository } from 'typeorm';
 import CreateAppointmentDto from './dto/create-appointment.dto';
 import { PaymentsService } from '../payments/payments.service';
 import {
@@ -18,8 +18,8 @@ import { AppointmentDataDto } from './dto/appointment-data.dto';
 import { AppointmentDataAdminDto } from './dto/appointment-data-admin.dto';
 import { UsersService } from '../users/users.service';
 import { OpeningsService } from '../openings/openings.service';
+import { CourtsService } from 'src/courts/courts.service';
 
-const COST = 10;
 const HOUR = 60 * 60 * 1000;
 const DAY = 24 * HOUR;
 const WEEK = 7 * DAY;
@@ -33,13 +33,14 @@ export class AppointmentsService {
 		private readonly paymentsService: PaymentsService,
 		private readonly usersService: UsersService,
 		private readonly openingsService: OpeningsService,
+		private readonly courtsService: CourtsService,
 	) {}
 
 	private async paginate(
 		isAdmin: boolean,
 		options: IPaginationOptions,
 		searchOptions = {},
-	): Promise<Pagination<any>> {
+	): Promise<Pagination<AppointmentListDataDto | AppointmentListDataAdminDto>> {
 		const page = await paginate<Appointment>(this.repository, options, {
 			order: { createdAt: 'DESC' },
 			...searchOptions,
@@ -64,28 +65,24 @@ export class AppointmentsService {
 		isAdmin: boolean,
 		filters: string[],
 	): Promise<AppointmentDataDto[] | AppointmentDataAdminDto[]> {
-		let f = '';
-		if (filters.length) {
-			filters.forEach((item, i) => {
-				if (i) {
-					f += ` or appointments.status = :${item}`;
-				} else {
-					f += `appointments.status = :${item}`;
-				}
-			});
-		}
-		const items = await this.repository
-			.createQueryBuilder('appointments')
-			.leftJoinAndSelect('appointments.user', 'User')
-			.leftJoinAndSelect('User.role', 'Role')
-			.leftJoinAndSelect('User.profile', 'Profile')
-			.where(
-				`appointments.begins >= :startTime and appointments.begins < :endTime`,
-				{ startTime, endTime },
-			)
-			.andWhere(f ? f : '1 = 1', { ...Status })
-			.orderBy('begins')
-			.getMany();
+		const items = await this.repository.find({
+			order: { begins: 'ASC' },
+			where: {
+				begins: Between(startTime, endTime),
+				status: In(
+					filters.length
+						? filters
+						: [
+								Status.SHOWED,
+								Status.PENDING,
+								Status.CANCELED,
+								Status.DELETED,
+								Status.MISSED,
+						  ],
+				),
+			},
+		});
+
 		const mapFunc = isAdmin
 			? (item) => new AppointmentDataAdminDto(item)
 			: (item) => new AppointmentDataDto(item);
@@ -160,7 +157,10 @@ export class AppointmentsService {
 		if (begins.getTime() <= currentDate.getTime()) {
 			throw new BaseException('400apo04');
 		}
-		if (user.credit < COST) {
+
+		const court = await this.courtsService.getById(dto.courtId);
+
+		if (user.credit < court.hourlyCost) {
 			throw new BaseException('400pay00');
 		}
 		const { openingHour, closingHour } = (
@@ -182,18 +182,18 @@ export class AppointmentsService {
 			throw new BaseException('400apo03');
 		}
 		const afterward = async (queryRunner: QueryRunner, payment: Payment) => {
-			const newAppointment = await this.repository.create({
+			const newAppointment = this.repository.create({
 				begins,
 				user,
 				payment,
-				court: dto.court,
+				court,
 				status: Status.PENDING,
 			});
 			return await queryRunner.manager.save(newAppointment);
 		};
 		const newAppointment = await this.paymentsService.chargeCredit(
 			user,
-			-COST,
+			-court.hourlyCost,
 			afterward,
 		);
 		return newAppointment.id;
