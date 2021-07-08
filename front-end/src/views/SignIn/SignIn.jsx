@@ -152,7 +152,6 @@ const SignIn = (props) => {
 									<CardActions className={classes.buttons}>
 										<ThemeProvider theme={theme}>
 											<Button
-												// className={classes.buttonStyle}
 												disabled={isSubmitting}
 												color="primary"
 												type="submit"

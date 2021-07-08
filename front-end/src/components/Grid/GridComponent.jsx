@@ -211,7 +211,6 @@ const GridComponent = (props) => {
 													justify="space-between"
 													spacing={1}
 												>
-													{/* {value < 5 ? */}
 													{[...Array(15).keys()].map((itemValue) => {
 														const currentDate = new Date(
 															firstDayOfTheWeekDate.getTime() +
@@ -220,21 +219,6 @@ const GridComponent = (props) => {
 														const currentHour = itemValue + 8;
 
 														return (
-															// 	reservedAppointments,
-															// 	currentHour,
-															// 	currentDate,
-															// 	court,
-															// ) ? (
-															// 	<Grid key={itemValue} item>
-															// 		<ThemeProvider theme={theme}>
-															// 			<Button disabled>
-															// 				{currentHour < 10
-															// 					? '0'.concat(currentHour, ':00')
-															// 					: ''.concat(currentHour, ':00')}
-															// 			</Button>
-															// 		</ThemeProvider>
-															// 	</Grid>
-															// ) : (
 															<Grid key={itemValue} item>
 																<Card
 																	disabled={reserved(
@@ -251,16 +235,6 @@ const GridComponent = (props) => {
 															</Grid>
 														);
 													})}
-													{/* )) : [...Array(15).keys()].map((itemValue) => (
-												<Grid key={itemValue} item>
-													<Card
-														date={date}
-														day={value + firstDayOfTheWeeK}
-														hour={itemValue + 8}
-														reservedAppointments={reservedAppointments}
-													/>
-												</Grid>
-												)) */}
 												</Grid>
 											</Grid>
 										</Paper>

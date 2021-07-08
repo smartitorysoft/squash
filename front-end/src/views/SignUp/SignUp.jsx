@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
-		// padding: theme.spacing(6, 2),
 		backgroundImage: 'url("/images/background_image.png")',
 		backgroundSize: 'cover',
 		backgroundPosition: 'center',
@@ -52,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 
 	fields: {
-		// margin: theme.spacing(-1),
 		display: 'flex',
 		flexWrap: 'wrap',
 	},

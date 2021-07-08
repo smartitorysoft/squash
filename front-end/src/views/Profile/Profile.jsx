@@ -64,7 +64,6 @@ const useStyles = makeStyles((theme) => ({
 
 	avatarBox: {
 		display: 'flex',
-		// justifyContent: 'center',
 		alignItems: 'center',
 		height: '100%',
 		width: '100%',
@@ -123,17 +122,7 @@ const Profile = (props) => {
 
 	const { t } = useTranslation(defaultNamespace);
 
-	// const user = useSelector((state) => state.me);
-
-	const user = {
-		profile: {
-			firstName: 'Lorem',
-			lastName: 'Ipsum',
-			phone: '+40755279691',
-		},
-		email: 'vgtamas@example.com',
-		credit: '500055',
-	};
+	const user = useSelector((state) => state.me);
 
 	const onSubmit = async (values, { setSubmitting }) => {
 		try {
@@ -193,6 +182,7 @@ const Profile = (props) => {
 						</Paper>
 					</ThemeProvider>
 				</Box>
+				{/* Itt ez azért van bent hagyva, mert nem volt megbeszélve, hogy ez végül bent marad-e */}
 				{/* <Box className={classes.size}>
 					<ProfileHeader />
 				</Box> */}
