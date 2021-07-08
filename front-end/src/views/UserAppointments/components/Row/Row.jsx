@@ -1,6 +1,4 @@
-import {
-	Box, TableRow, TableCell, IconButton,
-} from '@material-ui/core';
+import { Box, TableRow, TableCell, IconButton } from '@material-ui/core';
 import React from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useDispatch } from 'react-redux';
@@ -12,7 +10,6 @@ import { getUserAppointments } from '../../../../../store/appointments/actions';
 const Row = ({ row }) => {
 	const date = moment(new Date(row.date)).format('YYYY.MM.DD.');
 	const hour = moment(new Date(row.begin)).add(-3, 'hours').format('HH:mm');
-	console.log('ROW', hour);
 	const dispatch = useDispatch();
 
 	const deleteAppoin = (id) => {
@@ -23,13 +20,11 @@ const Row = ({ row }) => {
 	return (
 		<>
 			<TableRow key={row.date}>
-				<TableCell align='left'>{date}</TableCell>
-				<TableCell align='left'>
-					{hour}
-				</TableCell>
-				<TableCell align='right'>{row.court === 'ONE' ? '1' : '2'}</TableCell>
-				<TableCell align='right'>
-					<IconButton size='small' onClick={() => deleteAppoin(row.id)}>
+				<TableCell align="left">{date}</TableCell>
+				<TableCell align="left">{hour}</TableCell>
+				<TableCell align="right">{row.court === 'ONE' ? '1' : '2'}</TableCell>
+				<TableCell align="right">
+					<IconButton size="small" onClick={() => deleteAppoin(row.id)}>
 						<DeleteIcon />
 					</IconButton>
 				</TableCell>

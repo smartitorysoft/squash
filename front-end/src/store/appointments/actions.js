@@ -68,12 +68,10 @@ export const makeAdminAppointment = (data) => (
 	dispatch,
 	getState,
 	{ jsonApi },
-) => {
-	console.log(data);
-	return jsonApi()
+) =>
+	jsonApi()
 		.post(`appointments/${data.userId}`, data.payload)
 		.then(() => {
 			console.log('Admin appointment created to:', data);
 			Promise.resolve();
 		});
-};

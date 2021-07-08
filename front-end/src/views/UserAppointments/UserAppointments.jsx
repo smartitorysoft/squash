@@ -26,8 +26,6 @@ const UserAppointments = (props) => {
 
 	const { defaultNamespace } = props;
 
-	console.log(defaultNamespace);
-
 	const { t } = useTranslation(defaultNamespace);
 
 	const classes = useStyles();
@@ -48,7 +46,6 @@ const UserAppointments = (props) => {
 						<TableBody>
 							{appointments.list.map((listItem) =>
 								listItem.reserved.map((reservation) => {
-									// console.log('res', reservation);
 									const row = {
 										date: listItem.date,
 										begin: reservation.begins,
