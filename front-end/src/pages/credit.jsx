@@ -2,6 +2,7 @@ import React from 'react';
 
 import pageRedirect from 'lib/pageRedirect';
 import Page from 'views/Credit';
+import { loadLocaleFromCtx } from 'lib/loadLocaleFromCtx';
 
 const Credit = (props) => <Page {...props} />;
 
@@ -14,7 +15,8 @@ Credit.getInitialProps = async (ctx) => {
 		throw error;
 	}
 	return {
-		namespacesRequired: ['error', 'global', 'credit'],
+		defaultNamespace: 'credit',
+		...(await loadLocaleFromCtx(ctx)),
 	};
 };
 

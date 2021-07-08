@@ -1,5 +1,4 @@
-import { HYDRATE } from 'next-redux-wrapper';
-import { GET_ALL_APPOINTMENTS, GET_APPOINTMENTS } from './actions';
+import { GET_APPOINTMENTS, GET_USER_APPPOINTMENTS } from './actions';
 
 const INITIAL_STATE = {
 	appointments: {
@@ -41,19 +40,15 @@ const INITIAL_STATE = {
 			},
 		],
 	},
-	adminAppointments: {
-		list: [],
-	},
+	userAppointments: [],
 };
 
 export const appointments = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
-		case HYDRATE:
-			return { ...state, ...action.payload.appointments };
 		case GET_APPOINTMENTS:
 			return { ...state, appointments: action.payload };
-		case GET_ALL_APPOINTMENTS:
-			return { ...state, adminAppointments: action.payload };
+		case GET_USER_APPPOINTMENTS:
+			return { ...state, userAppointments: action.payload };
 		default:
 			return state;
 	}

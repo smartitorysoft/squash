@@ -16,16 +16,18 @@ import Row from 'components/Row/Row';
 
 import { getUsers } from 'store/user/actions';
 import Dashboard from 'components/Layout/Navigation/Dashboard';
+import useTranslation from 'next-translate/useTranslation';
 
-const useStyles = makeStyles(() => ({
-	table: {
-		width: '80%',
-		backgroundColor: 'grey',
-	},
+const useStyles = makeStyles((theme) => ({
+	container: { paddingBottom: 15, paddingLeft: 20 },
 }));
 
-const Credit = () => {
-	const [, setValue] = useState('');
+const Credit = (props) => {
+	const [value, setValue] = useState('');
+
+	const { defaultNamespace } = props;
+
+	const { t } = useTranslation(defaultNamespace);
 
 	const classes = useStyles();
 
@@ -39,30 +41,38 @@ const Credit = () => {
 
 	return (
 		<Dashboard>
-		<Box>
-			<TextInput
-				label="Keresés"
-				onChange={(text) => {
-					setValue(text.target.value);
-				}}
-			/>
-			<TableContainer classes={classes.table} component={Paper}>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell />
-							<TableCell align="left">Név</TableCell>
-							<TableCell align="left">Email</TableCell>
-							<TableCell align="right">Kredit</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{users.items &&
-							users.items.map((user) => <Row key={user.id} row={user} />)}
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</Box>
+			<Box>
+				<Box className={classes.container}>
+					<TextInput
+						label={t('search')}
+						onChange={(text) => {
+							setValue(text.target.value);
+						}}
+					/>
+				</Box>
+				<TableContainer component={Paper}>
+					<Table>
+						<TableHead>
+							<TableRow>
+								<TableCell />
+								<TableCell align="left">{t('name')}</TableCell>
+								<TableCell align="left">{t('email')}</TableCell>
+								<TableCell align="right">{t('credit')}</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{users.items &&
+								users.items.map((user) => (
+									<Row
+										key={user.id}
+										row={user}
+										defaultNamespace={defaultNamespace}
+									/>
+								))}
+						</TableBody>
+					</Table>
+				</TableContainer>
+			</Box>
 		</Dashboard>
 	);
 };

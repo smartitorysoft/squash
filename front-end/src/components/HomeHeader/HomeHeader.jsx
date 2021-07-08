@@ -34,11 +34,14 @@ const useStyles = makeStyles(() => ({
 export const HomeHeader = () => {
 	const [value, setValue] = useState(0);
 
-	const router = useRouter();
+	// dispatch(getUserAppointments());
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
+	const router = useRouter();
+
+	// dispatch(getUserAppointments());
 
 	const classes = useStyles();
 

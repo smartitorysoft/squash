@@ -5,6 +5,7 @@ import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import PersonIcon from '@material-ui/icons/Person';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 const navigationConfig = ({ t }) => {
@@ -28,6 +29,25 @@ const navigationConfig = ({ t }) => {
 			icon: MonetizationOnIcon,
 		},
 		{
+			title: t('nav-bar.user-appointments'),
+			href: '/user-appointments',
+			icon: AssignmentIcon,
+		},
+		// {
+		// 	title: 'components.nav-bar.sets',
+		// 	icon: BarChartIcon,
+		// 	pages: [
+		// 		{
+		// 			title: 'components.nav-bar.items',
+		// 			href: '/items',
+		// 		},
+		// 		{
+		// 			title: 'components.nav-bar.products',
+		// 			href: '/products',
+		// 		},
+		// 	],
+		// },
+		{
 			title: t('nav-bar.courts'),
 			icon: BarChartIcon,
 			pages: [
@@ -45,6 +65,11 @@ const navigationConfig = ({ t }) => {
 			title: t('nav-bar.timesheet'),
 			href: '/timesheet',
 			icon: AccessTimeIcon,
+		},
+		{
+			title: t('nav-bar.admin-appointments'),
+			href: '/admin-appointments',
+			icon: AssignmentIcon,
 		},
 	];
 
