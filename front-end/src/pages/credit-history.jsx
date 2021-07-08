@@ -9,7 +9,7 @@ const CreditHistory = (props) => <Page {...props} />;
 CreditHistory.getInitialProps = async (ctx) => {
 	const { store } = ctx;
 
-	await pageRedirect({ auth: false, url: '/sign-in' }, ctx);
+	await pageRedirect({ auth: true, url: '/sign-in' }, ctx);
 
 	return {
 		defaultNamespace: 'credit-history',
